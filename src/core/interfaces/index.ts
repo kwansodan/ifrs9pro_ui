@@ -3,7 +3,7 @@ export interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   isLoading?: boolean;
-  type?: "button" | "submit";
+  type?: "submit";
   className?: string;
 }
 

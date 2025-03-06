@@ -3,15 +3,14 @@ import { ButtonProps } from "../../core/interfaces";
 
 const Button: React.FC<ButtonProps> = ({
   text,
+  disabled,
   onClick,
-  disabled = false,
   isLoading,
-  type = "button",
   className = "",
 }) => {
   return (
     <button
-      type={type}
+      type="submit"
       onClick={onClick}
       disabled={disabled || isLoading}
       className={`px-4 py-2 w-full rounded-[10px] text-[14px] text-[#AFAFAF] font-medium transition-all
@@ -22,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
         } 
         ${className}`}
     >
-      {isLoading ? "Loading..." : text}
+      {isLoading ? "Please wait..." : text}
     </button>
   );
 };

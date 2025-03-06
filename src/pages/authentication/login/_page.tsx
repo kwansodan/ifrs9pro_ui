@@ -16,14 +16,17 @@ function Login() {
   const [emailValue, setEmailValue] = useState<string>("");
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [password, setPassword] = useState<boolean>(false);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const [isFormValid, setIsFormValid] = useState(false);
 
   const handleLogin = async (prevState: any, formData: FormData) => {
+    setButtonLoading(true);
     console.log("prev: ", prevState);
     const email = formData.get("email") as string | null;
     const password = formData.get("password") as string | null;
     if (!email || !password) {
       showToast("Email and password are required.", false);
+      setButtonLoading(false);
       return { success: false, error: "Email and password are required." };
     }
     // if (email.toLocaleLowerCase() !== "admin@ifrs9pro.com") navigate("/");
@@ -31,6 +34,7 @@ function Login() {
     try {
       UserLogin(email, password)
         .then((res) => {
+          setButtonLoading(false);
           if (res.status === 200) {
             const expiresInMs = res.data.expires_in * 1000;
             const expirationTime = Date.now() + expiresInMs;
@@ -43,16 +47,18 @@ function Login() {
           }
         })
         .catch((err) => {
+          setButtonLoading(false);
           showToast(err?.response?.data.detail, false);
         });
     } catch (err) {
+      setButtonLoading(false);
+      showToast("Login failed. Please try again.", false);
       return { success: false, error: "Login failed. Please try again." };
     }
   };
 
   const [state, formAction] = useActionState(handleLogin, null);
   console.log("state: ", state);
-  const { pending } = useFormStatus();
 
   const passwordToggle = () => {
     setPassword(!password);
@@ -108,7 +114,7 @@ function Login() {
               className="mt-8"
               text="Login"
               disabled={!isFormValid}
-              isLoading={pending}
+              isLoading={buttonLoading}
             />
           </form>
         </div>

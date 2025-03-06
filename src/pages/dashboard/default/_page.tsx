@@ -49,6 +49,7 @@ function Default() {
               key={item.name}
               title={item.name}
               value={item.fig}
+              parentClassName="slide-in-left "
               valueClassName="text-[#AFAFAF]"
             />
           ))}
@@ -61,6 +62,7 @@ function Default() {
               key={item.name}
               title={item.name}
               value={item.fig}
+              parentClassName="slide-in-top-bounce"
               valueClassName="!text-[#F1F1F1]"
             />
           ))}
