@@ -1,0 +1,28 @@
+.rdg {
+  border: none !important;
+  background: transparent !important;
+}
+
+.rdg-header-row {
+  background-color: #f8f9fa !important;
+  font-weight: bold;
+  color: #6b7280;
+}
+
+.rdg-row {
+  border-bottom: none !important;
+}
+
+.custom-grid .rdg-cell {
+  border: none !important;
+  padding: 12px;
+  text-align: left;
+}
+
+.css-13cymwt-control {
+  height: 40px;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

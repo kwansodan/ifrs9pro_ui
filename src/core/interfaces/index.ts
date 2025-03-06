@@ -1,0 +1,80 @@
+export interface ButtonProps {
+  text: string | React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  isLoading?: boolean;
+  type?: "button" | "submit";
+  className?: string;
+}
+
+export interface CardProps {
+  title: string;
+  value: number | string;
+  valueClassName?: string;
+  parentClassName?: string;
+  textColor?: string;
+}
+
+export interface ModalProps {
+  open?: boolean;
+  closeOnOverlay?: boolean;
+  close?: any;
+  children?: React.ReactNode;
+  modalHeader?: string;
+}
+
+export interface FilterTrayProps {
+  closeFilter?: () => void;
+}
+export interface UploadProps {
+  UploadTitle?: string;
+}
+export interface UploadDataProps {
+  close?: () => void;
+}
+
+export interface CategoryProps {
+  category: string;
+  range: string;
+  rate: string;
+}
+
+export type IFrontentConfig = {
+  appName: string;
+  countryCode?: string;
+};
+
+export interface IConfig {
+  appName?: string;
+  apiBaseUrl?: string;
+}
+
+export type IAppState = {
+  config?: IFrontentConfig;
+  loading: boolean;
+  error: boolean;
+};
+
+export type IUserAdditionalInfo = {
+  displayName?: string;
+  distributorInfo: IDistributorInfo;
+  rechargeTypes: IRechargeType[];
+};
+export type IDistributorInfo = {
+  id?: string;
+  dealerId?: number;
+  distributorName?: string;
+};
+export type IRechargeType = {
+  id?: string;
+  name?: string;
+};
+
+export type IUser = {
+  roles?: string[];
+  username?: string;
+  additionalInfo?: IUserAdditionalInfo;
+};
+export type IUserState = {
+  user?: IUser;
+};
