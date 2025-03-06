@@ -3,7 +3,6 @@ import { Images } from "../../data/Assets";
 import Button from "../../components/button/_component";
 
 function PasswordChange() {
-  const [emailValue, setEmailValue] = useState<string>("");
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [newPasswordValue, setNewPasswordValue] = useState<string>("");
   const [password, setPassword] = useState<boolean>(false);

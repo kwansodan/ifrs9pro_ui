@@ -19,6 +19,7 @@ function Login() {
   const [isFormValid, setIsFormValid] = useState(false);
 
   const handleLogin = async (prevState: any, formData: FormData) => {
+    console.log("prev: ", prevState);
     const email = formData.get("email") as string | null;
     const password = formData.get("password") as string | null;
     if (!email || !password) {
@@ -50,6 +51,7 @@ function Login() {
   };
 
   const [state, formAction] = useActionState(handleLogin, null);
+  console.log("state: ", state);
   const { pending } = useFormStatus();
 
   const passwordToggle = () => {

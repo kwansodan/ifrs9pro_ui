@@ -2,16 +2,15 @@ import { useActionState, useEffect, useState } from "react";
 import Button from "../../../components/button/_component";
 import { UserRequestAccess } from "../../../core/services/auth.service";
 import { useNavigate } from "react-router-dom";
-import { useFormStatus } from "react-dom";
 
 function RequestAccess() {
   const [emailValue, setEmailValue] = useState<string>("");
   const [isFormValid, setIsFormValid] = useState(false);
-  const { pending } = useFormStatus();
 
   const navigate = useNavigate();
 
   const handleRequestAccess = async (prevState: any, formData: FormData) => {
+    console.log("prev: ", prevState);
     const email = formData.get("email") as string | null;
     if (!email) {
       console.error("Email is required.");
@@ -31,7 +30,7 @@ function RequestAccess() {
     }
   };
   const [state, formAction] = useActionState(handleRequestAccess, null);
-
+  console.log("state: ", state);
   useEffect(() => {
     setIsFormValid(emailValue.trim() !== "");
   }, [emailValue]);
@@ -64,7 +63,7 @@ function RequestAccess() {
               className="mt-8 text-white"
               text="Request access"
               onClick={() => handleRequestAccess}
-              disabled={pending}
+              disabled={isFormValid}
             />
           </form>
         </div>

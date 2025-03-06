@@ -34,7 +34,7 @@ function AdminAccess() {
     };
   }, [showActionsMenu]);
 
-  const renderActionsRow = (data: any) => {
+  const renderActionsRow = () => {
     return (
       <div className="flex cursor-pointer">
         <img

@@ -8,7 +8,6 @@ import AfterUpload from "./after_upload";
 import CalculateEcl from "./calculate_elc";
 import CalculateLocalImpairment from "./calculate_local";
 import GenerateReport from "./generate_report";
-import GenerateReportSuccess from "./generate_report_success";
 import YesReport from "./yes_report";
 
 function Test() {

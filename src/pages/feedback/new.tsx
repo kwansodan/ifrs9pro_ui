@@ -1,4 +1,3 @@
-import React from "react";
 import NoFeedback from "./no_feedback";
 
 function NewPorfolio() {

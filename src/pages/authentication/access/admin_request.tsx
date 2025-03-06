@@ -4,14 +4,11 @@ import {
   UserSendRequestToAdmin,
   VerifyUserEmail,
 } from "../../../core/services/auth.service";
-import PageLoader from "../../../components/page_loader/_component";
 import { useNavigate } from "react-router-dom";
-import { useFormStatus } from "react-dom";
 
 function AdminRequest() {
   const queryParams = new URLSearchParams(location.search);
   const [verifyDone, setVerifyDone] = useState(false);
-  const { pending } = useFormStatus();
 
   const navigate = useNavigate();
 
@@ -20,7 +17,7 @@ function AdminRequest() {
 
   useEffect(() => {
     VerifyUserEmail(verificationKey)
-      .then((response) => {
+      .then(() => {
         setVerifyDone(true);
       })
       .catch((error) => {
@@ -35,6 +32,7 @@ function AdminRequest() {
   }, [emailValue]);
 
   const handleRequestAccess = async (prevState: any, formData: FormData) => {
+    console.log("prev: ", prevState);
     const admin_email = formData.get("email") as string | null;
     if (!admin_email) {
       console.error("Admin email is required.");
@@ -53,7 +51,7 @@ function AdminRequest() {
     }
   };
   const [state, formAction] = useActionState(handleRequestAccess, null);
-
+  console.log("state: ", state);
   return (
     <>
       {/* {!verifyDone && <PageLoader />} */}
@@ -84,7 +82,7 @@ function AdminRequest() {
                   type="submit"
                   text="Submit"
                   // onClick={handleLogin}
-                  disabled={pending}
+                  disabled={isFormValid}
                 />
               </form>
             </div>

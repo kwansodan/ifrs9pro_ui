@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import { ModalProps } from "../../core/interfaces";
 
 export const Modal = memo(

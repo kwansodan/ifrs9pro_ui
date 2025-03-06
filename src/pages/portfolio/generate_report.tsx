@@ -1,6 +1,5 @@
 import Select from "react-select";
-import { assetsOptions, reportTypeOptions } from "../../data";
-import { Images } from "../../data/Assets";
+import { reportTypeOptions } from "../../data";
 import Button from "../../components/button/_component";
 import { UploadDataProps } from "../../core/interfaces";
 function GenerateReport({ close }: UploadDataProps) {

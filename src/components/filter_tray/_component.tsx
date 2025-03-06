@@ -1,11 +1,8 @@
-import { useState } from "react";
 import { FilterTrayProps } from "../../core/interfaces";
 import Button from "../button/_component";
-import { Images } from "../../data/Assets";
 import { useNavigate } from "react-router-dom";
 
 function FilterTray({ closeFilter }: FilterTrayProps) {
-  const [inputType, setInputType] = useState<"text" | "date">("text");
   const navigate = useNavigate();
   return (
     <>
@@ -65,8 +62,6 @@ function FilterTray({ closeFilter }: FilterTrayProps) {
             placeholder="Select a date"
             className="w-full border rounded-[10px] border-gray-300 px-[6px] py-[5px] focus:outline-[#166E94] text-gray-400"
             type="date"
-            onFocus={() => setInputType("date")}
-            onBlur={() => setInputType("text")}
           />
           {/* <img
             className="w-[14px] h-[14px] absolute right-3 top-3"

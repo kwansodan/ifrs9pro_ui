@@ -33,19 +33,7 @@ function Users() {
     };
   }, [showActionsMenu]);
 
-  const renderActionsRow = (data: any) => {
-    return (
-      <div className="flex cursor-pointer">
-        <img
-          onClick={() => setShowActionsMenu(!showActionsMenu)}
-          src={Images.options}
-          className="w-[24px]"
-          alt=""
-        />
-      </div>
-    );
-  };
-  const renderRoleRow = (data: any) => {
+  const renderActionsRow = () => {
     return (
       <div className="flex cursor-pointer">
         <img

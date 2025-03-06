@@ -5,7 +5,6 @@ import Card from "../../../components/card/_component";
 import "react-data-grid/lib/styles.css";
 import Button from "../../../components/button/_component";
 import { DataGrid } from "react-data-grid";
-import ActionsMenu from "../../../components/actions_menu/_component";
 
 function Main() {
   const [currentDate, setCurrentDate] = useState("");
@@ -30,7 +29,7 @@ function Main() {
     setGreeting(greetingMessage);
   }, []);
 
-  const renderActionsRow = (data: any) => {
+  const renderActionsRow = () => {
     return (
       <div className="flex cursor-pointer">
         <img src={Images.options} className="w-[24px]" alt="" />

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import Button from "../../components/button/_component";
 import { Modal } from "../../components/modal/_component";
-import { UploadDataProps } from "../../core/interfaces";
-function Help({ close }: UploadDataProps) {
+function Help() {
   const [openHelpModal, setOpenHelpModal] = useState<boolean>(true);
   return (
     <>

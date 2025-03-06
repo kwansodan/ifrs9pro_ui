@@ -6,7 +6,7 @@ import Button from "../../components/button/_component";
 
 function PortfolioMain() {
   const [showFilter, setShowFilter] = useState(false);
-  const renderActionsRow = (data: any) => {
+  const renderActionsRow = () => {
     return (
       <div className="flex cursor-pointer">
         <img src={Images.options} className="w-[24px]" alt="" />

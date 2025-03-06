@@ -1,16 +1,8 @@
-import Select from "react-select";
-import {
-  assetsOptions,
-  customerTypeOptions,
-  dataSourceOptions,
-  fundingSourceOptions,
-} from "../../data";
 import { useState } from "react";
 import { Modal } from "../../components/modal/_component";
 import Button from "../../components/button/_component";
 
 function ShareFeedback({ cancel }: any) {
-  const [step, setStep] = useState<number>(1);
   const [openSecondStepCreatePortfolio, setOpenSecondStepCreatePortfolio] =
     useState<boolean>(false);
 

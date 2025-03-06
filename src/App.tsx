@@ -13,7 +13,6 @@ import PortfolioMain from "./pages/portfolio/main";
 import FilteredResults from "./pages/portfolio/filtered_results";
 import Test from "./pages/portfolio/test";
 import Users from "./pages/users/_page";
-import Feedback from "./pages/feedback/_page";
 import Help from "./pages/help/_page";
 import NoFeedback from "./pages/feedback/no_feedback";
 import RequestAccess from "./pages/authentication/access/request_access";
@@ -24,7 +23,7 @@ import PasswordChange from "./pages/passwords/_page";
 import ExpiredLink from "./pages/authentication/verification/expired_link";
 import { IAppState, IConfig } from "./core/interfaces";
 import { useQuery } from "@tanstack/react-query";
-import { clearUserData, getUserSession, setBaseApi } from "./core/utility";
+import { getUserSession, setBaseApi } from "./core/utility";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -32,7 +31,6 @@ import {
   setFrontendConfig,
 } from "./core/stores/slices/system_slice";
 import { GetFrontendConfig } from "./core/services/system.service";
-import { GetUserCurrentSession } from "./core/services/auth.service";
 import { ToastContainer } from "react-toastify";
 import { RootState } from "./core/stores";
 import PageLoader from "./components/page_loader/_component";
@@ -49,17 +47,17 @@ function App() {
     setConfigLoaded(true);
   };
 
-  const onSessionSuccess = (res: any) => {
-    if (res.success) {
-      const data = res.data;
-      // setToken(data.token, data.user.tokenExpiry);
-      // dispatch(
-      //   setUser({ roles: data.user.role, username: data.user.username })
-      // );
-    } else {
-      clearUserData();
-    }
-  };
+  // const onSessionSuccess = (res: any) => {
+  //   if (res.success) {
+  //     const data = res.data;
+  //     // setToken(data.token, data.user.tokenExpiry);
+  //     // dispatch(
+  //     //   setUser({ roles: data.user.role, username: data.user.username })
+  //     // );
+  //   } else {
+  //     clearUserData();
+  //   }
+  // };
 
   const initQuery = useQuery<IConfig>({
     retry: (count: any) => count < 1,
