@@ -69,7 +69,7 @@ function Default() {
         </div>
 
         <div className="mb-12 md:max-w-[1341px] h-[298px] border-[1px] border-[#F0F0F0] rounded-[11px] mt-6">
-          <div className="absolute bg-[#f9f8f8] px-6 py-2 w-[1341px] rounded-t-[11px]">
+          <div className="absolute bg-[#f9f8f8] px-6 py-2  rounded-t-[11px]">
             Portfolios
           </div>
           <NoPortfolioYet />
