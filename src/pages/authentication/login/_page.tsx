@@ -42,7 +42,7 @@ function Login() {
             cacheUserRole(res?.data.user.role);
             dispatch(setUser({ roles: [], username: res?.data.user.role }));
             if (res?.data.user.role === "admin") window.location.reload();
-            else navigate("/");
+            else navigate("/request-access");
           }
         })
         .catch((err) => {

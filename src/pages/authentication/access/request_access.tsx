@@ -63,7 +63,7 @@ function RequestAccess() {
               className="mt-8 text-white"
               text="Request access"
               onClick={() => handleRequestAccess}
-              disabled={isFormValid}
+              disabled={!isFormValid}
             />
           </form>
         </div>
