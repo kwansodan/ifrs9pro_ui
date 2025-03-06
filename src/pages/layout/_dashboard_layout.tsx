@@ -136,7 +136,7 @@ const DashboardLayout = () => {
           </div>
         </nav>
         <hr className="border-[1px] border-[#F0F0F0]" />
-        <div className="mx-auto max-w-[1341px]">
+        <div className="mx-auto max-w-[1341px] md:px-12 w-full px-6">
           <div>
             <Outlet />
           </div>
