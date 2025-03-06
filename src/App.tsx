@@ -114,7 +114,7 @@ function App() {
                 path="/admin-request"
                 element={<Navigate to="/dashboard" />}
               />
-              <Route path="/login" element={<Navigate to="/dashboard" />} />
+              <Route path="/" element={<Navigate to="/dashboard" />} />
               <Route path="/signup" element={<Navigate to="/dashboard" />} />
               <Route
                 path="/verification"
@@ -148,7 +148,7 @@ function App() {
             </Route>
           ) : (
             // Redirect to login if user tries to access private routes when not logged in
-            <Route path="/dashboard/*" element={<Navigate to="/login" />} />
+            <Route path="/dashboard/*" element={<Navigate to="/" />} />
           )}
 
           {/* 404 Page */}
