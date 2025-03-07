@@ -1,6 +1,7 @@
 import { Images } from "../../../data/Assets";
 
 function AdminVerification() {
+  const adminEmail = localStorage.getItem("admin-email");
   return (
     <>
       <h2 className=" mt-24 text-center text-[20px] font-extrabold text-[#166E94]">
@@ -21,9 +22,7 @@ function AdminVerification() {
               </h3>
               <p className="text-[14px] text-[#AFAFAF] mt-2 text-center">
                 Your access request has been sent to{" "}
-                <span className="text-[#166E94] font-medium">
-                  username@email.com
-                </span>{" "}
+                <span className="text-[#166E94] font-medium">{adminEmail}</span>{" "}
                 You will receive an email once your request is approved.
               </p>
             </div>

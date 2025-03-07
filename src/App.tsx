@@ -97,12 +97,20 @@ function App() {
             <>
               <Route path="/" element={<Login />} />
               <Route path="/request-access" element={<RequestAccess />} />
-              <Route path="/admin-request" element={<AdminRequest />} />
+              <Route path="/admin-request/:token" element={<AdminRequest />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/verification" element={<Verification />} />
               <Route
                 path="/admin-verification"
                 element={<AdminVerification />}
+              />
+              <Route
+                path="/admin-verification"
+                element={<AdminVerification />}
+              />
+              <Route
+                path="/password-change/:token"
+                element={<PasswordChange />}
               />
               <Route path="/expired-link" element={<ExpiredLink />} />
             </>

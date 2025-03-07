@@ -4,25 +4,31 @@ import {
   UserSendRequestToAdmin,
   VerifyUserEmail,
 } from "../../../core/services/auth.service";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { showToast } from "../../../core/hooks/alert";
+import PageLoader from "../../../components/page_loader/_component";
 
 function AdminRequest() {
-  const queryParams = new URLSearchParams(location.search);
   const [verifyDone, setVerifyDone] = useState(false);
-
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const verificationKey = queryParams.get("vk") as string;
-  console.log("vk: ", verificationKey);
+  const { token } = useParams();
 
+  console.log("Verification Token:", token);
+
+  console.log("Token:", token);
   useEffect(() => {
-    VerifyUserEmail(verificationKey)
-      .then(() => {
-        setVerifyDone(true);
-      })
-      .catch((error) => {
-        console.log("veriErr: ", error);
-      });
+    if (token) {
+      VerifyUserEmail(token)
+        .then(() => {
+          setVerifyDone(true);
+          navigate("/admin-verification");
+        })
+        .catch((error) => {
+          console.log("veriErr: ", error);
+        });
+    }
   }, []);
   const [emailValue, setEmailValue] = useState<string>("");
   const [isFormValid, setIsFormValid] = useState(false);
@@ -32,21 +38,32 @@ function AdminRequest() {
   }, [emailValue]);
 
   const handleRequestAccess = async (prevState: any, formData: FormData) => {
+    setButtonLoading(true);
     console.log("prev: ", prevState);
-    const admin_email = formData.get("email") as string | null;
+    const admin_email = formData.get("email") as string;
+    localStorage.setItem("admin-email", admin_email);
     if (!admin_email) {
-      console.error("Admin email is required.");
+      setButtonLoading(false);
+      showToast("Please enter admin email.", false);
       return { success: false, error: "Email and password are required." };
     }
     const user_email = localStorage.getItem("u_email") as string;
     try {
-      const res = await UserSendRequestToAdmin(user_email, admin_email);
-      console.log(res);
-      if (res) navigate("/admin-verification");
+      UserSendRequestToAdmin(user_email, admin_email)
+        .then((res) => {
+          console.log(res);
+          setButtonLoading(false);
+          navigate("/admin-verification");
+        })
+        .catch((err) => {
+          setButtonLoading(false);
+          showToast(err?.response?.data.detail, false);
+        });
 
       return { success: true };
     } catch (err) {
       console.error("Failed to login:", err);
+      setButtonLoading(false);
       return { success: false, error: "Login failed. Please try again." };
     }
   };
@@ -54,8 +71,8 @@ function AdminRequest() {
   console.log("state: ", state);
   return (
     <>
-      {/* {!verifyDone && <PageLoader />} */}
-      {!verifyDone && (
+      {!verifyDone && <PageLoader loadingHeader={"Verifying..."} />}
+      {verifyDone && (
         <>
           <h2 className=" mt-24 text-center text-[20px] font-extrabold text-[#166E94]">
             IFRS9Pro
@@ -71,6 +88,7 @@ function AdminRequest() {
                 <div className="mt-4">
                   <input
                     type="email"
+                    name="admin_email"
                     placeholder="Enter admin email address"
                     className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                     onChange={(e) => setEmailValue(e.target.value)}
@@ -81,8 +99,8 @@ function AdminRequest() {
                   className="mt-8 text-white"
                   type="submit"
                   text="Submit"
-                  // onClick={handleLogin}
                   disabled={isFormValid}
+                  isLoading={buttonLoading}
                 />
               </form>
             </div>

@@ -15,7 +15,10 @@ export const UserSendRequestToAdmin = async (
   await apiAxios().post("/submit-admin-request", { user_email, admin_email });
 
 export const VerifyUserEmail = async (token: string) =>
-  await apiAxios().post("/request-access/" + { token });
+  await apiAxios().post("/verify-email/" + { token });
+
+export const VerifyAdminApproval = async (token: string) =>
+  await apiAxios().post("/set-password/" + { token });
 
 export const GetUserCurrentSession = async () =>
   await apiAxios().post("/Auth/GetCurrentSessionInternalUser", {});

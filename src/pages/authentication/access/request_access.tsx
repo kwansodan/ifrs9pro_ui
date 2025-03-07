@@ -2,28 +2,36 @@ import { useActionState, useEffect, useState } from "react";
 import Button from "../../../components/button/_component";
 import { UserRequestAccess } from "../../../core/services/auth.service";
 import { useNavigate } from "react-router-dom";
+import { showToast } from "../../../core/hooks/alert";
 
 function RequestAccess() {
   const [emailValue, setEmailValue] = useState<string>("");
   const [isFormValid, setIsFormValid] = useState(false);
-
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleRequestAccess = async (prevState: any, formData: FormData) => {
     console.log("prev: ", prevState);
+    setButtonLoading(true);
     const email = formData.get("email") as string | null;
     if (!email) {
       console.error("Email is required.");
+      setButtonLoading(false);
       return { success: false, error: "Email and password are required." };
     }
-
+    localStorage.setItem("u_email", email);
     try {
-      localStorage.setItem("u_email", email);
-      const res = await UserRequestAccess(email);
-      console.log(res);
-      if (res) navigate("/verification");
-
-      return { success: true };
+      UserRequestAccess(email)
+        .then((res) => {
+          console.log("res: ", res);
+          navigate("/verification");
+        })
+        .catch((err) => {
+          console.log(err);
+          setButtonLoading(false);
+          showToast(err?.response?.data.detail, false);
+          return { success: false, error: "Login failed. Please try again." };
+        });
     } catch (err) {
       console.error("Failed to login:", err);
       return { success: false, error: "Login failed. Please try again." };
@@ -64,8 +72,18 @@ function RequestAccess() {
               text="Request access"
               onClick={() => handleRequestAccess}
               disabled={!isFormValid}
+              isLoading={buttonLoading}
             />
           </form>
+          <small>
+            Have access already?
+            <span
+              className="ml-2 text-blue-500 underline cursor-pointer"
+              onClick={() => navigate("/")}
+            >
+              Login
+            </span>
+          </small>
         </div>
       </div>
     </>

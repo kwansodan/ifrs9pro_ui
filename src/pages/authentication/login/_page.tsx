@@ -28,7 +28,6 @@ function Login() {
       setButtonLoading(false);
       return { success: false, error: "Email and password are required." };
     }
-    // if (email.toLocaleLowerCase() !== "admin@ifrs9pro.com") navigate("/");
 
     try {
       UserLogin(email, password)
@@ -116,6 +115,15 @@ function Login() {
               isLoading={buttonLoading}
             />
           </form>
+          <small>
+            Don't have access?
+            <span
+              className="ml-2 text-blue-500 underline cursor-pointer"
+              onClick={() => navigate("/request-access")}
+            >
+              Request access
+            </span>
+          </small>
         </div>
       </div>
     </>
