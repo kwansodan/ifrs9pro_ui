@@ -14,6 +14,7 @@ export const UserSendRequestToAdmin = async (
   admin_email: string
 ) => await apiAxios().post("/submit-admin-request", { email, admin_email });
 
+//using api directly for some reasons
 export const VerifyUserEmail = async (token: string) =>
   await axios.get(
     `https://ifrs9pro-backend.onrender.com/verify-email/${token}`

@@ -11,19 +11,17 @@ import PageLoader from "../../../components/page_loader/_component";
 function AdminRequest() {
   const [verifyDone, setVerifyDone] = useState(false);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const u_email = searchParams.get("email") as string;
   const token = searchParams.get("token") as string;
 
-  console.log("Email:", u_email);
-  console.log("Token:", token);
-
   useEffect(() => {
     VerifyUserEmail(token)
       .then((res) => {
-        console.log("verRes: ", res);
         setVerifyDone(true);
+        setMessage(res.data.message);
       })
       .catch((error) => {
         console.log("veriErr: ", error);
@@ -38,10 +36,7 @@ function AdminRequest() {
 
   useEffect(() => {
     if (verifyDone) {
-      showToast(
-        "Verification successful. Please enter admin email to send request.",
-        true
-      );
+      showToast(message, true);
     }
   }, [verifyDone]);
 

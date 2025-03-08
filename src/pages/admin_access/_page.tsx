@@ -7,6 +7,7 @@ import { Modal } from "../../components/modal/_component";
 import CreatePorfolio from "../../components/create_portfolio/_component";
 import DeleteUser from "../users/delete_user";
 import ApproveRequest from "./approve_request";
+import { useAdminRequests } from "../../core/hooks/admin";
 
 function AdminAccess() {
   const menuRef = useRef<HTMLDivElement>(null);
@@ -18,6 +19,17 @@ function AdminAccess() {
   const [openEditUserModal, setOpenEditUserModal] = useState<boolean>(false);
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
 
+  const { adminRequestsQuery } = useAdminRequests();
+  console.log(
+    "adminRequestsQuery: ",
+    adminRequestsQuery &&
+      adminRequestsQuery.data &&
+      adminRequestsQuery.data.data
+  );
+  const adminRequestsRows =
+    adminRequestsQuery &&
+    adminRequestsQuery.data &&
+    adminRequestsQuery.data.data;
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -48,25 +60,18 @@ function AdminAccess() {
   };
 
   const columns = [
-    { key: "name", name: "Email", width: 600 },
-    { key: "assetType", name: "Status", width: 440 },
+    { key: "email", name: "Email", width: 300 },
+    { key: "admin_email", name: "Admin Email", width: 410 },
 
+    { key: "created_at", name: "Created At", width: 340 },
     {
-      key: "update",
-      name: "Actions",
+      key: "status",
+      name: "Status",
       renderCell: renderActionsRow,
       width: "100px",
     },
   ];
 
-  const rows = Array(15).fill({
-    name: "Personal loans",
-    assetType: "Debt",
-    customerType: "Individuals",
-    totalLoans: "2,587",
-    totalValue: "$5,000,900",
-    lastCalculation: "Jan 24, 2025",
-  });
   return (
     <>
       <Modal
@@ -97,7 +102,7 @@ function AdminAccess() {
       {showActionsMenu && (
         <div
           ref={menuRef}
-          className="absolute z-10 top-[15rem] right-[20rem] w-[200px] bg-white rounded-[10px] shadow-md"
+          className="absolute z-10 top-[15rem] right-[13rem] w-[200px] bg-white rounded-[10px] shadow-md"
         >
           <div className="p-4">
             <div
@@ -171,7 +176,7 @@ function AdminAccess() {
       <div className="max-w-[1160px] h-[398px] border-[1px] border-[#F0F0F0] rounded-[11px]">
         <DataGrid
           columns={columns}
-          rows={rows}
+          rows={adminRequestsRows}
           className="rdg-light custom-grid"
         />
       </div>
