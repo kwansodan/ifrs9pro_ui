@@ -14,10 +14,6 @@ function AdminRequest() {
   const navigate = useNavigate();
 
   const { token } = useParams();
-
-  console.log("Verification Token:", token);
-
-  console.log("Token:", token);
   useEffect(() => {
     if (token) {
       VerifyUserEmail(token)
@@ -72,6 +68,11 @@ function AdminRequest() {
   return (
     <>
       {!verifyDone && <PageLoader loadingHeader={"Verifying..."} />}
+      {verifyDone &&
+        showToast(
+          "Verification successful. Please enter admin email to send request.",
+          true
+        )}
       {verifyDone && (
         <>
           <h2 className=" mt-24 text-center text-[20px] font-extrabold text-[#166E94]">

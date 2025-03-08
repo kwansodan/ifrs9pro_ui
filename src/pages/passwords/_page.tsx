@@ -80,9 +80,13 @@ function PasswordChange() {
   console.log("state: ", state);
   return (
     <>
-      {!verifyDone && <PageLoader loadingHeader={"Verifying..."} />}
-
-      {verifyDone && (
+      {verifyDone && <PageLoader loadingHeader={"Verifying..."} />}
+      {verifyDone &&
+        showToast(
+          "Verification done. Please proceed to create a password",
+          true
+        )}
+      {!verifyDone && (
         <>
           <h2 className=" mt-24 text-center text-[20px] font-extrabold text-[#166E94]">
             IFRS9Pro
@@ -92,8 +96,8 @@ function PasswordChange() {
               <form action={formAction}>
                 <div className="absolute top-0 left-0 right-0 h-8 bg-gray-100 rounded-t-xl"></div>
 
-                <h3 className="text-left text-[18px] font-medium text-gray-800">
-                  Log into your account
+                <h3 className="text-center text-[18px] font-medium text-gray-800">
+                  Set Password
                 </h3>
                 <div className="relative mt-4">
                   <input
