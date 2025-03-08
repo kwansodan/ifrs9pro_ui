@@ -4,7 +4,7 @@ import {
   UserSendRequestToAdmin,
   VerifyUserEmail,
 } from "../../../core/services/auth.service";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { showToast } from "../../../core/hooks/alert";
 import PageLoader from "../../../components/page_loader/_component";
 
@@ -12,8 +12,12 @@ function AdminRequest() {
   const [verifyDone, setVerifyDone] = useState(false);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const u_email = searchParams.get("email") as string;
+  const token = searchParams.get("token");
 
-  const { token } = useParams();
+  console.log("Email:", u_email);
+  console.log("Token:", token);
   const hasRun = useRef(false);
 
   useEffect(() => {
@@ -54,9 +58,8 @@ function AdminRequest() {
       showToast("Please enter admin email.", false);
       return { success: false, error: "Email and password are required." };
     }
-    const user_email = localStorage.getItem("u_email") as string;
     try {
-      UserSendRequestToAdmin(user_email, admin_email)
+      UserSendRequestToAdmin(u_email, admin_email)
         .then((res) => {
           console.log(res);
           setButtonLoading(false);
