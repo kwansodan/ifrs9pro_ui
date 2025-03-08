@@ -97,7 +97,7 @@ function App() {
             <>
               <Route path="/" element={<Login />} />
               <Route path="/request-access" element={<RequestAccess />} />
-              <Route path="/admin-request/:token" element={<AdminRequest />} />
+              <Route path="/admin-request" element={<AdminRequest />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/verification" element={<Verification />} />
               <Route
