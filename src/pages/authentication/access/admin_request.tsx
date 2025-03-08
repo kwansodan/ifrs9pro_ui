@@ -1,4 +1,4 @@
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import Button from "../../../components/button/_component";
 import {
   UserSendRequestToAdmin,
@@ -14,8 +14,11 @@ function AdminRequest() {
   const navigate = useNavigate();
 
   const { token } = useParams();
+  const hasRun = useRef(false);
+
   useEffect(() => {
-    if (token) {
+    if (!hasRun.current && token) {
+      hasRun.current = true;
       VerifyUserEmail(token)
         .then(() => {
           setVerifyDone(true);
@@ -24,7 +27,7 @@ function AdminRequest() {
           console.log("veriErr: ", error);
         });
     }
-  }, []);
+  }, [token]);
   const [emailValue, setEmailValue] = useState<string>("");
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -99,7 +102,7 @@ function AdminRequest() {
                   className="mt-8 text-white"
                   type="submit"
                   text="Submit"
-                  disabled={isFormValid}
+                  disabled={!isFormValid}
                   isLoading={buttonLoading}
                 />
               </form>
