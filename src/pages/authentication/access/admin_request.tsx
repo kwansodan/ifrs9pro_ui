@@ -1,4 +1,4 @@
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import Button from "../../../components/button/_component";
 import {
   UserSendRequestToAdmin,
@@ -14,24 +14,20 @@ function AdminRequest() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const u_email = searchParams.get("email") as string;
-  const token = searchParams.get("token");
+  const token = searchParams.get("token") as string;
 
   console.log("Email:", u_email);
   console.log("Token:", token);
-  const hasRun = useRef(false);
 
   useEffect(() => {
-    if (!hasRun.current && token) {
-      hasRun.current = true;
-      VerifyUserEmail(token)
-        .then((res) => {
-          console.log("verRes: ", res);
-          setVerifyDone(true);
-        })
-        .catch((error) => {
-          console.log("veriErr: ", error);
-        });
-    }
+    VerifyUserEmail(token)
+      .then((res) => {
+        console.log("verRes: ", res);
+        setVerifyDone(true);
+      })
+      .catch((error) => {
+        console.log("veriErr: ", error);
+      });
   }, [token]);
   const [emailValue, setEmailValue] = useState<string>("");
   const [isFormValid, setIsFormValid] = useState(false);
