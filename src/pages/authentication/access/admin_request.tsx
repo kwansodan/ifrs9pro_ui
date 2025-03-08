@@ -35,10 +35,19 @@ function AdminRequest() {
     setIsFormValid(emailValue.trim() !== "");
   }, [emailValue]);
 
+  useEffect(() => {
+    if (verifyDone) {
+      showToast(
+        "Verification successful. Please enter admin email to send request.",
+        true
+      );
+    }
+  }, [verifyDone]);
+
   const handleRequestAccess = async (prevState: any, formData: FormData) => {
     setButtonLoading(true);
     console.log("prev: ", prevState);
-    const admin_email = formData.get("email") as string;
+    const admin_email = formData.get("admin_email") as string;
     localStorage.setItem("admin-email", admin_email);
     if (!admin_email) {
       setButtonLoading(false);
@@ -70,11 +79,7 @@ function AdminRequest() {
   return (
     <>
       {!verifyDone && <PageLoader loadingHeader={"Verifying..."} />}
-      {verifyDone &&
-        showToast(
-          "Verification successful. Please enter admin email to send request.",
-          true
-        )}
+
       {verifyDone && (
         <>
           <h2 className=" mt-24 text-center text-[20px] font-extrabold text-[#166E94]">
