@@ -1,7 +1,7 @@
 import { useActionState, useEffect, useState } from "react";
 import { Images } from "../../data/Assets";
 import Button from "../../components/button/_component";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { VerifyAdminApproval } from "../../core/services/auth.service";
 import PageLoader from "../../components/page_loader/_component";
 import { showToast } from "../../core/hooks/alert";
@@ -15,8 +15,6 @@ function PasswordChange() {
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const [verifyDone, setVerifyDone] = useState(false);
 
-  const navigate = useNavigate();
-
   const { token } = useParams();
 
   console.log("Verification Token:", token);
@@ -27,7 +25,6 @@ function PasswordChange() {
       VerifyAdminApproval(token)
         .then(() => {
           setVerifyDone(true);
-          navigate("/admin-verification");
         })
         .catch((error) => {
           console.log("veriErr: ", error);

@@ -9,10 +9,9 @@ export const UserRequestAccess = async (email: string) =>
   await apiAxios().post("/request-access", { email });
 
 export const UserSendRequestToAdmin = async (
-  user_email: string,
+  email: string,
   admin_email: string
-) =>
-  await apiAxios().post("/submit-admin-request", { user_email, admin_email });
+) => await apiAxios().post("/submit-admin-request/", { email, admin_email });
 
 export const VerifyUserEmail = async (token: string) =>
   await apiAxios().get("/verify-email/" + token);

@@ -22,7 +22,11 @@ function AdminVerification() {
               </h3>
               <p className="text-[14px] text-[#AFAFAF] mt-2 text-center">
                 Your access request has been sent to{" "}
-                <span className="text-[#166E94] font-medium">{adminEmail}</span>{" "}
+                <span className="text-[#166E94] font-medium">
+                  {adminEmail === "" || !adminEmail || adminEmail === " "
+                    ? "the admin"
+                    : adminEmail}
+                </span>{" "}
                 You will receive an email once your request is approved.
               </p>
             </div>
