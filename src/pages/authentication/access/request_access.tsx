@@ -15,7 +15,7 @@ function RequestAccess() {
     setButtonLoading(true);
     const email = formData.get("email") as string | null;
     if (!email) {
-      console.error("Email is required.");
+      console.error("Email is required");
       setButtonLoading(false);
       return { success: false, error: "Email and password are required." };
     }
