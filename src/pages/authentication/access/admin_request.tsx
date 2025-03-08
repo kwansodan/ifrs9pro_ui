@@ -19,7 +19,6 @@ function AdminRequest() {
       VerifyUserEmail(token)
         .then(() => {
           setVerifyDone(true);
-          navigate("/admin-verification");
         })
         .catch((error) => {
           console.log("veriErr: ", error);
