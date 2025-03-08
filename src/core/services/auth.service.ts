@@ -1,3 +1,4 @@
+import axios from "axios";
 import { getAxios, getConfig } from "../utility";
 
 const apiAxios = () => getAxios(getConfig().apiBaseUrl);
@@ -14,7 +15,9 @@ export const UserSendRequestToAdmin = async (
 ) => await apiAxios().post("/submit-admin-request", { email, admin_email });
 
 export const VerifyUserEmail = async (token: string) =>
-  await apiAxios().get("/verify-email/" + token);
+  await axios.get(
+    `https://ifrs9pro-backend.onrender.com/verify-email/${token}`
+  );
 
 export const VerifyAdminApproval = async (token: string) =>
   await apiAxios().post("/set-password/" + token);
