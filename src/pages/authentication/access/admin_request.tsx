@@ -24,7 +24,8 @@ function AdminRequest() {
     if (!hasRun.current && token) {
       hasRun.current = true;
       VerifyUserEmail(token)
-        .then(() => {
+        .then((res) => {
+          console.log("verRes: ", res);
           setVerifyDone(true);
         })
         .catch((error) => {
