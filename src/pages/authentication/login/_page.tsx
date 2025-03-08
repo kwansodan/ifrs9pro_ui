@@ -76,7 +76,7 @@ function Login() {
           <form action={formAction}>
             <div className="absolute top-0 left-0 right-0 h-8 bg-gray-100 rounded-t-xl"></div>
 
-            <h3 className="text-left text-[18px] font-medium text-gray-800">
+            <h3 className="text-center text-[18px] font-medium text-gray-800">
               Log into your account
             </h3>
             <div className="mt-4">
@@ -115,7 +115,7 @@ function Login() {
               isLoading={buttonLoading}
             />
           </form>
-          <small>
+          <small className="flex justify-center text-center">
             Don't have access?
             <span
               className="ml-2 text-blue-500 underline cursor-pointer"
