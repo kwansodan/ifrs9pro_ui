@@ -1,6 +1,4 @@
-import { getAxios, getConfig } from "../utility";
-
-const apiAxios = () => getAxios(getConfig().apiBaseUrl);
+import { getAxios } from "../utility";
 
 export const CreatePortfolioApi = async (payload: any) =>
-  await apiAxios().post("/portfolios", payload);
+  await getAxios().post("/portfolios", payload);

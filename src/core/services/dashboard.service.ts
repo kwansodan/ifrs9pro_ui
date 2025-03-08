@@ -1,6 +1,4 @@
-import { getAxios, getConfig } from "../utility";
-
-const apiAxios = () => getAxios(getConfig().apiBaseUrl);
+import { getAxios } from "../utility";
 
 export const GetAdminRequests = async () =>
-  await apiAxios().get("/admin/requests");
+  await getAxios().get("/admin/requests");

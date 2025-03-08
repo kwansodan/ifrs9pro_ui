@@ -21,31 +21,20 @@ import AdminVerification from "./pages/authentication/verification/admin_verific
 import AdminAccess from "./pages/admin_access/_page";
 import PasswordChange from "./pages/passwords/_page";
 import ExpiredLink from "./pages/authentication/verification/expired_link";
-import { IAppState, IConfig } from "./core/interfaces";
-import { useQuery } from "@tanstack/react-query";
-import { getUserSession, setBaseApi } from "./core/utility";
+import { IAppState } from "./core/interfaces";
+import { getUserSession } from "./core/utility";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setAppLoading,
-  setFrontendConfig,
-} from "./core/stores/slices/system_slice";
-import { GetFrontendConfig } from "./core/services/system.service";
+import { useSelector } from "react-redux";
+
 import { ToastContainer } from "react-toastify";
 import { RootState } from "./core/stores";
 import PageLoader from "./components/page_loader/_component";
 
 function App() {
   const [userSession] = useState(getUserSession());
-  const [configLoaded, setConfigLoaded] = useState<boolean>(false);
-  const dispatch = useDispatch();
+  const [configLoaded] = useState<boolean>(false);
+
   const appState = useSelector<RootState, IAppState>((state) => state.system);
-  const onInitSuccess = (res: IConfig) => {
-    document.title = res?.appName ?? "";
-    setBaseApi(res?.apiBaseUrl ?? "");
-    dispatch(setFrontendConfig(res));
-    setConfigLoaded(true);
-  };
 
   // const onSessionSuccess = (res: any) => {
   //   if (res.success) {
@@ -59,27 +48,27 @@ function App() {
   //   }
   // };
 
-  const initQuery = useQuery<IConfig>({
-    retry: (count: any) => count < 1,
-    staleTime: Infinity,
-    queryKey: ["initQuery"],
-    queryFn: async () => {
-      const res = await GetFrontendConfig();
-      const data = res.data;
-      onInitSuccess(data);
-      return data;
-    },
-  });
+  // const initQuery = useQuery<IConfig>({
+  //   retry: (count: any) => count < 1,
+  //   staleTime: Infinity,
+  //   queryKey: ["initQuery"],
+  //   queryFn: async () => {
+  //     const res = await GetFrontendConfig();
+  //     const data = res.data;
+  //     onInitSuccess(data);
+  //     return data;
+  //   },
+  // });
 
-  useEffect(() => {
-    dispatch(setAppLoading(initQuery?.isLoading));
+  // useEffect(() => {
+  //   dispatch(setAppLoading(initQuery?.isLoading));
 
-    return () => {};
-  }, [initQuery.isLoading]);
+  //   return () => {};
+  // }, [initQuery.isLoading]);
 
-  useEffect(() => {
-    document.body.style.overflow = appState.loading ? "hidden" : "auto";
-  }, [appState.loading]);
+  // useEffect(() => {
+  //   document.body.style.overflow = appState.loading ? "hidden" : "auto";
+  // }, [appState.loading]);
 
   useEffect(() => {}, [configLoaded]);
   return (

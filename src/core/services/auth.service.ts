@@ -1,18 +1,16 @@
 import axios from "axios";
-import { getAxios, getConfig } from "../utility";
-
-const apiAxios = () => getAxios(getConfig().apiBaseUrl);
+import { getAxios } from "../utility";
 
 export const UserLogin = async (email: string, password: string) =>
-  await apiAxios().post("/login", { email, password });
+  await getAxios().post("/login", { email, password });
 
 export const UserRequestAccess = async (email: string) =>
-  await apiAxios().post("/request-access", { email });
+  await getAxios().post("/request-access", { email });
 
 export const UserSendRequestToAdmin = async (
   email: string,
   admin_email: string
-) => await apiAxios().post("/submit-admin-request", { email, admin_email });
+) => await getAxios().post("/submit-admin-request", { email, admin_email });
 
 //using api directly for some reasons
 export const VerifyUserEmail = async (token: string) =>
@@ -21,10 +19,10 @@ export const VerifyUserEmail = async (token: string) =>
   );
 
 export const VerifyAdminApproval = async (token: string) =>
-  await apiAxios().post("/set-password/" + token);
+  await getAxios().post("/set-password/" + token);
 
 export const GetUserCurrentSession = async () =>
-  await apiAxios().post("/Auth/GetCurrentSessionInternalUser", {});
+  await getAxios().post("/Auth/GetCurrentSessionInternalUser", {});
 
 export const ExpireToken = async () =>
-  await apiAxios().post("/Auth/ExpireToken", {});
+  await getAxios().post("/Auth/ExpireToken", {});

@@ -8,6 +8,8 @@ import CreatePorfolio from "../../components/create_portfolio/_component";
 import DeleteUser from "../users/delete_user";
 import ApproveRequest from "./approve_request";
 import { useAdminRequests } from "../../core/hooks/admin";
+import TableLoader from "../../components/table_loader/component";
+import moment from "moment";
 
 function AdminAccess() {
   const menuRef = useRef<HTMLDivElement>(null);
@@ -20,16 +22,7 @@ function AdminAccess() {
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
 
   const { adminRequestsQuery } = useAdminRequests();
-  console.log(
-    "adminRequestsQuery: ",
-    adminRequestsQuery &&
-      adminRequestsQuery.data &&
-      adminRequestsQuery.data.data
-  );
-  const adminRequestsRows =
-    adminRequestsQuery &&
-    adminRequestsQuery.data &&
-    adminRequestsQuery.data.data;
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -59,11 +52,21 @@ function AdminAccess() {
     );
   };
 
+  const renderDate = (data: any) => {
+    console.log("created_at: ", data);
+    return moment(data.row.created_at).format("lll");
+  };
+
   const columns = [
     { key: "email", name: "Email", width: 300 },
     { key: "admin_email", name: "Admin Email", width: 410 },
 
-    { key: "created_at", name: "Created At", width: 340 },
+    {
+      key: "created_at",
+      name: "Created At",
+      width: 340,
+      renderCell: renderDate,
+    },
     {
       key: "status",
       name: "Status",
@@ -174,11 +177,24 @@ function AdminAccess() {
         {showFilter && <FilterTray closeFilter={() => setShowFilter(false)} />}
       </div>
       <div className="max-w-[1160px] h-[398px] border-[1px] border-[#F0F0F0] rounded-[11px]">
-        <DataGrid
-          columns={columns}
-          rows={adminRequestsRows}
-          className="rdg-light custom-grid"
-        />
+        {adminRequestsQuery.isFetching ? (
+          <>
+            <TableLoader />
+          </>
+        ) : (
+          <>
+            <DataGrid
+              columns={columns}
+              rows={
+                (adminRequestsQuery &&
+                  adminRequestsQuery.data &&
+                  adminRequestsQuery.data.data) ||
+                []
+              }
+              className="rdg-light custom-grid"
+            />
+          </>
+        )}
       </div>
     </>
   );

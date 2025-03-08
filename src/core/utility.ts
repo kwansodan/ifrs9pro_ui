@@ -14,8 +14,11 @@ export const clearUserData = () => {
   localStorage.removeItem("coverImage");
 };
 
-export const getAxios = (baseURL: string = "") => {
-  const instance = axios.create({ baseURL });
+export const getAxios = () => {
+  const instance = axios.create({
+    baseURL: "https://ifrs9pro-backend.onrender.com",
+  });
+
   const token = localStorage.getItem("u_token");
 
   const checkExpiry = () => {
@@ -25,7 +28,6 @@ export const getAxios = (baseURL: string = "") => {
     if (dateToCheck.isBefore(now)) {
       return true;
     }
-
     return false;
   };
 
