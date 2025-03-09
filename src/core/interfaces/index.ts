@@ -31,6 +31,9 @@ export interface UploadProps {
 }
 export interface UploadDataProps {
   close?: () => void;
+  rowId?: number;
+  rowStatus?: string;
+  requestId?: number;
 }
 
 export interface CategoryProps {

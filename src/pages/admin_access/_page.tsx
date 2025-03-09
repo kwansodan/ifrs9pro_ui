@@ -14,6 +14,8 @@ import moment from "moment";
 function AdminAccess() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [showFilter, setShowFilter] = useState(false);
+  const [rowStatus, setRowStatus] = useState<string>("");
+  const [requestId, setRequestId] = useState<number>();
   const [openCreatePortfolioModal, setOpenCreatePortfolioModal] =
     useState<boolean>(false);
   const [openDeleteUserModal, setOpenDeleteUserModal] =
@@ -39,7 +41,9 @@ function AdminAccess() {
     };
   }, [showActionsMenu]);
 
-  const renderActionsRow = () => {
+  const renderActionsRow = (data: any) => {
+    setRowStatus(data && data.row.status);
+    setRequestId(data && data.row.id);
     return (
       <div className="flex cursor-pointer">
         <img
@@ -53,7 +57,6 @@ function AdminAccess() {
   };
 
   const renderDate = (data: any) => {
-    console.log("created_at: ", data);
     return moment(data.row.created_at).format("lll");
   };
 
@@ -70,6 +73,11 @@ function AdminAccess() {
     {
       key: "status",
       name: "Status",
+      width: "100px",
+    },
+    {
+      key: "actions",
+      name: "Actions",
       renderCell: renderActionsRow,
       width: "100px",
     },
@@ -83,7 +91,11 @@ function AdminAccess() {
         close={() => setOpenEditUserModal(false)}
       >
         <div className="bg-white rounded-[20px]">
-          <ApproveRequest close={() => setOpenEditUserModal(false)} />
+          <ApproveRequest
+            requestId={requestId}
+            rowStatus={rowStatus}
+            close={() => setOpenEditUserModal(false)}
+          />
         </div>
       </Modal>
       <Modal

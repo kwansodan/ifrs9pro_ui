@@ -21,6 +21,7 @@ function AdminRequest() {
     VerifyUserEmail(token)
       .then((res) => {
         setVerifyDone(true);
+        console.log("veriRes: ", res);
         setMessage(res.data.message);
       })
       .catch((error) => {

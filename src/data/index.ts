@@ -56,6 +56,11 @@ export const reportTypeOptions = [
   { value: "debt", label: "Loss given default report  " },
 ];
 
+export const roles = [
+  { value: "admin", label: "Admin" },
+  { value: "user", label: "User" },
+];
+
 export const customerTypeOptions = [
   { value: "individuals", label: "Individuals" },
   { value: "institution", label: "Institution" },
