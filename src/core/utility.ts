@@ -14,6 +14,11 @@ export const clearUserData = () => {
   localStorage.removeItem("coverImage");
 };
 
+export const clearUserSession = () => {
+  localStorage.clear();
+  window.location.reload();
+};
+
 export const getAxios = () => {
   const instance = axios.create({
     baseURL: "https://ifrs9pro-backend.onrender.com",
@@ -26,6 +31,7 @@ export const getAxios = () => {
     let now = moment();
     let dateToCheck = moment(tokenExpiry);
     if (dateToCheck.isBefore(now)) {
+      alert("expired date");
       return true;
     }
     return false;
@@ -38,18 +44,16 @@ export const getAxios = () => {
   instance.interceptors.response.use(
     (response) => {
       if (response.status === 200 && response.data.data == 401) {
-        clearUserData();
-        window.location.reload();
+        clearUserSession();
       }
       if (response.status === 401 || checkExpiry()) {
-        clearUserData();
-        window.location.reload();
+        clearUserSession();
       }
       return response;
     },
     (error) => {
       if (error?.response?.status === 401) {
-        clearUserData();
+        clearUserSession();
       }
       if (error?.response?.status === 429) {
         return Promise.resolve(error);
@@ -58,11 +62,6 @@ export const getAxios = () => {
     }
   );
   return instance;
-};
-
-export const clearUserSession = () => {
-  localStorage.clear();
-  window.location.reload();
 };
 
 export const cacheUserSession = (token: string, expiry: any) => {
@@ -100,4 +99,12 @@ export const getUserSession = () => {
 
 export const addCommasToNumber = (number: number) => {
   return number.toLocaleString();
+};
+
+export const renderStatusColors = (status: string) => {
+  return status.toLocaleLowerCase() === "pending"
+    ? "text-yellow-500"
+    : status.toLocaleLowerCase() === "approved"
+    ? "text-green-500"
+    : "text-red-500";
 };

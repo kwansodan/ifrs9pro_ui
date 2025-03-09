@@ -98,7 +98,7 @@ function App() {
                 element={<AdminVerification />}
               />
               <Route
-                path="/password-change/:token"
+                path="/password-reset/:token"
                 element={<PasswordChange />}
               />
               <Route path="/expired-link" element={<ExpiredLink />} />

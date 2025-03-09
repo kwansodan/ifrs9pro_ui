@@ -25,7 +25,10 @@ function AdminRequest() {
         setMessage(res.data.message);
       })
       .catch((error) => {
-        console.log("veriErr: ", error);
+        showToast(error?.response.data.detail, false);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
       });
   }, [token]);
   const [emailValue, setEmailValue] = useState<string>("");

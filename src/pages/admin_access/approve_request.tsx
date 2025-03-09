@@ -5,24 +5,24 @@ import { UploadDataProps } from "../../core/interfaces";
 import { useActionState, useState } from "react";
 import { showToast } from "../../core/hooks/alert";
 import { ApproveUserRequest } from "../../core/services/dashboard.service";
-import { useNavigate } from "react-router-dom";
+
 function ApproveRequest({ close, rowStatus, requestId }: UploadDataProps) {
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<string>("");
-  const navigate = useNavigate();
 
   const handleAdminApproval = async () => {
     setButtonLoading(true);
     if (!requestId || !rowStatus || !selectedRole) {
       showToast("Some required fields are missing.", false);
+      setButtonLoading(false);
       return;
     }
     try {
       ApproveUserRequest(requestId, rowStatus, selectedRole)
         .then((res) => {
           console.log(res);
+          showToast(res.data.message, true);
           setButtonLoading(false);
-          navigate("/admin-verification");
         })
         .catch((err) => {
           setButtonLoading(false);

@@ -10,6 +10,7 @@ import ApproveRequest from "./approve_request";
 import { useAdminRequests } from "../../core/hooks/admin";
 import TableLoader from "../../components/table_loader/component";
 import moment from "moment";
+import { renderStatusColors } from "../../core/utility";
 
 function AdminAccess() {
   const menuRef = useRef<HTMLDivElement>(null);
@@ -42,16 +43,29 @@ function AdminAccess() {
   }, [showActionsMenu]);
 
   const renderActionsRow = (data: any) => {
-    setRowStatus(data && data.row.status);
-    setRequestId(data && data.row.id);
+    const { id, status } = data.row;
     return (
       <div className="flex cursor-pointer">
         <img
-          onClick={() => setShowActionsMenu(!showActionsMenu)}
+          onClick={() => {
+            setRowStatus(status);
+            setRequestId(id);
+            console.log("Clicked row data: ", id, status);
+            setShowActionsMenu((prev) => !prev);
+          }}
           src={Images.options}
           className="w-[24px]"
           alt=""
         />
+      </div>
+    );
+  };
+
+  const renderStatus = (data: any) => {
+    const { status } = data.row;
+    return (
+      <div className="flex cursor-pointer">
+        <span className={renderStatusColors(status)}>{status}</span>
       </div>
     );
   };
@@ -74,6 +88,7 @@ function AdminAccess() {
       key: "status",
       name: "Status",
       width: "100px",
+      renderCell: renderStatus,
     },
     {
       key: "actions",
