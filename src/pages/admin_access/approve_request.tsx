@@ -42,6 +42,7 @@ function ApproveRequest({ close, rowStatus, requestId }: UploadDataProps) {
   };
 
   const [state, formAction] = useActionState(handleAdminApproval, null);
+  console.log("state: ", state);
   return (
     <>
       <div className="p-8">
