@@ -3,7 +3,6 @@ import { Images } from "../../data/Assets";
 import Button from "../../components/button/_component";
 import { useNavigate, useParams } from "react-router-dom";
 import { VerifyAdminApproval } from "../../core/services/auth.service";
-import PageLoader from "../../components/page_loader/_component";
 import { showToast } from "../../core/hooks/alert";
 
 function PasswordChange() {
