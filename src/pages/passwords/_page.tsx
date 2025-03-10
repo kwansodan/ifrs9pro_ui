@@ -50,7 +50,7 @@ function PasswordChange() {
     }
     try {
       if (token) {
-        VerifyAdminApproval(token)
+        VerifyAdminApproval(token, passsword, confirm_password)
           .then((res) => {
             setButtonLoading(false);
             setVerifyDone(true);
@@ -61,6 +61,7 @@ function PasswordChange() {
             }, 2000);
           })
           .catch((error) => {
+            setButtonLoading(false);
             showToast(error?.response.data.detail, false);
           });
       }

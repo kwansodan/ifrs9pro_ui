@@ -18,8 +18,15 @@ export const VerifyUserEmail = async (token: string) =>
     `https://ifrs9pro-backend.onrender.com/verify-email/${token}`
   );
 
-export const VerifyAdminApproval = async (token: string) =>
-  await getAxios().post("/set-password/" + token);
+export const VerifyAdminApproval = async (
+  token: string,
+  password: string,
+  confirm_password: string
+) =>
+  await getAxios().post("/set-password/" + token, {
+    password,
+    confirm_password,
+  });
 
 export const GetUserCurrentSession = async () =>
   await getAxios().post("/Auth/GetCurrentSessionInternalUser", {});
