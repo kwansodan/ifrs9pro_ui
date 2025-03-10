@@ -1,7 +1,7 @@
 import { useActionState, useEffect, useState } from "react";
 import { Images } from "../../data/Assets";
 import Button from "../../components/button/_component";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { VerifyAdminApproval } from "../../core/services/auth.service";
 import PageLoader from "../../components/page_loader/_component";
 import { showToast } from "../../core/hooks/alert";
@@ -10,27 +10,14 @@ function PasswordChange() {
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [newPasswordValue, setNewPasswordValue] = useState<string>("");
   const [password, setPassword] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
   const [newPassword, setNewPassword] = useState<boolean>(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
-  const [verifyDone, setVerifyDone] = useState(false);
+  const [verifyDone, setVerifyDone] = useState<boolean>(false);
 
   const { token } = useParams();
-
-  console.log("Verification Token:", token);
-
-  console.log("Token:", token);
-  useEffect(() => {
-    if (token) {
-      VerifyAdminApproval(token)
-        .then(() => {
-          setVerifyDone(true);
-        })
-        .catch((error) => {
-          console.log("veriErr: ", error);
-        });
-    }
-  }, []);
+  const navigate = useNavigate();
   const passwordToggle = () => {
     setPassword(!password);
   };
@@ -45,31 +32,42 @@ function PasswordChange() {
     );
   }, [passwordValue, newPasswordValue]);
 
+  useEffect(() => {
+    if (verifyDone) {
+      showToast(message, true);
+    }
+  }, [verifyDone]);
+
   const handlePasswordChange = async (prevState: any, formData: FormData) => {
     setButtonLoading(true);
     console.log("prev: ", prevState);
 
     const passsword = formData.get("password") as string;
-    const confirm_password = formData.get("email") as string;
-    if (!passsword || confirm_password) {
+    const confirm_password = formData.get("confirm_password") as string;
+    if (!passsword || !confirm_password) {
       setButtonLoading(false);
       showToast("Please fill all fields.", false);
-      return { success: false, error: "Email and password are required." };
+      return { success: false, error: "Passwords are required." };
     }
     try {
-      // UserSendRequestToAdmin(user_email, admin_email)
-      //   .then((res) => {
-      //     console.log(res);
-      //     navigate("/admin-verification");
-      //   })
-      //   .catch((err) => {
-      //     showToast(err?.response?.data.detail, false);
-      //   });
-      // return { success: true };
+      if (token) {
+        VerifyAdminApproval(token)
+          .then((res) => {
+            setButtonLoading(false);
+            setVerifyDone(true);
+            setMessage(res.data.message);
+            showToast(res.data.message, true);
+            setTimeout(() => {
+              navigate("/");
+            }, 2000);
+          })
+          .catch((error) => {
+            showToast(error?.response.data.detail, false);
+          });
+      }
     } catch (err) {
       console.error("Failed to login:", err);
       setButtonLoading(false);
-      return { success: false, error: "Login failed. Please try again." };
     }
   };
 
@@ -77,75 +75,67 @@ function PasswordChange() {
   console.log("state: ", state);
   return (
     <>
-      {verifyDone && <PageLoader loadingHeader={"Verifying..."} />}
-      {verifyDone &&
-        showToast(
-          "Verification done. Please proceed to create a password",
-          true
-        )}
-      {!verifyDone && (
-        <>
-          <h2 className=" mt-24 text-center text-[20px] font-extrabold text-[#166E94]">
-            IFRS9Pro
-          </h2>
-          <div className="flex items-center justify-center">
-            <div className="relative bg-white px-8 py-12 rounded-xl border-[1px] border-[#F0F0F0] w-96">
-              <form action={formAction}>
-                <div className="absolute top-0 left-0 right-0 h-8 bg-gray-100 rounded-t-xl"></div>
+      <>
+        <h2 className=" mt-24 text-center text-[20px] font-extrabold text-[#166E94]">
+          IFRS9Pro
+        </h2>
+        <div className="flex items-center justify-center">
+          <div className="relative bg-white px-8 py-12 rounded-xl border-[1px] border-[#F0F0F0] w-96">
+            <form action={formAction}>
+              <div className="absolute top-0 left-0 right-0 h-8 bg-gray-100 rounded-t-xl"></div>
 
-                <h3 className="text-center text-[18px] font-medium text-gray-800">
-                  Set Password
-                </h3>
-                <div className="relative mt-4">
-                  <input
-                    type={password ? "text" : "password"}
-                    placeholder="Create password"
-                    name="password"
-                    className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-                    onChange={(e) => setPasswordValue(e.target.value)}
-                  />
-                  <span
-                    onClick={() => passwordToggle()}
-                    className="absolute text-gray-500 cursor-pointer top-3 right-4"
-                  >
-                    {password ? (
-                      <img className="w-5" src={Images.closedEye} />
-                    ) : (
-                      <img className="w-5" src={Images.openEye} />
-                    )}
-                  </span>
-                </div>
-                <div className="relative mt-4">
-                  <input
-                    type={newPassword ? "text" : "password"}
-                    placeholder="Cofirm password"
-                    name="confirm_password"
-                    className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-                    onChange={(e) => setNewPasswordValue(e.target.value)}
-                  />
-                  <span
-                    onClick={() => newPasswordToggle()}
-                    className="absolute text-gray-500 cursor-pointer top-3 right-4"
-                  >
-                    {newPassword ? (
-                      <img className="w-5" src={Images.closedEye} />
-                    ) : (
-                      <img className="w-5" src={Images.openEye} />
-                    )}
-                  </span>
-                </div>
-                <Button
-                  type="submit"
-                  className="mt-8 text-white"
-                  text="Set password"
-                  disabled={!isFormValid}
-                  isLoading={buttonLoading}
+              <h3 className="text-center text-[18px] font-medium text-gray-800">
+                Set Password
+              </h3>
+              <div className="relative mt-4">
+                <input
+                  type={password ? "text" : "password"}
+                  placeholder="Create password"
+                  name="password"
+                  className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                  onChange={(e) => setPasswordValue(e.target.value)}
                 />
-              </form>
-            </div>
+                <span
+                  onClick={() => passwordToggle()}
+                  className="absolute text-gray-500 cursor-pointer top-3 right-4"
+                >
+                  {password ? (
+                    <img className="w-5" src={Images.closedEye} />
+                  ) : (
+                    <img className="w-5" src={Images.openEye} />
+                  )}
+                </span>
+              </div>
+              <div className="relative mt-4">
+                <input
+                  type={newPassword ? "text" : "password"}
+                  placeholder="Cofirm password"
+                  name="confirm_password"
+                  className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                  onChange={(e) => setNewPasswordValue(e.target.value)}
+                />
+                <span
+                  onClick={() => newPasswordToggle()}
+                  className="absolute text-gray-500 cursor-pointer top-3 right-4"
+                >
+                  {newPassword ? (
+                    <img className="w-5" src={Images.closedEye} />
+                  ) : (
+                    <img className="w-5" src={Images.openEye} />
+                  )}
+                </span>
+              </div>
+              <Button
+                type="submit"
+                className="mt-8 text-white"
+                text="Set password"
+                disabled={!isFormValid}
+                isLoading={buttonLoading}
+              />
+            </form>
           </div>
-        </>
-      )}
+        </div>
+      </>
     </>
   );
 }
