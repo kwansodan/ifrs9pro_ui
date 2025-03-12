@@ -3,8 +3,9 @@ export interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   isLoading?: boolean;
-  type?: "submit";
+  type?: "submit" | "button";
   className?: string;
+  btnId?: string;
 }
 
 export interface CardProps {
@@ -14,7 +15,6 @@ export interface CardProps {
   parentClassName?: string;
   textColor?: string;
 }
-
 export interface ModalProps {
   open?: boolean;
   closeOnOverlay?: boolean;
@@ -22,18 +22,19 @@ export interface ModalProps {
   children?: React.ReactNode;
   modalHeader?: string;
 }
-
 export interface FilterTrayProps {
   closeFilter?: () => void;
 }
+
 export interface UploadProps {
   UploadTitle?: string;
 }
 export interface UploadDataProps {
   close?: () => void;
   rowId?: number;
-  rowStatus?: string;
+  actionToBeTaken?: string;
   requestId?: number;
+  isOperationDone?: boolean;
 }
 
 export interface CategoryProps {
@@ -51,13 +52,11 @@ export interface IConfig {
   appName?: string;
   apiBaseUrl?: string;
 }
-
 export type IAppState = {
   config?: IFrontentConfig;
   loading: boolean;
   error: boolean;
 };
-
 export type IUserAdditionalInfo = {
   displayName?: string;
   distributorInfo: IDistributorInfo;
@@ -72,7 +71,6 @@ export type IRechargeType = {
   id?: string;
   name?: string;
 };
-
 export type IUser = {
   roles?: string[];
   username?: string;

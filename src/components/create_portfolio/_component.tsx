@@ -16,26 +16,27 @@ function CreatePorfolio({ cancel }: any) {
   const [step, setStep] = useState<number>(1);
   const [openSecondStepCreatePortfolio, setOpenSecondStepCreatePortfolio] =
     useState<boolean>(false);
-  const [selectedAsset, setSelectedAsset] = useState<string>();
-  const [repaymentValue, setRepaymentValue] = useState<boolean>();
-  const [selectedCustomerType, setSelectedCustomerType] = useState<string>();
-  const [selectedFundingSource, setSelectedFundingSource] = useState<string>();
-  const [selectedDataSource, setSelectedDataSource] = useState<string>();
+  const [selectedAsset, setSelectedAsset] = useState<string>("");
+  const [repaymentValue, setRepaymentValue] = useState<boolean>(false);
+  const [selectedCustomerType, setSelectedCustomerType] = useState<string>("");
+  const [selectedFundingSource, setSelectedFundingSource] =
+    useState<string>("");
+  const [selectedDataSource, setSelectedDataSource] = useState<string>("");
 
-  const handleAssetChange = (selectedOption: string) => {
-    setSelectedAsset(selectedOption);
+  const handleAssetChange = (selectedOption: any) => {
+    setSelectedAsset(selectedOption.value);
   };
 
-  const handleCustomerTypeChange = (selectedOption: string) => {
-    setSelectedCustomerType(selectedOption);
+  const handleCustomerTypeChange = (selectedOption: any) => {
+    setSelectedCustomerType(selectedOption.value);
   };
 
-  const handleFundingSourceChange = (selectedOption: string) => {
-    setSelectedFundingSource(selectedOption);
+  const handleFundingSourceChange = (selectedOption: any) => {
+    setSelectedFundingSource(selectedOption.value);
   };
 
-  const handleDataSourceChange = (selectedOption: string) => {
-    setSelectedDataSource(selectedOption);
+  const handleDataSourceChange = (selectedOption: any) => {
+    setSelectedDataSource(selectedOption.value);
   };
 
   const handleRepaymentToggle = (
@@ -46,28 +47,43 @@ function CreatePorfolio({ cancel }: any) {
 
   const handleSubmit = async (prevState: any, formData: FormData) => {
     console.log("prev: ", prevState);
-    const email = formData.get("email") as string | null;
-    const password = formData.get("password") as string | null;
-    if (!email || !password) {
-      showToast("Email and password are required.", false);
-
-      return { success: false, error: "Email and password are required." };
-    }
-    // if (email.toLocaleLowerCase() !== "admin@ifrs9pro.com") navigate("/");
-
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string;
+    const assetType = selectedAsset as string;
+    const customerType = selectedCustomerType as string;
+    const fundingSource = selectedFundingSource as string;
+    const dataSource = selectedDataSource as string;
+    const repaymentSource = repaymentValue as boolean;
     const payload = {
-      name: formData.get("name") as string,
-      description: formData.get("description") as string,
-      asset_type: selectedAsset as string,
-      customer_type: selectedCustomerType as string,
-      funding_source: selectedFundingSource as string,
-      data_source: selectedDataSource as string,
-      repayment_source: repaymentValue as boolean,
+      name,
+      description,
+      asset_type: assetType,
+      customer_type: customerType,
+      funding_source: fundingSource,
+      data_source: dataSource,
+      repayment_source: repaymentSource,
     };
+    if (
+      !name ||
+      !description ||
+      !assetType ||
+      !customerType ||
+      !fundingSource ||
+      !dataSource
+    ) {
+      showToast("Please fill in all fields.", false);
+      return { success: false, error: "All fields are required." };
+    }
+
     try {
       CreatePortfolioApi(payload)
         .then((res) => {
-          if (res.status === 200) {
+          if (res.status === 200 || res.status === 201) {
+            showToast("First step of portfolio created successfully.", true);
+            console.log("res: ", res);
+            setTimeout(() => {
+              setStep(2);
+            }, 1000);
           }
         })
         .catch((err) => {
@@ -113,9 +129,8 @@ function CreatePorfolio({ cancel }: any) {
                 <label>Asset type</label>
                 <Select
                   className="w-full"
-                  onChange={() => handleAssetChange}
+                  onChange={handleAssetChange}
                   options={assetsOptions}
-                  id="asset-type"
                   placeholder="Select asset type"
                 />
               </div>
@@ -123,9 +138,8 @@ function CreatePorfolio({ cancel }: any) {
                 <label>Customer type</label>
                 <Select
                   className="w-full"
-                  onChange={() => handleCustomerTypeChange}
+                  onChange={handleCustomerTypeChange}
                   options={customerTypeOptions}
-                  id="customer-type"
                   placeholder="Select customer type"
                 />
               </div>
@@ -133,9 +147,8 @@ function CreatePorfolio({ cancel }: any) {
                 <label>Funding source</label>
                 <Select
                   className="w-full"
-                  onChange={() => handleFundingSourceChange}
+                  onChange={handleFundingSourceChange}
                   options={fundingSourceOptions}
-                  id="funding-source"
                   placeholder="Select funding source"
                 />
               </div>
@@ -143,9 +156,8 @@ function CreatePorfolio({ cancel }: any) {
                 <label>Data source</label>
                 <Select
                   className="w-full"
-                  onChange={() => handleDataSourceChange}
+                  onChange={handleDataSourceChange}
                   options={dataSourceOptions}
-                  id="data-source"
                   placeholder="Select data source"
                 />
               </div>
@@ -170,16 +182,16 @@ function CreatePorfolio({ cancel }: any) {
             </div>
             <hr />
             <div className="flex justify-end p-2">
-              <Button
-                text="Cancel"
-                onClick={() => {
-                  cancel();
-                }}
-                className="bg-white !py-0 mr-3 border-[1px] border-[#6F6F6F] font-normal mt-3 text-[#6F6F6F] text-[12px] !rounded-[10px] !w-[90px] "
-              />
+              <div
+                onClick={() => cancel()}
+                className="bg-white flex justify-center items-center !py-0 mr-3 border-[1px] border-[#6F6F6F] font-normal mt-3 text-[#6F6F6F] text-[12px] !rounded-[10px] !w-[90px]"
+              >
+                Cancel
+              </div>
+
               <Button
                 text="Next"
-                onClick={() => setStep(2)}
+                type="submit"
                 className="bg-[#166E94] font-normal mt-3 text-white text-[12px] !rounded-[10px] !w-[90px] "
               />
             </div>

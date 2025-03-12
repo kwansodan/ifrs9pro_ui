@@ -6,23 +6,47 @@ import { useActionState, useState } from "react";
 import { showToast } from "../../core/hooks/alert";
 import { ApproveUserRequest } from "../../core/services/dashboard.service";
 
-function ApproveRequest({ close, rowStatus, requestId }: UploadDataProps) {
+function ApproveRequest({
+  close,
+  actionToBeTaken,
+  requestId,
+}: UploadDataProps) {
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<string>("");
 
   const handleAdminApproval = async () => {
     setButtonLoading(true);
-    if (!requestId || !rowStatus || !selectedRole) {
+
+    if (
+      !requestId ||
+      (!selectedRole &&
+        actionToBeTaken?.toLocaleLowerCase() === "approve request")
+    ) {
       showToast("Some required fields are missing.", false);
       setButtonLoading(false);
       return;
     }
     try {
-      ApproveUserRequest(requestId, rowStatus, selectedRole)
+      ApproveUserRequest(
+        requestId,
+        actionToBeTaken?.toLocaleLowerCase() === "approve request"
+          ? "approved"
+          : actionToBeTaken?.toLocaleLowerCase() === "deny request"
+          ? "denied"
+          : "flagged",
+        actionToBeTaken?.toLocaleLowerCase() === "approve request"
+          ? selectedRole
+          : actionToBeTaken?.toLocaleLowerCase() === "deny request"
+          ? "admin"
+          : "admin"
+      )
         .then((res) => {
           console.log(res);
           showToast(res.data.message, true);
           setButtonLoading(false);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         })
         .catch((err) => {
           setButtonLoading(false);
@@ -47,28 +71,61 @@ function ApproveRequest({ close, rowStatus, requestId }: UploadDataProps) {
     <>
       <div className="p-8">
         <form action={formAction}>
+          {actionToBeTaken?.toLocaleLowerCase() === "approve request" ? (
+            <>
+              <div className="mt-3 leading-9 min-w-[510px]">
+                <label className="text-[#1E1E1E] text-[14px] font-medium">
+                  Role
+                </label>
+
+                <Select
+                  className="w-full"
+                  onChange={(selectedOption) =>
+                    handleRoleOnChange(
+                      (selectedOption && selectedOption?.value) || ""
+                    )
+                  }
+                  options={roles}
+                  placeholder="Select role"
+                />
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+
           <div className="mt-3 leading-9 min-w-[510px]">
             <label className="text-[#1E1E1E] text-[14px] font-medium">
-              Role
+              Status
             </label>
             <Select
               className="w-full"
-              onChange={(selectedOption) =>
-                handleRoleOnChange(
-                  (selectedOption && selectedOption?.value) || ""
-                )
+              value={
+                actionToBeTaken?.toLocaleLowerCase() === "approve request"
+                  ? "approved"
+                  : actionToBeTaken?.toLocaleLowerCase() === "deny request"
+                  ? "denied"
+                  : "flagged"
               }
-              options={roles}
-              placeholder="Select role"
+              placeholder={
+                actionToBeTaken?.toLocaleLowerCase() === "approve request"
+                  ? "Approve"
+                  : actionToBeTaken?.toLocaleLowerCase() === "deny request"
+                  ? "Deny"
+                  : "Flag"
+              }
+              isDisabled={true}
             />
           </div>
 
           <div className="flex justify-end mt-3">
-            <Button
-              text="Cancel"
+            <div
               onClick={close}
-              className="px-4 !w-[90px]  !text-[14px] bg-white border border-gray-400 rounded-[10px] mr-2"
-            />
+              className="px-4 flex justify-center items-center cursor-pointer !w-[90px]  !text-[14px] bg-white border border-gray-400 rounded-[10px] mr-2"
+            >
+              Cancel
+            </div>
+
             <Button
               text="Authorize"
               type="submit"

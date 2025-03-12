@@ -15,7 +15,7 @@ import { renderStatusColors } from "../../core/utility";
 function AdminAccess() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [showFilter, setShowFilter] = useState(false);
-  const [rowStatus, setRowStatus] = useState<string>("");
+  const [actionToBeTaken, setActionToBeTaken] = useState<string>("");
   const [requestId, setRequestId] = useState<number>();
   const [openCreatePortfolioModal, setOpenCreatePortfolioModal] =
     useState<boolean>(false);
@@ -48,7 +48,6 @@ function AdminAccess() {
       <div className="flex cursor-pointer">
         <img
           onClick={() => {
-            setRowStatus(status);
             setRequestId(id);
             console.log("Clicked row data: ", id, status);
             setShowActionsMenu((prev) => !prev);
@@ -101,14 +100,14 @@ function AdminAccess() {
   return (
     <>
       <Modal
-        modalHeader="Approve role"
+        modalHeader="Update"
         open={openEditUserModal}
         close={() => setOpenEditUserModal(false)}
       >
         <div className="bg-white rounded-[20px]">
           <ApproveRequest
             requestId={requestId}
-            rowStatus={rowStatus}
+            actionToBeTaken={actionToBeTaken}
             close={() => setOpenEditUserModal(false)}
           />
         </div>
@@ -136,7 +135,11 @@ function AdminAccess() {
         >
           <div className="p-4">
             <div
-              onClick={() => {
+              onClick={(event) => {
+                const text =
+                  event.currentTarget.querySelector("span")?.innerText || "";
+                setActionToBeTaken(text);
+                console.log(text);
                 setOpenEditUserModal(true);
               }}
               className="flex items-center cursor-pointer"
@@ -148,8 +151,11 @@ function AdminAccess() {
             </div>
 
             <div
-              onClick={() => {
-                setOpenDeleteUserModal(true);
+              onClick={(event) => {
+                const text =
+                  event.currentTarget.querySelector("span")?.innerText || "";
+                setActionToBeTaken(text);
+                setOpenEditUserModal(true);
               }}
               className="flex items-center mt-2 cursor-pointer"
             >
@@ -159,8 +165,11 @@ function AdminAccess() {
               </span>
             </div>
             <div
-              onClick={() => {
-                setOpenDeleteUserModal(true);
+              onClick={(event) => {
+                const text =
+                  event.currentTarget.querySelector("span")?.innerText || "";
+                setActionToBeTaken(text);
+                setOpenEditUserModal(true);
               }}
               className="flex items-center mt-2 cursor-pointer"
             >

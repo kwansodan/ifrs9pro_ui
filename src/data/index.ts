@@ -52,13 +52,20 @@ export const reportTypeOptions = [
       "Amortised loan balances report (caveat that the BOG non-accrual rule has not been considered) ",
   },
   { value: "debt", label: "Probability of default report" },
-  { value: "debt", label: "Exposure at default report " },
-  { value: "debt", label: "Loss given default report  " },
+  { value: "debt", label: "Exposure at default report" },
+  { value: "debt", label: "Loss given default report" },
 ];
 
 export const roles = [
   { value: "admin", label: "Admin" },
   { value: "user", label: "User" },
+];
+
+export const status = [
+  { value: "pending", label: "Pending" },
+  { value: "approved", label: "Approved" },
+  { value: "denied", label: "Denied" },
+  { value: "flagged", label: "Flagged" },
 ];
 
 export const customerTypeOptions = [
@@ -68,15 +75,18 @@ export const customerTypeOptions = [
 ];
 
 export const fundingSourceOptions = [
-  { value: "individuals", label: "Individuals" },
-  { value: "institution", label: "Institution" },
-  { value: "mixed", label: "Mixed" },
+  { value: "private investors", label: "Private investors" },
+  { value: "pension fund", label: "Pension fund" },
+  { value: "mutual fund", label: "Mutual fund" },
+  { value: "other funds", label: "Other funds" },
 ];
 
 export const dataSourceOptions = [
-  { value: "individuals", label: "Individuals" },
-  { value: "institution", label: "Institution" },
-  { value: "mixed", label: "Mixed" },
+  {
+    value: "connect to external application",
+    label: "Connect to external application",
+  },
+  { value: "upload data", label: "Upload data" },
 ];
 export const options: ApexOptions = {
   chart: { type: "scatter" }, // Change type to scatter
