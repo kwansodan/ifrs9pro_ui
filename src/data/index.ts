@@ -59,6 +59,8 @@ export const reportTypeOptions = [
 export const roles = [
   { value: "admin", label: "Admin" },
   { value: "user", label: "User" },
+  { value: "analyst", label: "Analyst" },
+  { value: "reviewer", label: "Reviewer" },
 ];
 
 export const status = [

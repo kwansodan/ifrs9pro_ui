@@ -7,15 +7,15 @@ import {
 } from "../../data";
 import Button from "../button/_component";
 import { useActionState, useState } from "react";
-import { Modal } from "../modal/_component";
 import SecondStep from "./second_step";
 import { CreatePortfolioApi } from "../../core/services/portfolio.service";
 import { showToast } from "../../core/hooks/alert";
+import ThirdStep from "./third_step";
+import FourthStep from "./fourth_step";
 
 function CreatePorfolio({ cancel }: any) {
-  const [step, setStep] = useState<number>(1);
-  const [openSecondStepCreatePortfolio, setOpenSecondStepCreatePortfolio] =
-    useState<boolean>(false);
+  const [step, setStep] = useState<number>(4);
+  const [portfolioId, setPortfolioId] = useState<string>("");
   const [selectedAsset, setSelectedAsset] = useState<string>("");
   const [repaymentValue, setRepaymentValue] = useState<boolean>(false);
   const [selectedCustomerType, setSelectedCustomerType] = useState<string>("");
@@ -81,6 +81,8 @@ function CreatePorfolio({ cancel }: any) {
           if (res.status === 200 || res.status === 201) {
             showToast("First step of portfolio created successfully.", true);
             console.log("res: ", res);
+            setPortfolioId(res.data.id);
+
             setTimeout(() => {
               setStep(2);
             }, 1000);
@@ -97,15 +99,20 @@ function CreatePorfolio({ cancel }: any) {
 
   const [state, formAction] = useActionState(handleSubmit, null);
   console.log("state: ", state);
+
+  const handleSetSecondStep = (step: any) => {
+    setStep(step);
+  };
+  const handleSetThirdStep = (step: any) => {
+    setStep(step);
+  };
+  const handleSetFourthStep = (step: any) => {
+    setStep(step);
+  };
   return (
     <>
-      <Modal
-        close={() => setOpenSecondStepCreatePortfolio(false)}
-        open={openSecondStepCreatePortfolio}
-        modalHeader="Create Portfolio"
-      ></Modal>
       <div className="bg-white min-w-[500px] rounded-[20px]">
-        {step === 1 ? (
+        {step === 1 && (
           <form action={formAction}>
             <div className="p-8 ">
               <div className="mt-3">
@@ -184,7 +191,7 @@ function CreatePorfolio({ cancel }: any) {
             <div className="flex justify-end p-2">
               <div
                 onClick={() => cancel()}
-                className="bg-white flex justify-center items-center !py-0 mr-3 border-[1px] border-[#6F6F6F] font-normal mt-3 text-[#6F6F6F] text-[12px] !rounded-[10px] !w-[90px]"
+                className="bg-white cursor-pointer flex justify-center items-center !py-0 mr-3 border-[1px] border-[#6F6F6F] font-normal mt-3 text-[#6F6F6F] text-[12px] !rounded-[10px] !w-[90px]"
               >
                 Cancel
               </div>
@@ -196,8 +203,20 @@ function CreatePorfolio({ cancel }: any) {
               />
             </div>
           </form>
-        ) : (
-          <SecondStep close={() => cancel()} />
+        )}
+
+        {step === 2 && (
+          <SecondStep
+            setStep={handleSetSecondStep}
+            id={portfolioId}
+            close={() => cancel()}
+          />
+        )}
+        {step === 3 && (
+          <ThirdStep close={() => cancel()} setStep={handleSetThirdStep} />
+        )}
+        {step === 4 && (
+          <FourthStep close={() => cancel()} setStep={handleSetFourthStep} />
         )}
       </div>
     </>

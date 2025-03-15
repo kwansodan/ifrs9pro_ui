@@ -7,6 +7,9 @@ import { Modal } from "../../components/modal/_component";
 import NewUser from "./new_user";
 import EditUser from "./edit_user";
 import DeleteUser from "./delete_user";
+import { useAdminUsers } from "../../core/hooks/users";
+import moment from "moment";
+import TableLoader from "../../components/table_loader/component";
 
 function Users() {
   const [showFilter, setShowFilter] = useState<boolean>(false);
@@ -15,8 +18,11 @@ function Users() {
   const [openDeleteUserModal, setOpenDeleteUserModal] =
     useState<boolean>(false);
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
+  const [id, setId] = useState<number>(0);
+  const [userName, setUserName] = useState<string>("");
   const menuRef = useRef<HTMLDivElement>(null);
 
+  const { adminUsersQuery } = useAdminUsers();
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -33,11 +39,16 @@ function Users() {
     };
   }, [showActionsMenu]);
 
-  const renderActionsRow = () => {
+  const renderActionsRow = (data: any) => {
+    const { id, first_name, last_name } = data.row;
     return (
       <div className="flex cursor-pointer">
         <img
-          onClick={() => setShowActionsMenu(!showActionsMenu)}
+          onClick={() => {
+            setId(id);
+            setUserName(first_name + " " + last_name);
+            setShowActionsMenu(!showActionsMenu);
+          }}
           src={Images.options}
           className="w-[24px]"
           alt=""
@@ -45,13 +56,36 @@ function Users() {
       </div>
     );
   };
+  const renderFullName = (data: any) => {
+    const { first_name, last_name } = data.row;
+    return <span>{first_name + " " + last_name}</span>;
+  };
+
+  const renderDate = (data: any) => {
+    return moment(data.row.created_at).format("lll");
+  };
+
+  const renderUpdatedAt = (data: any) => {
+    return moment(data.row.updated_at).format("lll");
+  };
 
   const columns = [
-    { key: "name", name: "Name", width: 300 },
-    { key: "assetType", name: "Email", width: 350 },
-    { key: "customerType", name: "Role", width: 180 },
+    { key: "name", name: "Name", width: 300, renderCell: renderFullName },
+    { key: "email", name: "Email", width: 350 },
+    { key: "recovery_email", name: "Role", width: 180 },
     { key: "role", name: "Role", width: 150 },
-
+    {
+      key: "created_at",
+      name: "Created At",
+      width: 340,
+      renderCell: renderDate,
+    },
+    {
+      key: "updated_at",
+      name: "Updated At",
+      width: 340,
+      renderCell: renderUpdatedAt,
+    },
     {
       key: "update",
       name: "Actions",
@@ -60,14 +94,6 @@ function Users() {
     },
   ];
 
-  const rows = Array(15).fill({
-    name: "Personal loans",
-    assetType: "Debt",
-    customerType: "Individuals",
-    role: "Accepted",
-    totalValue: "$5,000,900",
-    lastCalculation: "Jan 24, 2025",
-  });
   return (
     <>
       <Modal
@@ -85,7 +111,7 @@ function Users() {
         close={() => setOpenEditUserModal(false)}
       >
         <div className="bg-white rounded-[20px]">
-          <EditUser close={() => setOpenEditUserModal(false)} />
+          <EditUser rowId={id} close={() => setOpenEditUserModal(false)} />
         </div>
       </Modal>
       <Modal
@@ -94,7 +120,11 @@ function Users() {
         close={() => setOpenDeleteUserModal(false)}
       >
         <div className="bg-white rounded-[20px]">
-          <DeleteUser close={() => setOpenDeleteUserModal(false)} />
+          <DeleteUser
+            userName={userName}
+            rowId={id}
+            close={() => setOpenDeleteUserModal(false)}
+          />
         </div>
       </Modal>
 
@@ -161,11 +191,24 @@ function Users() {
         {showFilter && <FilterTray closeFilter={() => setShowFilter(false)} />}
       </div>
       <div className="max-w-[1160px] h-[398px] border-[1px] border-[#F0F0F0] rounded-[11px]">
-        <DataGrid
-          columns={columns}
-          rows={rows}
-          className="rdg-light custom-grid"
-        />
+        {adminUsersQuery?.isFetching ? (
+          <>
+            <TableLoader />
+          </>
+        ) : (
+          <>
+            <DataGrid
+              columns={columns}
+              rows={
+                (adminUsersQuery &&
+                  adminUsersQuery.data &&
+                  adminUsersQuery.data.data) ||
+                []
+              }
+              className="rdg-light custom-grid"
+            />
+          </>
+        )}
       </div>
     </>
   );

@@ -43,13 +43,12 @@ function AdminAccess() {
   }, [showActionsMenu]);
 
   const renderActionsRow = (data: any) => {
-    const { id, status } = data.row;
+    const { id } = data.row;
     return (
       <div className="flex cursor-pointer">
         <img
           onClick={() => {
             setRequestId(id);
-            console.log("Clicked row data: ", id, status);
             setShowActionsMenu((prev) => !prev);
           }}
           src={Images.options}
@@ -76,7 +75,6 @@ function AdminAccess() {
   const columns = [
     { key: "email", name: "Email", width: 300 },
     { key: "admin_email", name: "Admin Email", width: 410 },
-
     {
       key: "created_at",
       name: "Created At",
@@ -96,7 +94,6 @@ function AdminAccess() {
       width: "100px",
     },
   ];
-
   return (
     <>
       <Modal

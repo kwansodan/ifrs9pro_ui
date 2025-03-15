@@ -31,16 +31,18 @@ export interface UploadProps {
 }
 export interface UploadDataProps {
   close?: () => void;
-  rowId?: number;
+  rowId?: any;
   actionToBeTaken?: string;
   requestId?: number;
   isOperationDone?: boolean;
+  setStep?: any;
+  userName?: string;
 }
 
 export interface CategoryProps {
   category: string;
   range: string;
-  rate: string;
+  rate?: string;
 }
 
 export type IFrontentConfig = {
