@@ -19,7 +19,7 @@ function DeletePortfolio({ id, close, name }: any) {
       <div className="w-16 m-auto"></div>
       <div className="text-sm">
         <h3 className="mt-3 text-black">
-          This action will delte all data related to this portfolio. Are you
+          This action will delete all data related to this portfolio. Are you
           sure you want to delete <br />
           <b className="font-bold">{name}'s </b>portfolio?
         </h3>
