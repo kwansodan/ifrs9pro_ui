@@ -2,21 +2,23 @@ import Select from "react-select";
 
 import Button from "../../components/button/_component";
 import { UploadDataProps } from "../../core/interfaces";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { UpdateAUser } from "../../core/services/users.service";
 import { useAdminUser } from "../../core/hooks/users";
 import { showToast } from "../../core/hooks/alert";
 import { usePortfolios } from "../../core/hooks/portfolio";
 import { roles } from "../../data";
 function EditUser({ close, rowId }: UploadDataProps) {
-  const [selectedPortfolio, setSelectedPortfolio] = useState<string>("");
+  // const [selectedPortfolio, setSelectedPortfolio] = useState<string>("");
   const { portfoliosQuery } = usePortfolios();
   const [selectedRole, setSelectedRole] = useState<string>("");
+  const [hasRoleChanged, setHasRoleChanged] = useState<boolean>(false);
 
-  const { adminUserQuery } = useAdminUser(rowId);
-  console.log(
-    adminUserQuery && adminUserQuery.data && adminUserQuery.data.data
-  );
+  const { adminUserQuery } = useAdminUser(Number(rowId));
+
+  useEffect(() => {
+    adminUserQuery.refetch();
+  }, [rowId]);
 
   const portfolioDropdowns =
     portfoliosQuery &&
@@ -30,12 +32,13 @@ function EditUser({ close, rowId }: UploadDataProps) {
       label: po.name,
     }));
 
-  const handlePortofioOptions = (selectedOptions: any) => {
-    setSelectedPortfolio(selectedOptions.value);
-  };
+  // const handlePortofioOptions = (selectedOptions: any) => {
+  //   setSelectedPortfolio(selectedOptions.value);
+  // };
 
   const handleRoleChange = (selectedOption: any) => {
     setSelectedRole(selectedOption.value);
+    setHasRoleChanged(true);
   };
 
   const handleSubmit = async (prevState: any, formData: FormData) => {
@@ -46,7 +49,6 @@ function EditUser({ close, rowId }: UploadDataProps) {
     const recovery_email = formData.get("recovery_email") as string;
     const is_active = true;
     const role = selectedRole as string;
-    const portfolio_id = selectedPortfolio as string;
 
     const payload = {
       first_name,
@@ -54,29 +56,27 @@ function EditUser({ close, rowId }: UploadDataProps) {
       email,
       is_active,
       recovery_email,
-      role,
-      portfolio_id,
+      role: hasRoleChanged
+        ? role
+        : adminUserQuery &&
+          adminUserQuery.data &&
+          adminUserQuery.data.data.role,
     };
 
-    if (
-      !first_name ||
-      !last_name ||
-      !email ||
-      !recovery_email ||
-      !role ||
-      !portfolio_id
-    ) {
+    console.log("pay: 0", payload);
+
+    if (!first_name || !last_name || !email || !recovery_email) {
       showToast("Please fill in all fields.", false);
       return;
     }
 
     try {
-      UpdateAUser(rowId, payload)
+      UpdateAUser(Number(rowId), payload)
         .then((res) => {
+          showToast(res.data.message, true);
           setTimeout(() => {
-            showToast(res.data.message, true);
+            window.location.reload();
           }, 2000);
-          window.location.reload();
         })
         .catch((err) => {
           showToast(err?.response?.data.detail, false);
@@ -164,10 +164,14 @@ function EditUser({ close, rowId }: UploadDataProps) {
               onChange={handleRoleChange}
               options={roles}
               id="asset-type"
-              placeholder="Select role"
+              placeholder={
+                adminUserQuery &&
+                adminUserQuery.data &&
+                adminUserQuery.data.data.role
+              }
             />
 
-            <label className="text-[#1E1E1E] text-[14px] font-medium">
+            {/* <label className="text-[#1E1E1E] text-[14px] font-medium">
               Assign portfolio
             </label>
             <Select
@@ -175,7 +179,7 @@ function EditUser({ close, rowId }: UploadDataProps) {
               onChange={handlePortofioOptions}
               options={portfolioOptions}
               placeholder="Select portfolio"
-            />
+            /> */}
           </div>
 
           <div className="flex justify-end mt-3">

@@ -2,8 +2,9 @@ import React, { useRef } from "react";
 import { Images } from "../../data/Assets";
 import { UploadProps } from "../../core/interfaces";
 
-function Upload({ UploadTitle }: UploadProps) {
-  const [isDragging, setIsDragging] = React.useState(false);
+function Upload({ UploadTitle, setFile, templateLink }: UploadProps) {
+  const [isDragging, setIsDragging] = React.useState<boolean>(false);
+  const [fileName, setFileName] = React.useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleDragOver = (e: any) => {
@@ -15,36 +16,40 @@ function Upload({ UploadTitle }: UploadProps) {
     setIsDragging(false);
   };
 
+  const handleFiles = (file: any) => {
+    setFileName(file && file.name);
+    setFile(file);
+  };
+
   const handleDrop = (e: any) => {
     e.preventDefault();
     setIsDragging(false);
-    // setIsUploading(true);
-    // const file = e.dataTransfer.files[0];
+    const file = e.dataTransfer.files[0];
     // const formData = new FormData();
-    // formData.append('file', file);
+    // formData.append("file", file);
+    // // let preview = URL.createObjectURL(file);
+    handleFiles(file);
+  };
+
+  const handleBrowseFiles = (e: any) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
     // let preview = URL.createObjectURL(file);
-    // setPreviewImage(preview);
-    // handleFiles(file);
-
-    // UploadImage(formData)
-    //    .then((res) => {
-    //       setIsUploading(false);
-    //       setIsUploadDone(true);
-    //       toast.success(<p className="text-[12px]">{<HtmlRenderer htmlContent={'Upload successful.'} />}</p>);
-
-    //       if (onUploadSuccess) {
-    //          onUploadSuccess(res?.data.id);
-    //       }
-    //    })
-    //    .catch((err) => {
-    //       setIsUploading(false);
-    //       toast.error(<p className="text-[12px]">{<HtmlRenderer htmlContent={err.response?.data?.message} /> ?? 'An error occured. Please try again !'}</p>);
-    //    });
+    handleFiles(file);
   };
 
   const handleFileSelect = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setFileName("");
+    setFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
   return (
@@ -77,18 +82,33 @@ function Upload({ UploadTitle }: UploadProps) {
             type="file"
             ref={fileInputRef}
             className="hidden"
-            accept=".csv"
+            accept=".xls,.xlsx"
+            onChange={handleBrowseFiles}
           />
         </div>
         <div>
           <a
-            href="#"
-            className="flex items-center gap-2 text-sm text-[#F7941E]"
+            href={templateLink}
+            className="flex items-center underline gap-2 text-sm text-[#F7941E]"
           >
-            <img className="w-[14px] h-[14px]" src={Images.download} alt="" />
+            <img className="w-[14px] h-[14px] " src={Images.download} alt="" />
             Download template
           </a>
         </div>
+        <span className="flex text-xs">
+          {fileName && (
+            <>
+              filename: <span className="ml-2 text-green-500"> {fileName}</span>
+              <img
+                src={Images.deleteIcon}
+                alt="Remove file"
+                className="w-4 h-4 ml-2 cursor-pointer"
+                onClick={handleRemoveFile}
+              />
+            </>
+          )}
+        </span>
+
         <hr className="mt-3" />
       </div>
     </>

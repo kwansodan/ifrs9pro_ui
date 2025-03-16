@@ -15,6 +15,7 @@ export const useAdminUser = (id: number) => {
   const adminUserQuery = useQuery({
     queryKey: ["adminUserQuery"],
     queryFn: () => GetAUser(id),
+    refetchOnWindowFocus: true,
   });
   return {
     adminUserQuery,

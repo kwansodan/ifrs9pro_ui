@@ -10,3 +10,8 @@ export const GetAllPortfolios = async () => await getAxios().get("/portfolios");
 
 export const DeleteAPortfolio = async (id: number) =>
   await getAxios().delete("/portfolios/" + id);
+
+export const CreatePortfolioIngestion = async (
+  id: number | string,
+  payload: FormData
+) => await getAxios().post(`/portfolios/${id}/ingest`, payload);

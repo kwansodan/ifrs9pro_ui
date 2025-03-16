@@ -9,8 +9,10 @@ import TableLoader from "../../components/table_loader/component";
 import { Modal } from "../../components/modal/_component";
 import CreatePorfolio from "../../components/create_portfolio/_component";
 import DeletePortfolio from "./delete_portfolio";
+import { useNavigate } from "react-router-dom";
 
 function PortfolioMain() {
+  const navigate = useNavigate();
   const { portfoliosQuery } = usePortfolios();
   console.log(portfoliosQuery);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -44,7 +46,6 @@ function PortfolioMain() {
       <div className="flex cursor-pointer">
         <img
           onClick={() => {
-            console.log("id: ", id);
             setRequestId(id);
             setPortfolioName(name);
             setShowActionsMenu((prev) => !prev);
@@ -144,12 +145,9 @@ function PortfolioMain() {
             </div>
 
             <div
-              // onClick={(event) => {
-              //   const text =
-              //     event.currentTarget.querySelector("span")?.innerText || "";
-              //   setActionToBeTaken(text);
-              //   setOpenEditUserModal(true);
-              // }}
+              onClick={() =>
+                navigate("/dashboard/portfolio-details/" + requestId)
+              }
               className="flex mt-2 cursor-pointer"
             >
               <img className="w-[14px] mr-1" src={Images.openEye} alt="" />

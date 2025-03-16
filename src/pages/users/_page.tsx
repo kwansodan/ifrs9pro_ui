@@ -18,7 +18,7 @@ function Users() {
   const [openDeleteUserModal, setOpenDeleteUserModal] =
     useState<boolean>(false);
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
-  const [id, setId] = useState<number>(0);
+  const [id, setId] = useState<number>();
   const [userName, setUserName] = useState<string>("");
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -41,11 +41,13 @@ function Users() {
 
   const renderActionsRow = (data: any) => {
     const { id, first_name, last_name } = data.row;
+
     return (
       <div className="flex cursor-pointer">
         <img
           onClick={() => {
             setId(id);
+
             setUserName(first_name + " " + last_name);
             setShowActionsMenu(!showActionsMenu);
           }}
@@ -111,7 +113,9 @@ function Users() {
         close={() => setOpenEditUserModal(false)}
       >
         <div className="bg-white rounded-[20px]">
-          <EditUser rowId={id} close={() => setOpenEditUserModal(false)} />
+          {id !== undefined && (
+            <EditUser rowId={id} close={() => setOpenEditUserModal(false)} />
+          )}
         </div>
       </Modal>
       <Modal

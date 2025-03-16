@@ -4,7 +4,7 @@ import { UploadDataProps } from "../../core/interfaces";
 import { DeleteAdminUser } from "../../core/services/users.service";
 function DeleteUser({ close, rowId, userName }: UploadDataProps) {
   const confirmDelete = () => {
-    DeleteAdminUser(rowId)
+    DeleteAdminUser(Number(rowId))
       .then(() => {
         showToast("Operation successful", true);
         setTimeout(() => {
@@ -18,8 +18,9 @@ function DeleteUser({ close, rowId, userName }: UploadDataProps) {
   return (
     <>
       <div className="p-8">
-        <p className="text-[#1E1E1E] font-medium text-[14px] my-8">
-          Are you sure you want to delete {userName}? This action cannot be
+        <p className="text-[#1E1E1E] text-[14px] my-8">
+          Are you sure you want to delete{" "}
+          <span className="font-medium">{userName}</span>? This action cannot be
           undone
         </p>
 

@@ -29,6 +29,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { RootState } from "./core/stores";
 import PageLoader from "./components/page_loader/_component";
+import PortfolioDetails from "./pages/portfolio/portfolio_details";
 
 function App() {
   const [userSession] = useState(getUserSession());
@@ -135,7 +136,10 @@ function App() {
               <Route path="main" element={<Main />} />
               <Route path="portfolio" element={<Porfolio />} />
               <Route path="portfolio-main" element={<PortfolioMain />} />
-              <Route path="filtered-results" element={<FilteredResults />} />
+              <Route
+                path="portfolio-details/:id"
+                element={<PortfolioDetails />}
+              />
               <Route path="after-upload" element={<Test />} />
               <Route path="feedback" element={<NoFeedback />} />
               <Route path="users" element={<Users />} />

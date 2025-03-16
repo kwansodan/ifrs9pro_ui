@@ -28,10 +28,12 @@ export interface FilterTrayProps {
 
 export interface UploadProps {
   UploadTitle?: string;
+  setFile?: any;
+  templateLink?: string;
 }
 export interface UploadDataProps {
   close?: () => void;
-  rowId?: any;
+  rowId?: string | number;
   actionToBeTaken?: string;
   requestId?: number;
   isOperationDone?: boolean;
