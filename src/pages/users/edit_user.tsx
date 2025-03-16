@@ -6,11 +6,11 @@ import { useActionState, useEffect, useState } from "react";
 import { UpdateAUser } from "../../core/services/users.service";
 import { useAdminUser } from "../../core/hooks/users";
 import { showToast } from "../../core/hooks/alert";
-import { usePortfolios } from "../../core/hooks/portfolio";
+// import { usePortfolios } from "../../core/hooks/portfolio";
 import { roles } from "../../data";
 function EditUser({ close, rowId }: UploadDataProps) {
   // const [selectedPortfolio, setSelectedPortfolio] = useState<string>("");
-  const { portfoliosQuery } = usePortfolios();
+  // const { portfoliosQuery } = usePortfolios();
   const [selectedRole, setSelectedRole] = useState<string>("");
   const [hasRoleChanged, setHasRoleChanged] = useState<boolean>(false);
 
@@ -20,17 +20,17 @@ function EditUser({ close, rowId }: UploadDataProps) {
     adminUserQuery.refetch();
   }, [rowId]);
 
-  const portfolioDropdowns =
-    portfoliosQuery &&
-    portfoliosQuery.data &&
-    portfoliosQuery.data.data &&
-    portfoliosQuery.data.data.items;
-  const portfolioOptions =
-    portfolioDropdowns &&
-    portfolioDropdowns.map((po: any, _: any) => ({
-      value: po.id,
-      label: po.name,
-    }));
+  // const portfolioDropdowns =
+  //   portfoliosQuery &&
+  //   portfoliosQuery.data &&
+  //   portfoliosQuery.data.data &&
+  //   portfoliosQuery.data.data.items;
+  // const portfolioOptions =
+  //   portfolioDropdowns &&
+  //   portfolioDropdowns.map((po: any, _: any) => ({
+  //     value: po.id,
+  //     label: po.name,
+  //   }));
 
   // const handlePortofioOptions = (selectedOptions: any) => {
   //   setSelectedPortfolio(selectedOptions.value);
