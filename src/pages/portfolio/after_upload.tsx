@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Chart from "react-apexcharts";
 import Tabs from "../../components/tabs/tab";
 import Card from "../../components/card/_component";
@@ -61,19 +61,20 @@ function AfterUpload() {
                   { title: "Total loan value", value: "$1.25 M" },
                   { title: "Average loan amount", value: "$500" },
                   { title: "Total customers", value: "1,093" },
-                ].map((item) => (
-                  <>
+                ].map((item, idx) => (
+                  <React.Fragment key={idx}>
                     {/* <div key={item.title} className="p-4 bg-gray-100 rounded-lg">
                     <p className="text-sm text-gray-600">{item.title}</p>
                     <p className="text-2xl font-semibold">{item.value}</p>
                   </div> */}
                     <Card
+                      key={idx}
                       parentClassName="!h-[110px]"
                       valueClassName="!text-[33px] !text-[#1E1E1E]"
                       title={item.title}
                       value={item.value}
                     />
-                  </>
+                  </React.Fragment>
                 ))}
               </div>
               <h3 className="mt-6 mb-3 font-medium text-[#6F6F6F]">
@@ -85,8 +86,9 @@ function AfterUpload() {
                   { title: "Institutions", value: "325" },
                   { title: "Mixed", value: "200" },
                   { title: "Active customers", value: "1,005" },
-                ].map((item) => (
+                ].map((item, idx) => (
                   <Card
+                    key={idx}
                     parentClassName="!h-[110px]"
                     valueClassName="!text-[33px] !text-[#1E1E1E]"
                     title={item.title}
@@ -130,9 +132,9 @@ function AfterUpload() {
               </div>
 
               <div className="bg-white border rounded-lg shadow-sm">
-                {issues.map((issue, index) => (
+                {issues.map((issue, idx) => (
                   <div
-                    key={index}
+                    key={idx}
                     className="flex items-center justify-between p-4 border-b last:border-0"
                   >
                     <span className="text-gray-700">{issue.name}</span>

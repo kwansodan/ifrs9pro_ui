@@ -4,9 +4,31 @@ import NoReport from "../../components/no_report/_component";
 import { Images } from "../../data/Assets";
 import { Modal } from "../../components/modal/_component";
 import UploadData from "./upload_data";
+import CalculateEcl from "./calculate_elc";
+import CalculateLocalImpairment from "./calculate_local";
+import GenerateReport from "./generate_report";
+import AfterUpload from "./after_upload";
+import YesReport from "./yes_report";
+import { useParams } from "react-router-dom";
+import { usePorfolioReports } from "../../core/hooks/portfolio";
 
 function FilteredResults() {
+  const { id } = useParams();
+
+  const { portfoliosReportsQuery } = usePorfolioReports(Number(id));
+  console.log(
+    "aaa: ",
+    portfoliosReportsQuery &&
+      portfoliosReportsQuery.data &&
+      portfoliosReportsQuery.data.data &&
+      portfoliosReportsQuery.data.data.items
+  );
   const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
+  const [openEclModal, setOpenEclModal] = useState<boolean>(false);
+  const [openLocalImpairmentModal, setOpenLocalImpairmentModal] =
+    useState<boolean>(false);
+  const [openGenerateReportModal, setOpenGenerateReportModal] =
+    useState<boolean>(false);
   return (
     <>
       <Modal
@@ -16,6 +38,36 @@ function FilteredResults() {
       >
         <div className="bg-white min-w-[600px] pt-5 pb-3 px-16 rounded-[20px]">
           <UploadData close={() => setOpenUploadModal(false)} />
+        </div>
+      </Modal>
+      <Modal
+        modalHeader="Calculate ECL"
+        open={openEclModal}
+        close={() => setOpenEclModal(false)}
+      >
+        <div className="bg-white min-w-[600px] p-8 px-16 rounded-[20px]">
+          <CalculateEcl close={() => setOpenEclModal(false)} />
+        </div>
+      </Modal>
+      <Modal
+        modalHeader="Calculate local impairment"
+        open={openLocalImpairmentModal}
+        close={() => setOpenLocalImpairmentModal(false)}
+      >
+        <div className="bg-white min-w-[600px] p-8 px-8 rounded-[20px]">
+          <CalculateLocalImpairment
+            close={() => setOpenLocalImpairmentModal(false)}
+          />
+        </div>
+      </Modal>
+      <Modal
+        modalHeader="Generate report"
+        open={openGenerateReportModal}
+        close={() => setOpenGenerateReportModal(false)}
+      >
+        <div className="bg-white min-w-[600px] p-8 px-8 rounded-[20px]">
+          {/* <GenerateReportSuccess /> */}
+          <GenerateReport close={() => setOpenGenerateReportModal(false)} />
         </div>
       </Modal>
       <div className="flex min-h-screen">
@@ -65,6 +117,7 @@ function FilteredResults() {
                 className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[190px]  bg-[#D9EFF9]"
               />
               <Button
+                onClick={() => setOpenEclModal(true)}
                 text={
                   <>
                     <img
@@ -78,6 +131,7 @@ function FilteredResults() {
                 className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[190px]  bg-[#D9EFF9]"
               />
               <Button
+                onClick={() => setOpenLocalImpairmentModal(true)}
                 text={
                   <>
                     <img
@@ -91,6 +145,7 @@ function FilteredResults() {
                 className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[260px] !h-[45px] bg-[#D9EFF9]"
               />
               <Button
+                onClick={() => setOpenGenerateReportModal(true)}
                 text={
                   <>
                     <img
@@ -105,13 +160,22 @@ function FilteredResults() {
               />
             </div>
           </div>
+          <AfterUpload />
           <div>
-            <div className="flex items-center justify-between bg-[#f8f9fa] rounded-t-lg py-[10px] px-[12px] mt-6 max-w-[1160px]">
-              <h1 className="text-[16px] font-semibold">Report history</h1>
-            </div>
-            <div className="p-6 text-center bg-white rounded-lg">
-              <NoReport />
-            </div>
+            {portfoliosReportsQuery &&
+            portfoliosReportsQuery.data &&
+            portfoliosReportsQuery.data.data &&
+            portfoliosReportsQuery.data.data.items.length < 1 ? (
+              <>
+                <div className="p-6 text-center bg-white rounded-lg">
+                  <NoReport />
+                </div>
+              </>
+            ) : (
+              <>
+                <YesReport />
+              </>
+            )}
           </div>
         </main>
       </div>

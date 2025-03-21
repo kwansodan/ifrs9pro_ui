@@ -41,19 +41,22 @@ export const assetsOptions = [
 ];
 
 export const reportTypeOptions = [
-  { value: "equity", label: "Summary of Collateral data " },
-  { value: "debt", label: "Summary of Guarantee data " },
-  { value: "debt", label: "Summary of Interest rates " },
-  { value: "debt", label: "Summary of repayments " },
-  { value: "debt", label: "Summary of assumptions " },
+  { value: "collateral_summary", label: "Summary of Collateral data" },
+  { value: "guarantee_summary", label: "Summary of Guarantee data" },
+  { value: "interest_rate_summary", label: "Summary of Interest rates" },
+  { value: "repayment_summary", label: "Summary of repayments" },
+  { value: "assumptions_summary", label: "Summary of assumptions" },
   {
-    value: "debt",
+    value: "amortised_loan_balances",
     label:
-      "Amortised loan balances report (caveat that the BOG non-accrual rule has not been considered) ",
+      "Amortised loan balances report (caveat that the BOG non-accrual rule has not been considered)",
   },
-  { value: "debt", label: "Probability of default report" },
-  { value: "debt", label: "Exposure at default report" },
-  { value: "debt", label: "Loss given default report" },
+  {
+    value: "probability_default",
+    label: "Probability of default report",
+  },
+  { value: "exposure_default", label: "Exposure at default report" },
+  { value: "loss_given_default", label: "Loss given default report" },
 ];
 
 export const roles = [

@@ -108,3 +108,18 @@ export const renderStatusColors = (status: string) => {
     ? "text-green-500"
     : "text-red-500";
 };
+
+export const renderReportLabel = (value: string) => {
+  if (value === "collateral_summary") return "Summary of Collateral data";
+  if (value === "guarantee_summary") return "Summary of Guarantee data";
+  if (value === "interest_rate_summary") return "Summary of Interest rates";
+  if (value === "repayment_summary") return "Summary of repayments";
+  if (value === "assumptions_summary") return "Summary of assumptions";
+  if (value === "amortised_loan_balances")
+    return "Amortised loan balances report (caveat that the BOG non-accrual rule has not been considered)";
+  if (value === "probability_default") return "Probability of default report";
+  if (value === "exposure_default") return "Exposure at default report";
+  if (value === "loss_given_default") return "Loss given default report";
+
+  return "Report not found";
+};

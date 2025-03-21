@@ -15,3 +15,32 @@ export const CreatePortfolioIngestion = async (
   id: number | string,
   payload: FormData
 ) => await getAxios().post(`/portfolios/${id}/ingest`, payload);
+
+export const CreatePortfolioECLCalculation = async (
+  id: number | string,
+  reporting_date: string | HTMLInputElement,
+  payload: any
+) =>
+  await getAxios().post(
+    `/portfolios/${id}/calculate-ecl?reporting_date=${reporting_date}`,
+    payload
+  );
+
+export const CreatePortfolioLocalImpairmentCalculation = async (
+  id: number | string,
+  reporting_date: string | HTMLInputElement,
+  payload: any
+) =>
+  await getAxios().post(
+    `/portfolios/${id}/calculate-local-impairment?reporting_date=${reporting_date}`,
+    payload
+  );
+
+export const GenerateReports = async (id: number | string, payload: any) =>
+  await getAxios().post(`/reports/${id}/generate`, payload);
+
+export const SaveReports = async (id: number | string, payload: any) =>
+  await getAxios().post(`/reports/${id}/save`, payload);
+
+export const GetReportHistory = async (id: number | string) =>
+  await getAxios().get(`/reports/${id}/history`);

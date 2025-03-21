@@ -1,66 +1,147 @@
-import Select from "react-select";
-import { assetsOptions } from "../../data";
+import { CategoryProps, UploadDataProps } from "../../core/interfaces";
 import { Images } from "../../data/Assets";
 import Button from "../../components/button/_component";
-import { UploadDataProps } from "../../core/interfaces";
+import { useState } from "react";
+import { CreatePortfolioECLCalculation } from "../../core/services/portfolio.service";
+import { useParams } from "react-router-dom";
+import { showToast } from "../../core/hooks/alert";
+
 function CalculateEcl({ close }: UploadDataProps) {
+  const { id } = useParams();
+  const [categories, setCategories] = useState<CategoryProps[]>([
+    { category: "Current", range: "0-30" },
+    { category: "OLEM", range: "31-89" },
+    { category: "Substandard", range: "90-179" },
+    { category: "Doubtful", range: "180-359" },
+    { category: "Loss", range: "360+" },
+  ]);
+
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  const handleEditClick = (index: number) => {
+    setEditingIndex(index);
+  };
+
+  const handleToggle = () => {
+    setEditingIndex(null);
+  };
+
+  const handleInputChange = (
+    index: number,
+    field: keyof CategoryProps,
+    value: string
+  ) => {
+    const updatedCategories = [...categories];
+    updatedCategories[index][field] = value;
+    setCategories(updatedCategories);
+  };
+
+  const handleSubmit = () => {
+    const reportingDateElement = document.getElementById(
+      "ecl_reporting_date"
+    ) as HTMLInputElement | null;
+    const reporting_date = reportingDateElement?.value ?? "";
+
+    if (!id || !reporting_date) {
+      showToast("All fields required", false);
+      return;
+    }
+    for (const item of categories) {
+      const { category, range } = item;
+
+      if (!range?.trim()) {
+        showToast(
+          `Please ensure all fields are filled. Missing values in "${category}"`,
+          false
+        );
+        return;
+      }
+    }
+
+    const payload = categories.reduce((acc, item) => {
+      const key = item.category.toLowerCase();
+
+      acc[key] = {
+        days_range: item.range ?? "",
+        rate: parseFloat(item.rate ?? "0"),
+      };
+
+      return acc;
+    }, {} as Record<string, { days_range: string; rate: number }>);
+
+    if (id && reporting_date) {
+      CreatePortfolioECLCalculation(id, reporting_date, payload)
+        .then(() => {
+          showToast("Operation successful", true);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        })
+        .catch((err) => {
+          showToast(err?.response?.data?.detail || "Submission failed", false);
+        });
+    }
+  };
   return (
     <>
-      <div className="mt-3">
-        <label className="text-[#1E1E1E] text-[14px] font-medium">
-          Configure ECL
-        </label>
-        <Select
-          className="w-full"
-          onChange={() => {}}
-          options={assetsOptions}
-          id="asset-type"
-          placeholder="Select asset type"
-        />
-        <div className="flex justify-between mt-4">
-          <label className="mr-2">
-            0 probability of default for government workers{" "}
-          </label>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" className="sr-only peer" />
-            <div className="w-[42px] h-[23px] bg-gray-200 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-[#D2D5DA] peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#166E94]"></div>
-          </label>
+      <div className="py-6 bg-white rounded-lg">
+        <div className="overflow-x-auto">
+          <table className="w-full border rounded-lg">
+            <thead>
+              <tr className="text-left text-gray-700 bg-gray-100">
+                <th className="p-3">Category</th>
+                <th className="p-3">Days range</th>
+                <th className="p-3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {categories.map((item, index) => (
+                <tr key={index} className="border-t hover:bg-gray-50">
+                  <td className="p-3">{item.category}</td>
+
+                  <td className="p-3">
+                    <input
+                      type="text"
+                      className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                      value={item.range}
+                      disabled={editingIndex !== index}
+                      onChange={(e) =>
+                        handleInputChange(index, "range", e.target.value)
+                      }
+                    />
+                  </td>
+
+                  <td className="p-3 text-gray-500 cursor-pointer hover:text-gray-700">
+                    {editingIndex === index ? (
+                      <img
+                        src={Images.edit}
+                        className="w-[14px] h-[14px]"
+                        alt=""
+                        onClick={handleToggle}
+                      />
+                    ) : (
+                      <img
+                        src={Images.edit}
+                        className="w-[14px] h-[14px]"
+                        alt=""
+                        onClick={() => handleEditClick(index)}
+                      />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <div className="bg-[#D9EFF929] mt-4">
-          <h3 className="text-[#04161E] text-[14px] font-medium">
-            Prediction features
-          </h3>
-          <p className="text-[14px] text-[#6F6F6F]">
-            The following features will be used for ECL prediction
-          </p>
+        <small>Reporting date</small>
+        <div className="w-full">
+          <input
+            placeholder="Select a date"
+            className=" w-full border rounded-[10px] border-gray-300 px-[6px] py-[5px] focus:outline-[#166E94] text-gray-400"
+            type="date"
+            id="ecl_reporting_date"
+          />
         </div>
-        <div className="leading-[30px]">
-          <div className="flex items-center">
-            <img
-              src={Images.checkbox}
-              alt=""
-              className="w-[14px] h-[14px] mr-2"
-            />
-            <span>Historical payment behavior</span>
-          </div>
-          <div className="flex items-center">
-            <img
-              src={Images.checkbox}
-              alt=""
-              className="w-[14px] h-[14px] mr-2"
-            />
-            <span>Loan-to-value ratio</span>
-          </div>
-          <div className="flex items-center">
-            <img
-              src={Images.checkbox}
-              alt=""
-              className="w-[14px] h-[14px] mr-2"
-            />
-            <span>Delinquency history</span>
-          </div>
-        </div>
-        <hr className="my-4" />
         <div className="flex justify-end mt-3">
           <Button
             text="Cancel"
@@ -68,8 +149,9 @@ function CalculateEcl({ close }: UploadDataProps) {
             className="px-4 !w-[90px] !text-[14px] bg-white border border-gray-400 rounded-[10px] mr-2"
           />
           <Button
-            text="Start prediction"
-            className="bg-[#166E94] !text-[14px] !w-[150px] text-white px-4 py-2 rounded-[10px]"
+            onClick={handleSubmit}
+            text="Calculate Ecl"
+            className="bg-[#166E94] !text-[14px] !w-[170px] text-white px-4 py-2 rounded-[10px]"
           />
         </div>
       </div>

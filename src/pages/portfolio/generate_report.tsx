@@ -2,9 +2,64 @@ import Select from "react-select";
 import { reportTypeOptions } from "../../data";
 import Button from "../../components/button/_component";
 import { UploadDataProps } from "../../core/interfaces";
+import { useParams } from "react-router-dom";
+import { showToast } from "../../core/hooks/alert";
+import { GenerateReports } from "../../core/services/portfolio.service";
+import { useState } from "react";
+import { Modal } from "../../components/modal/_component";
+import GerneratingReport from "./generating_report";
+import GenerateReportSuccess from "./generate_report_success";
 function GenerateReport({ close }: UploadDataProps) {
+  const { id } = useParams();
+  const [report_type, setReportType] = useState<string>("");
+  const [report_date, setReportDate] = useState<string>("");
+  const [triggerReportGeneration, setTriggerReportGeneration] =
+    useState<boolean>(false);
+  const [triggerReportGenerationSuccess, setTriggerReportGenerationSuccess] =
+    useState<boolean>(false);
+
+  const handleReportType = (selectedOption: any) => {
+    setReportType(selectedOption.value);
+  };
+
+  const handleSubmit = () => {
+    const reportDateElement = document.getElementById(
+      "report_date"
+    ) as HTMLInputElement | null;
+    const report_date = reportDateElement?.value ?? "";
+
+    if (!id || !report_date) {
+      showToast("All fields required", false);
+      return;
+    }
+    setReportDate(report_date);
+    const payload = { report_date, report_type };
+    setTriggerReportGeneration(true);
+    if (id) {
+      GenerateReports(id, payload)
+        .then((res) => {
+          console.log(res);
+          setTriggerReportGeneration(false);
+          setTriggerReportGenerationSuccess(true);
+          showToast(res.data.message, true);
+        })
+        .catch(() => {
+          setTriggerReportGeneration(false);
+          showToast("Submission failed", false);
+        });
+    }
+  };
   return (
     <>
+      <Modal open={triggerReportGeneration}>
+        <GerneratingReport />
+      </Modal>
+      <Modal open={triggerReportGenerationSuccess}>
+        <GenerateReportSuccess
+          report_type={report_type}
+          report_date={report_date}
+        />
+      </Modal>
       <div className="mt-3 leading-9">
         <label className="text-[#1E1E1E] text-[14px] font-medium">
           Report date
@@ -14,6 +69,7 @@ function GenerateReport({ close }: UploadDataProps) {
             placeholder="Select a date"
             className="w-full border rounded-[10px] border-gray-300 px-[6px] py-[5px] focus:outline-[#166E94] text-gray-400"
             type="date"
+            id="report_date"
           />
         </div>
         <label className="text-[#1E1E1E] text-[14px] font-medium">
@@ -21,7 +77,7 @@ function GenerateReport({ close }: UploadDataProps) {
         </label>
         <Select
           className="w-full"
-          onChange={() => {}}
+          onChange={handleReportType}
           options={reportTypeOptions}
           id="asset-type"
           placeholder="Select report to run"
@@ -41,6 +97,7 @@ function GenerateReport({ close }: UploadDataProps) {
           className="px-4 !w-[90px]  !text-[14px] bg-white border border-gray-400 rounded-[10px] mr-2"
         />
         <Button
+          onClick={handleSubmit}
           text="Generate"
           className="bg-[#166E94] !text-[14px] !w-[90px] text-white px-4 py-2 rounded-[10px]"
         />
