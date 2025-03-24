@@ -1,12 +1,13 @@
 import { getAxios } from "../utility";
 
 export const CreatePortfolioApi = async (payload: any) =>
-  await getAxios().post("/portfolios", payload);
+  await getAxios().post("/portfolios/", payload);
 
 export const CreateSecondStepPortfolioApi = async (id: number, payload: any) =>
   await getAxios().put("/portfolios/" + id, payload);
 
-export const GetAllPortfolios = async () => await getAxios().get("/portfolios");
+export const GetAllPortfolios = async () =>
+  await getAxios().get("/portfolios/");
 
 export const DeleteAPortfolio = async (id: number) =>
   await getAxios().delete("/portfolios/" + id);
@@ -14,7 +15,7 @@ export const DeleteAPortfolio = async (id: number) =>
 export const CreatePortfolioIngestion = async (
   id: number | string,
   payload: FormData
-) => await getAxios().post(`/portfolios/${id}/ingest`, payload);
+) => await getAxios().post(`/portfolios/${id}/ingest/`, payload);
 
 export const CreatePortfolioECLCalculation = async (
   id: number | string,
@@ -22,7 +23,7 @@ export const CreatePortfolioECLCalculation = async (
   payload: any
 ) =>
   await getAxios().post(
-    `/portfolios/${id}/calculate-ecl?reporting_date=${reporting_date}`,
+    `/portfolios/${id}/calculate-ecl?reporting_date=${reporting_date}/`,
     payload
   );
 
@@ -32,15 +33,15 @@ export const CreatePortfolioLocalImpairmentCalculation = async (
   payload: any
 ) =>
   await getAxios().post(
-    `/portfolios/${id}/calculate-local-impairment?reporting_date=${reporting_date}`,
+    `/portfolios/${id}/calculate-local-impairment?reporting_date=${reporting_date}/`,
     payload
   );
 
 export const GenerateReports = async (id: number | string, payload: any) =>
-  await getAxios().post(`/reports/${id}/generate`, payload);
+  await getAxios().post(`/reports/${id}/generate/`, payload);
 
 export const SaveReports = async (id: number | string, payload: any) =>
-  await getAxios().post(`/reports/${id}/save`, payload);
+  await getAxios().post(`/reports/${id}/save/`, payload);
 
 export const GetReportHistory = async (id: number | string) =>
-  await getAxios().get(`/reports/${id}/history`);
+  await getAxios().get(`/reports/${id}/history/`);

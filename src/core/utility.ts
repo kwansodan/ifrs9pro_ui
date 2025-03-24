@@ -32,7 +32,6 @@ export const getAxios = () => {
     let now = moment();
     let dateToCheck = moment(tokenExpiry);
     if (dateToCheck.isBefore(now)) {
-      alert("expired date");
       return true;
     }
     return false;

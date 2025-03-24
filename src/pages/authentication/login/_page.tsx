@@ -48,10 +48,10 @@ function Login() {
           setButtonLoading(false);
           showToast(err?.response?.data.detail, false);
         });
-    } catch (err) {
+    } catch {
       setButtonLoading(false);
       showToast("Login failed. Please try again.", false);
-      return { success: false, error: "Login failed. Please try again." };
+      return;
     }
   };
 
