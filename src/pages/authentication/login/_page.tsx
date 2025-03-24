@@ -40,9 +40,9 @@ function Login() {
             cacheUserSession(res?.data.access_token, expirationTime.toString());
             cacheUserRole(res?.data.user.role);
             dispatch(setUser({ roles: [], username: res?.data.user.role }));
-            if (res?.data.user.role === "admin")
-              window.location.href = "/dashboard";
-            else navigate("/request-access");
+            // if (res?.data.user.role === "admin")
+            window.location.href = "/dashboard";
+            // else navigate("/request-access");
           }
         })
         .catch((err) => {

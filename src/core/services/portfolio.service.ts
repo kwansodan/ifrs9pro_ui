@@ -23,7 +23,7 @@ export const CreatePortfolioECLCalculation = async (
   payload: any
 ) =>
   await getAxios().post(
-    `/portfolios/${id}/calculate-ecl?reporting_date=${reporting_date}/`,
+    `/portfolios/${id}/stage-loans-ecl?reporting_date=${reporting_date}/`,
     payload
   );
 

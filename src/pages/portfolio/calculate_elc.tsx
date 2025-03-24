@@ -10,11 +10,9 @@ function CalculateEcl({ close }: UploadDataProps) {
   const { id } = useParams();
   const [calculating, setCalculating] = useState<boolean>(false);
   const [categories, setCategories] = useState<CategoryProps[]>([
-    { category: "Current", range: "0-30" },
-    { category: "OLEM", range: "31-89" },
-    { category: "Substandard", range: "90-179" },
-    { category: "Doubtful", range: "180-359" },
-    { category: "Loss", range: "360+" },
+    { category: "stage_1", range: "0-30" },
+    { category: "stage_2", range: "31-89" },
+    { category: "stage_3", range: "90-179" },
   ]);
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -67,11 +65,10 @@ function CalculateEcl({ close }: UploadDataProps) {
 
       acc[key] = {
         days_range: item.range ?? "",
-        rate: parseFloat(item.rate ?? "0"),
       };
 
       return acc;
-    }, {} as Record<string, { days_range: string; rate: number }>);
+    }, {} as Record<string, { days_range: string }>);
 
     if (id && reporting_date) {
       CreatePortfolioECLCalculation(id, reporting_date, payload)

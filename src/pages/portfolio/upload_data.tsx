@@ -8,7 +8,7 @@ import { useState } from "react";
 
 function UploadData({ close }: UploadDataProps) {
   const { id } = useParams();
-
+  const [isDone, setIsDone] = useState<boolean>(false);
   const [loan_details, setLoanDetails] = useState<File | null>(null);
   const [loan_guarantee_data, setLoanGuarantee] = useState<File | null>(null);
   const [loan_collateral_data, setLoanCollateral] = useState<File | null>(null);
@@ -29,8 +29,10 @@ function UploadData({ close }: UploadDataProps) {
   };
 
   const handleSubmit = () => {
+    setIsDone(true);
     if (!loan_details || !loan_guarantee_data || !loan_collateral_data) {
       showToast("Please upload all required files.", false);
+      setIsDone(false);
       return;
     }
 
@@ -39,18 +41,17 @@ function UploadData({ close }: UploadDataProps) {
     formData.append("loan_guarantee_data", loan_guarantee_data);
     formData.append("loan_collateral_data", loan_collateral_data);
 
-    console.log("pay: ", formData);
-
     if (id) {
       CreatePortfolioIngestion(id, formData)
-        .then((res) => {
-          console.log("res: ", res);
+        .then(() => {
+          setIsDone(false);
           showToast("Submission successful", true);
           setTimeout(() => {
             window.location.reload();
           }, 2000);
         })
         .catch((err) => {
+          setIsDone(false);
           showToast(err?.response?.data?.detail || "Submission failed", false);
         });
     }
@@ -81,6 +82,7 @@ function UploadData({ close }: UploadDataProps) {
         />
         <Button
           text="Done"
+          isLoading={isDone}
           onClick={handleSubmit}
           className="bg-[#166E94] font-normal text-white text-[12px] !rounded-[10px] !w-[90px] "
         />

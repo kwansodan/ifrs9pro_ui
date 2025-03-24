@@ -22,7 +22,7 @@ const Button: React.FC<ButtonProps> = ({
         } 
         ${className}`}
     >
-      {isLoading ? "Please wait..." : text}
+      {isLoading ? "loading..." : text}
     </button>
   );
 };

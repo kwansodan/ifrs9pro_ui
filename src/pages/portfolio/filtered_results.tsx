@@ -11,6 +11,7 @@ import AfterUpload from "./after_upload";
 import YesReport from "./yes_report";
 import { useParams } from "react-router-dom";
 import { usePorfolioReports } from "../../core/hooks/portfolio";
+import PageLoader from "../../components/page_loader/_component";
 
 function FilteredResults() {
   const { id } = useParams();
@@ -167,7 +168,15 @@ function FilteredResults() {
               </>
             ) : (
               <>
-                <YesReport />
+                {portfoliosReportsQuery?.isLoading ? (
+                  <>
+                    <PageLoader />
+                  </>
+                ) : (
+                  <>
+                    <YesReport />
+                  </>
+                )}
               </>
             )}
           </div>
