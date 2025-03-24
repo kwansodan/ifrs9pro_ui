@@ -16,13 +16,7 @@ function FilteredResults() {
   const { id } = useParams();
 
   const { portfoliosReportsQuery } = usePorfolioReports(Number(id));
-  console.log(
-    "aaa: ",
-    portfoliosReportsQuery &&
-      portfoliosReportsQuery.data &&
-      portfoliosReportsQuery.data.data &&
-      portfoliosReportsQuery.data.data.items
-  );
+
   const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
   const [openEclModal, setOpenEclModal] = useState<boolean>(false);
   const [openLocalImpairmentModal, setOpenLocalImpairmentModal] =

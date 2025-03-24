@@ -15,7 +15,7 @@ export const DeleteAPortfolio = async (id: number) =>
 export const CreatePortfolioIngestion = async (
   id: number | string,
   payload: FormData
-) => await getAxios().post(`/portfolios/${id}/ingest/`, payload);
+) => await getAxios().post(`/portfolios/${id}/ingest`, payload);
 
 export const CreatePortfolioECLCalculation = async (
   id: number | string,
@@ -33,15 +33,20 @@ export const CreatePortfolioLocalImpairmentCalculation = async (
   payload: any
 ) =>
   await getAxios().post(
-    `/portfolios/${id}/calculate-local-impairment?reporting_date=${reporting_date}/`,
+    `/portfolios/${id}/calculate-local-impairment?reporting_date=${reporting_date}`,
     payload
   );
 
 export const GenerateReports = async (id: number | string, payload: any) =>
-  await getAxios().post(`/reports/${id}/generate/`, payload);
+  await getAxios().post(`/reports/${id}/generate`, payload);
 
 export const SaveReports = async (id: number | string, payload: any) =>
-  await getAxios().post(`/reports/${id}/save/`, payload);
+  await getAxios().post(`/reports/${id}/save`, payload);
 
 export const GetReportHistory = async (id: number | string) =>
-  await getAxios().get(`/reports/${id}/history/`);
+  await getAxios().get(`/reports/${id}/history`);
+
+export const DownloadReportHistory = async (
+  id: number | string,
+  report_id: number | string
+) => await getAxios().get(`/reports/${id}/report/${report_id}/download`);

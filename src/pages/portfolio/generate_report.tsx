@@ -38,7 +38,6 @@ function GenerateReport({ close }: UploadDataProps) {
     if (id) {
       GenerateReports(id, payload)
         .then((res) => {
-          console.log(res);
           setTriggerReportGeneration(false);
           setTriggerReportGenerationSuccess(true);
           showToast(res.data.message, true);
@@ -54,7 +53,10 @@ function GenerateReport({ close }: UploadDataProps) {
       <Modal open={triggerReportGeneration}>
         <GerneratingReport />
       </Modal>
-      <Modal open={triggerReportGenerationSuccess}>
+      <Modal
+        close={() => setTriggerReportGeneration(false)}
+        open={triggerReportGenerationSuccess}
+      >
         <GenerateReportSuccess
           report_type={report_type}
           report_date={report_date}

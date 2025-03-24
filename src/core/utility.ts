@@ -52,9 +52,9 @@ export const getAxios = () => {
       return response;
     },
     (error) => {
-      if (error?.response?.status === 401) {
-        clearUserSession();
-      }
+      // if (error?.response?.status === 401) {
+      //   clearUserSession();
+      // }
       if (error?.response?.status === 429) {
         return Promise.resolve(error);
       }

@@ -3,19 +3,36 @@ import { Images } from "../../data/Assets";
 import { usePorfolioReports } from "../../core/hooks/portfolio";
 import moment from "moment";
 import { renderReportLabel } from "../../core/utility";
+import { DownloadReportHistory } from "../../core/services/portfolio.service";
+import { showToast } from "../../core/hooks/alert";
+import { useState } from "react";
 
 function YesReport() {
   const { id } = useParams();
-
+  const [reportId, setReportId] = useState<number>();
   const { portfoliosReportsQuery } = usePorfolioReports(Number(id));
-  console.log(
-    "aaa: ",
-    portfoliosReportsQuery &&
-      portfoliosReportsQuery.data &&
-      portfoliosReportsQuery.data.data &&
-      portfoliosReportsQuery.data.data.items
-  );
 
+  const downloadDocument = () => {
+    if (reportId) {
+      DownloadReportHistory(Number(id), reportId)
+        .then((res) => {
+          const blob = new Blob([res.data], { type: "application/pdf" });
+
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `report_${reportId}.pdf`;
+          document.body.appendChild(link);
+          link.click();
+
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+        })
+        .catch((err) => {
+          showToast(err?.response?.data.detail, false);
+        });
+    }
+  };
   return (
     <div className="p-4 rounded-lg bg-gray-50">
       <h2 className="mb-2 text-lg font-semibold">Report history</h2>
@@ -36,8 +53,11 @@ function YesReport() {
                   {renderReportLabel(report.report_type)}
                 </span>
                 <a
-                  href={report.link}
-                  className="flex items-center text-[#166E94] hover:underline"
+                  onClick={() => {
+                    setReportId(report.id);
+                    downloadDocument();
+                  }}
+                  className="flex items-center cursor-pointer text-[#166E94] hover:underline"
                 >
                   <img
                     title="download report"

@@ -8,6 +8,7 @@ import { showToast } from "../../core/hooks/alert";
 
 function CalculateEcl({ close }: UploadDataProps) {
   const { id } = useParams();
+  const [calculating, setCalculating] = useState<boolean>(false);
   const [categories, setCategories] = useState<CategoryProps[]>([
     { category: "Current", range: "0-30" },
     { category: "OLEM", range: "31-89" },
@@ -37,12 +38,14 @@ function CalculateEcl({ close }: UploadDataProps) {
   };
 
   const handleSubmit = () => {
+    setCalculating(true);
     const reportingDateElement = document.getElementById(
       "ecl_reporting_date"
     ) as HTMLInputElement | null;
     const reporting_date = reportingDateElement?.value ?? "";
 
     if (!id || !reporting_date) {
+      setCalculating(false);
       showToast("All fields required", false);
       return;
     }
@@ -54,6 +57,7 @@ function CalculateEcl({ close }: UploadDataProps) {
           `Please ensure all fields are filled. Missing values in "${category}"`,
           false
         );
+        setCalculating(false);
         return;
       }
     }
@@ -72,12 +76,14 @@ function CalculateEcl({ close }: UploadDataProps) {
     if (id && reporting_date) {
       CreatePortfolioECLCalculation(id, reporting_date, payload)
         .then(() => {
+          setCalculating(false);
           showToast("Operation successful", true);
           setTimeout(() => {
             window.location.reload();
           }, 1500);
         })
         .catch((err) => {
+          setCalculating(false);
           showToast(err?.response?.data?.detail || "Submission failed", false);
         });
     }
@@ -150,6 +156,7 @@ function CalculateEcl({ close }: UploadDataProps) {
           />
           <Button
             onClick={handleSubmit}
+            isLoading={calculating}
             text="Calculate Ecl"
             className="bg-[#166E94] !text-[14px] !w-[170px] text-white px-4 py-2 rounded-[10px]"
           />
