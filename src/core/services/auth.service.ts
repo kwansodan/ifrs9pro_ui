@@ -10,7 +10,7 @@ export const UserRequestAccess = async (email: string) =>
 export const UserSendRequestToAdmin = async (
   email: string,
   admin_email: string
-) => await getAxios().post("/submit-admin-request", { email, admin_email });
+) => await getAxios().post("/submit-admin-request/", { email, admin_email });
 
 //using api directly for some reasons
 export const VerifyUserEmail = async (token: string) =>
