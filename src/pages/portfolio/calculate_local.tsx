@@ -8,12 +8,13 @@ import { showToast } from "../../core/hooks/alert";
 
 function CalculateLocalImpairment({ close }: UploadDataProps) {
   const { id } = useParams();
+  const [calculating, setCalculating] = useState<boolean>(false);
   const [categories, setCategories] = useState<CategoryProps[]>([
-    { category: "Current", range: "0-30", rate: "1%" },
-    { category: "OLEM", range: "31-89", rate: "10%" },
-    { category: "Substandard", range: "90-179", rate: "25%" },
-    { category: "Doubtful", range: "180-359", rate: "50%" },
-    { category: "Loss", range: "360+", rate: "100%" },
+    { category: "Current", range: "0-30" },
+    { category: "OLEM", range: "31-89" },
+    { category: "Substandard", range: "90-179" },
+    { category: "Doubtful", range: "180-359" },
+    { category: "Loss", range: "360+" },
   ]);
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -37,30 +38,32 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
   };
 
   const handleSubmit = () => {
-    const reportingDateElement = document.getElementById(
-      "reporting_date"
-    ) as HTMLInputElement | null;
-    const reporting_date = reportingDateElement?.value ?? "";
+    // const reportingDateElement = document.getElementById(
+    //   "reporting_date"
+    // ) as HTMLInputElement | null;
+    // const reporting_date = reportingDateElement?.value ?? "";
 
-    if (!id || !reporting_date) {
-      showToast("All fields required", false);
-      return;
-    }
+    // if (!id || !reporting_date) {
+    //   showToast("All fields required", false);
+    //   return;
+    // }
+    setCalculating(true);
     for (const item of categories) {
-      const { category, range, rate } = item;
+      const { category, range } = item;
 
-      if (!range?.trim() || !rate?.trim()) {
+      if (!range?.trim()) {
         showToast(
           `Please ensure all fields are filled. Missing values in "${category}"`,
           false
         );
+        setCalculating(false);
         return;
       }
 
-      if (isNaN(parseFloat(rate))) {
-        showToast(`Invalid rate in "${category}". Must be a number.`, false);
-        return;
-      }
+      // if (isNaN(parseFloat(rate))) {
+      //   showToast(`Invalid rate in "${category}". Must be a number.`, false);
+      //   return;
+      // }
     }
 
     const payload = categories.reduce((acc, item) => {
@@ -68,21 +71,22 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
 
       acc[key] = {
         days_range: item.range ?? "",
-        rate: parseFloat(item.rate ?? "0"),
       };
 
       return acc;
-    }, {} as Record<string, { days_range: string; rate: number }>);
+    }, {} as Record<string, { days_range: string }>);
 
-    if (id && reporting_date) {
-      CreatePortfolioLocalImpairmentCalculation(id, reporting_date, payload)
+    if (id) {
+      CreatePortfolioLocalImpairmentCalculation(id, payload)
         .then(() => {
+          setCalculating(false);
           showToast("Operation successful", true);
           setTimeout(() => {
             window.location.reload();
           }, 1500);
         })
         .catch((err) => {
+          setCalculating(false);
           showToast(err?.response?.data?.detail || "Submission failed", false);
         });
     }
@@ -96,7 +100,7 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
               <tr className="text-left text-gray-700 bg-gray-100">
                 <th className="p-3">Category</th>
                 <th className="p-3">Days range</th>
-                <th className="p-3">Rate (%)</th>
+                {/* <th className="p-3">Rate (%)</th> */}
                 <th className="p-3"></th>
               </tr>
             </thead>
@@ -117,7 +121,7 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
                     />
                   </td>
 
-                  {/* Rate input field */}
+                  {/* Rate input field
                   <td className="p-3">
                     <input
                       type="text"
@@ -128,7 +132,7 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
                         handleInputChange(index, "rate", e.target.value)
                       }
                     />
-                  </td>
+                  </td> */}
 
                   <td className="p-3 text-gray-500 cursor-pointer hover:text-gray-700">
                     {editingIndex === index ? (
@@ -152,7 +156,7 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
             </tbody>
           </table>
         </div>
-        <small>Reporting date</small>
+        {/* <small>Reporting date</small>
         <div className="w-full">
           <input
             placeholder="Select a date"
@@ -160,7 +164,7 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
             type="date"
             id="reporting_date"
           />
-        </div>
+        </div> */}
         <div className="flex justify-end mt-3">
           <Button
             text="Cancel"
@@ -169,6 +173,7 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
           />
           <Button
             onClick={handleSubmit}
+            isLoading={calculating}
             text="Calculate impairment"
             className="bg-[#166E94] !text-[14px] !w-[170px] text-white px-4 py-2 rounded-[10px]"
           />

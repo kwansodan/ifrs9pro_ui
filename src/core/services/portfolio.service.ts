@@ -29,13 +29,8 @@ export const CreatePortfolioECLCalculation = async (
 
 export const CreatePortfolioLocalImpairmentCalculation = async (
   id: number | string,
-  reporting_date: string | HTMLInputElement,
   payload: any
-) =>
-  await getAxios().post(
-    `/portfolios/${id}/calculate-local-impairment?reporting_date=${reporting_date}`,
-    payload
-  );
+) => await getAxios().post(`/portfolios/${id}/stage-loans-local`, payload);
 
 export const GenerateReports = async (id: number | string, payload: any) =>
   await getAxios().post(`/reports/${id}/generate`, payload);
