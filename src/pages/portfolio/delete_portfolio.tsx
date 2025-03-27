@@ -1,16 +1,22 @@
+import { useState } from "react";
+import Button from "../../components/button/_component";
 import { showToast } from "../../core/hooks/alert";
 import { DeleteAPortfolio } from "../../core/services/portfolio.service";
 
 function DeletePortfolio({ id, close, name }: any) {
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const confirmDelete = () => {
+    setIsDeleting(true);
     DeleteAPortfolio(id)
       .then(() => {
+        setIsDeleting(false);
         showToast("Operation successful", true);
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       })
       .catch((err) => {
+        setIsDeleting(false);
         showToast(err?.response?.data.detail, false);
       });
   };
@@ -30,12 +36,12 @@ function DeletePortfolio({ id, close, name }: any) {
           >
             No
           </button>
-          <button
+          <Button
+            isLoading={isDeleting}
+            className="bg-red-500 !w-10 text-white px-4 py-2 rounded-lg min-w-[110px] min-h-[35px]"
+            text="Yes"
             onClick={confirmDelete}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg min-w-[110px] min-h-[35px]"
-          >
-            Yes
-          </button>
+          />
         </div>
       </div>
     </div>

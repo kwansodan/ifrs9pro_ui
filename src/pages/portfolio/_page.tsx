@@ -1,4 +1,5 @@
 import NoPortfolioYet from "../../components/no_portfolio/_component";
+import TableLoader from "../../components/table_loader/component";
 import { usePortfolios } from "../../core/hooks/portfolio";
 import PortfolioMain from "./main";
 
@@ -7,13 +8,20 @@ function Porfolio() {
 
   return (
     <>
-      {portfoliosQuery &&
-      portfoliosQuery.data &&
-      portfoliosQuery.data.data.length < 1 ? (
-        <NoPortfolioYet />
+      {portfoliosQuery?.isLoading ? (
+        <>
+          <TableLoader />
+        </>
       ) : (
-        <PortfolioMain />
-        // <Test />
+        <>
+          {portfoliosQuery &&
+          portfoliosQuery.data &&
+          portfoliosQuery.data.data.items.length > 0 ? (
+            <PortfolioMain />
+          ) : (
+            <NoPortfolioYet />
+          )}
+        </>
       )}
     </>
   );

@@ -15,9 +15,7 @@ import PageLoader from "../../components/page_loader/_component";
 
 function FilteredResults() {
   const { id } = useParams();
-
   const { portfoliosReportsQuery } = usePorfolioReports(Number(id));
-
   const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
   const [openEclModal, setOpenEclModal] = useState<boolean>(false);
   const [openLocalImpairmentModal, setOpenLocalImpairmentModal] =
@@ -61,7 +59,6 @@ function FilteredResults() {
         close={() => setOpenGenerateReportModal(false)}
       >
         <div className="bg-white min-w-[600px] p-8 px-8 rounded-[20px]">
-          {/* <GenerateReportSuccess /> */}
           <GenerateReport close={() => setOpenGenerateReportModal(false)} />
         </div>
       </Modal>

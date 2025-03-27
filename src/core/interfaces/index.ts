@@ -43,7 +43,7 @@ export interface UploadDataProps {
 
 export interface CategoryProps {
   category: string;
-  range: string;
+  range?: string;
   rate?: string;
 }
 

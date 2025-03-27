@@ -8,6 +8,7 @@ import { showToast } from "../../core/hooks/alert";
 import { CreateAdminUser } from "../../core/services/users.service";
 function NewUser({ close }: UploadDataProps) {
   const { portfoliosQuery } = usePortfolios();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedPortfolio, setSelectedPortfolio] = useState<string>("");
   const [selectedRole, setSelectedRole] = useState<string>("");
   const portfolioDropdowns =
@@ -32,6 +33,7 @@ function NewUser({ close }: UploadDataProps) {
 
   const handleSubmit = async (prevState: any, formData: FormData) => {
     console.log("prev: ", prevState);
+    setIsSubmitting(true);
     const first_name = formData.get("first_name") as string;
     const last_name = formData.get("last_name") as string;
     const email = formData.get("email") as string;
@@ -65,15 +67,18 @@ function NewUser({ close }: UploadDataProps) {
     try {
       CreateAdminUser(payload)
         .then((res) => {
+          setIsSubmitting(false);
           setTimeout(() => {
             showToast(res.data.message, true);
           }, 2000);
           window.location.reload();
         })
         .catch((err) => {
+          setIsSubmitting(false);
           showToast(err?.response?.data.detail, false);
         });
     } catch (err) {
+      setIsSubmitting(false);
       showToast("User creation failed. Please try again", false);
     }
   };
@@ -158,6 +163,7 @@ function NewUser({ close }: UploadDataProps) {
               Cancel
             </div>
             <Button
+              isLoading={isSubmitting}
               type="submit"
               text="Submit"
               className="bg-[#166E94] !text-[14px] !w-[90px] text-white px-4 py-2 rounded-[10px]"

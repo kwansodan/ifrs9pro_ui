@@ -1,11 +1,13 @@
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { showToast } from "../../core/hooks/alert";
 import { CreateSecondStepPortfolioApi } from "../../core/services/portfolio.service";
 import Button from "../button/_component";
 import { useNavigate } from "react-router-dom";
 function SecondStep({ close, id, setStep }: any) {
   const navigate = useNavigate();
+  const [isCreating, setIsCreating] = useState<boolean>(false);
   const handleSubmit = async (prevState: any, formData: FormData) => {
+    setIsCreating(true);
     console.log("prev: ", prevState);
     const creditReserve = formData.get("credit_source") as string;
     const loanAssets = formData.get("loan_assets") as string;
@@ -14,32 +16,34 @@ function SecondStep({ close, id, setStep }: any) {
     ) as string;
 
     const payload = {
-      name,
       creditReserve,
       loanAssets,
       eclImpairmentAccount,
     };
     if (!creditReserve || !loanAssets || !eclImpairmentAccount) {
       showToast("Please fill in all fields.", false);
-      return { success: false, error: "All fields are required." };
+      setIsCreating(false);
+      return;
     }
     if (!id) {
       showToast("Please create first step of portfolio.", false);
-      return { success: false, error: "Portfolio id is required." };
+      setIsCreating(false);
+      return;
     }
     try {
       CreateSecondStepPortfolioApi(id, payload)
         .then((res) => {
+          setIsCreating(false);
           if (res.status === 200 || res.status === 201) {
             showToast("Second step of portfolio created successfully.", true);
-            console.log("res: ", res);
-            setStep(2);
+            setStep(3);
             setTimeout(() => {
               navigate("/dashboard/portfolio");
             }, 1000);
           }
         })
         .catch((err) => {
+          setIsCreating(false);
           showToast(err?.response?.data.detail, false);
         });
     } catch (err) {
@@ -95,6 +99,7 @@ function SecondStep({ close, id, setStep }: any) {
             //   onClick={() => {
             //     setOpenSecondStepCreatePortfolio(true);
             //   }}
+            isLoading={isCreating}
             className="bg-[#166E94] font-normal mt-3 text-white text-[12px] !rounded-[10px] !w-[90px] "
           />
         </div>

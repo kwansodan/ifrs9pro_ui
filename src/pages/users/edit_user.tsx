@@ -11,6 +11,7 @@ import { roles } from "../../data";
 function EditUser({ close, rowId }: UploadDataProps) {
   // const [selectedPortfolio, setSelectedPortfolio] = useState<string>("");
   // const { portfoliosQuery } = usePortfolios();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<string>("");
   const [hasRoleChanged, setHasRoleChanged] = useState<boolean>(false);
 
@@ -43,6 +44,7 @@ function EditUser({ close, rowId }: UploadDataProps) {
 
   const handleSubmit = async (prevState: any, formData: FormData) => {
     console.log("prev: ", prevState);
+    setIsSubmitting(true);
     const first_name = formData.get("first_name") as string;
     const last_name = formData.get("last_name") as string;
     const email = formData.get("email") as string;
@@ -63,8 +65,6 @@ function EditUser({ close, rowId }: UploadDataProps) {
           adminUserQuery.data.data.role,
     };
 
-    console.log("pay: 0", payload);
-
     if (!first_name || !last_name || !email || !recovery_email) {
       showToast("Please fill in all fields.", false);
       return;
@@ -73,15 +73,18 @@ function EditUser({ close, rowId }: UploadDataProps) {
     try {
       UpdateAUser(Number(rowId), payload)
         .then((res) => {
+          setIsSubmitting(false);
           showToast(res.data.message, true);
           setTimeout(() => {
             window.location.reload();
           }, 2000);
         })
         .catch((err) => {
+          setIsSubmitting(false);
           showToast(err?.response?.data.detail, false);
         });
     } catch (err) {
+      setIsSubmitting(false);
       showToast("User creation failed. Please try again", false);
     }
   };
@@ -190,6 +193,7 @@ function EditUser({ close, rowId }: UploadDataProps) {
               Cancel
             </div>
             <Button
+              isLoading={isSubmitting}
               type="submit"
               text="Submit"
               className="bg-[#166E94] !text-[14px] !w-[90px] text-white px-4 py-2 rounded-[10px]"

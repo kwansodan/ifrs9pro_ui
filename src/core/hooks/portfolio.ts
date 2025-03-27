@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   GetAllPortfolios,
+  GetPortfolio,
   GetReportHistory,
 } from "../services/portfolio.service";
 
@@ -11,6 +12,16 @@ export const usePortfolios = () => {
   });
   return {
     portfoliosQuery,
+  };
+};
+
+export const usePortfolio = (id: number | string) => {
+  const portfolioQuery = useQuery({
+    queryKey: ["portfolioQuery"],
+    queryFn: () => GetPortfolio(id),
+  });
+  return {
+    portfolioQuery,
   };
 };
 

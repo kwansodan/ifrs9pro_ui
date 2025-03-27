@@ -10,11 +10,11 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
   const { id } = useParams();
   const [calculating, setCalculating] = useState<boolean>(false);
   const [categories, setCategories] = useState<CategoryProps[]>([
-    { category: "Current", range: "0-30" },
-    { category: "OLEM", range: "31-89" },
-    { category: "Substandard", range: "90-179" },
-    { category: "Doubtful", range: "180-359" },
-    { category: "Loss", range: "360+" },
+    { category: "Current", rate: "4%" },
+    { category: "OLEM", rate: "4%" },
+    { category: "Substandard", rate: "4%" },
+    { category: "Doubtful", rate: "4%" },
+    { category: "Loss", rate: "4%" },
   ]);
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -49,9 +49,9 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
     // }
     setCalculating(true);
     for (const item of categories) {
-      const { category, range } = item;
+      const { category, rate } = item;
 
-      if (!range?.trim()) {
+      if (!rate?.trim()) {
         showToast(
           `Please ensure all fields are filled. Missing values in "${category}"`,
           false
@@ -68,14 +68,14 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
 
     const payload = categories.reduce((acc, item) => {
       const key = item.category.toLowerCase();
-
+      console.log("acc: ", acc);
       acc[key] = {
-        days_range: item.range ?? "",
+        provision_rate: item.rate ?? "",
       };
 
       return acc;
-    }, {} as Record<string, { days_range: string }>);
-
+    }, {} as Record<string, { provision_rate: string }>);
+    console.log("ha: ", payload);
     if (id) {
       CreatePortfolioLocalImpairmentCalculation(id, payload)
         .then(() => {
@@ -99,7 +99,7 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
             <thead>
               <tr className="text-left text-gray-700 bg-gray-100">
                 <th className="p-3">Category</th>
-                <th className="p-3">Days range</th>
+                <th className="p-3">Provision Rate</th>
                 {/* <th className="p-3">Rate (%)</th> */}
                 <th className="p-3"></th>
               </tr>
@@ -113,10 +113,10 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
                     <input
                       type="text"
                       className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                      value={item.range}
+                      value={item.rate}
                       disabled={editingIndex !== index}
                       onChange={(e) =>
-                        handleInputChange(index, "range", e.target.value)
+                        handleInputChange(index, "rate", e.target.value)
                       }
                     />
                   </td>

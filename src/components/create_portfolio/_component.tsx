@@ -14,10 +14,12 @@ import ThirdStep from "./third_step";
 import FourthStep from "./fourth_step";
 
 function CreatePorfolio({ cancel }: any) {
-  const [step, setStep] = useState<number>(4);
+  const [step, setStep] = useState<number>(1);
   const [portfolioId, setPortfolioId] = useState<string>("");
   const [selectedAsset, setSelectedAsset] = useState<string>("");
   const [repaymentValue, setRepaymentValue] = useState<boolean>(false);
+  const [isSubmittingFirstStep, setIsSubmittingFirstStep] =
+    useState<boolean>(false);
   const [selectedCustomerType, setSelectedCustomerType] = useState<string>("");
   const [selectedFundingSource, setSelectedFundingSource] =
     useState<string>("");
@@ -47,8 +49,14 @@ function CreatePorfolio({ cancel }: any) {
 
   const handleSubmit = async (prevState: any, formData: FormData) => {
     console.log("prev: ", prevState);
+    setIsSubmittingFirstStep(true);
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
+    const credit_source = formData.get("credit_source") as string;
+    const loan_assets = formData.get("loan_assets") as string;
+    const ecl_impairment_account = formData.get(
+      "ecl_impairment_account"
+    ) as string;
     const assetType = selectedAsset as string;
     const customerType = selectedCustomerType as string;
     const fundingSource = selectedFundingSource as string;
@@ -57,6 +65,9 @@ function CreatePorfolio({ cancel }: any) {
     const payload = {
       name,
       description,
+      credit_source,
+      loan_assets,
+      ecl_impairment_account,
       asset_type: assetType,
       customer_type: customerType,
       funding_source: fundingSource,
@@ -66,18 +77,23 @@ function CreatePorfolio({ cancel }: any) {
     if (
       !name ||
       !description ||
+      !credit_source ||
+      !loan_assets ||
+      !ecl_impairment_account ||
       !assetType ||
       !customerType ||
       !fundingSource ||
       !dataSource
     ) {
+      setIsSubmittingFirstStep(false);
       showToast("Please fill in all fields.", false);
-      return { success: false, error: "All fields are required." };
+      return;
     }
 
     try {
       CreatePortfolioApi(payload)
         .then((res) => {
+          setIsSubmittingFirstStep(false);
           if (res.status === 200 || res.status === 201) {
             showToast("First step of portfolio created successfully.", true);
             console.log("res: ", res);
@@ -89,11 +105,13 @@ function CreatePorfolio({ cancel }: any) {
           }
         })
         .catch((err) => {
+          setIsSubmittingFirstStep(false);
           showToast(err?.response?.data.detail, false);
         });
     } catch (err) {
+      setIsSubmittingFirstStep(false);
       showToast("Login failed. Please try again.", false);
-      return { success: false, error: "Login failed. Please try again." };
+      return;
     }
   };
 
@@ -111,10 +129,10 @@ function CreatePorfolio({ cancel }: any) {
   };
   return (
     <>
-      <div className="bg-white min-w-[500px] rounded-[20px]">
+      <div className="bg-white min-w-[550px] rounded-[20px]">
         {step === 1 && (
           <form action={formAction}>
-            <div className="p-8 ">
+            <div className="p-8">
               <div className="mt-3">
                 <label>Portfolio name</label>
                 <input
@@ -132,40 +150,73 @@ function CreatePorfolio({ cancel }: any) {
                   className="w-full h-[100px] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 />
               </div>
+              <div className="flex items-center justify-between">
+                <div className="mt-3">
+                  <label>Asset type</label>
+                  <Select
+                    className="min-w-[280px] mr-2"
+                    onChange={handleAssetChange}
+                    options={assetsOptions}
+                    placeholder="Select asset type"
+                  />
+                </div>
+                <div className="mt-3">
+                  <label>Customer type</label>
+                  <Select
+                    className="min-w-[280px] mr-2"
+                    onChange={handleCustomerTypeChange}
+                    options={customerTypeOptions}
+                    placeholder="Select customer type"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="mt-3">
+                  <label>Funding source</label>
+                  <Select
+                    className="min-w-[280px] mr-2"
+                    onChange={handleFundingSourceChange}
+                    options={fundingSourceOptions}
+                    placeholder="Select funding source"
+                  />
+                </div>
+                <div className="mt-3">
+                  <label>Data source</label>
+                  <Select
+                    className="min-w-[280px] mr-2"
+                    onChange={handleDataSourceChange}
+                    options={dataSourceOptions}
+                    placeholder="Select data source"
+                  />
+                </div>
+              </div>
+
               <div className="mt-3">
-                <label>Asset type</label>
-                <Select
-                  className="w-full"
-                  onChange={handleAssetChange}
-                  options={assetsOptions}
-                  placeholder="Select asset type"
+                <label>Credit source</label>
+                <input
+                  type="name"
+                  name="credit_source"
+                  placeholder="Enter credit source"
+                  className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 />
               </div>
               <div className="mt-3">
-                <label>Customer type</label>
-                <Select
-                  className="w-full"
-                  onChange={handleCustomerTypeChange}
-                  options={customerTypeOptions}
-                  placeholder="Select customer type"
+                <label>Loan assets</label>
+                <input
+                  type="name"
+                  name="loan_assets"
+                  placeholder="Enter loan assets"
+                  className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 />
               </div>
               <div className="mt-3">
-                <label>Funding source</label>
-                <Select
-                  className="w-full"
-                  onChange={handleFundingSourceChange}
-                  options={fundingSourceOptions}
-                  placeholder="Select funding source"
-                />
-              </div>
-              <div className="mt-3">
-                <label>Data source</label>
-                <Select
-                  className="w-full"
-                  onChange={handleDataSourceChange}
-                  options={dataSourceOptions}
-                  placeholder="Select data source"
+                <label>Ecl impairment account</label>
+                <input
+                  type="name"
+                  name="ecl_impairment_account"
+                  placeholder="Enter impairment account"
+                  className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 />
               </div>
               <div className="flex items-center justify-between mt-3">
@@ -197,6 +248,7 @@ function CreatePorfolio({ cancel }: any) {
               </div>
 
               <Button
+                isLoading={isSubmittingFirstStep}
                 text="Next"
                 type="submit"
                 className="bg-[#166E94] font-normal mt-3 text-white text-[12px] !rounded-[10px] !w-[90px] "
@@ -213,10 +265,18 @@ function CreatePorfolio({ cancel }: any) {
           />
         )}
         {step === 3 && (
-          <ThirdStep close={() => cancel()} setStep={handleSetThirdStep} />
+          <ThirdStep
+            id={portfolioId}
+            close={() => cancel()}
+            setStep={handleSetThirdStep}
+          />
         )}
         {step === 4 && (
-          <FourthStep close={() => cancel()} setStep={handleSetFourthStep} />
+          <FourthStep
+            id={portfolioId}
+            close={() => cancel()}
+            setStep={handleSetFourthStep}
+          />
         )}
       </div>
     </>

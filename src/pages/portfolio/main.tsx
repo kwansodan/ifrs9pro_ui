@@ -129,13 +129,9 @@ function PortfolioMain() {
         >
           <div className="p-4">
             <div
-              // onClick={(event) => {
-              //   const text =
-              //     event.currentTarget.querySelector("span")?.innerText || "";
-              //   setActionToBeTaken(text);
-              //   console.log(text);
-              //   setOpenEditUserModal(true);
-              // }}
+              onClick={() =>
+                navigate("/dashboard/portfolio/edit-portfolio/" + requestId)
+              }
               className="flex cursor-pointer"
             >
               <img className="w-[14px] mr-1" src={Images.edit} alt="" />

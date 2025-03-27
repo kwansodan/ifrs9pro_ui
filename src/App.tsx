@@ -29,6 +29,7 @@ import { ToastContainer } from "react-toastify";
 import { RootState } from "./core/stores";
 import PageLoader from "./components/page_loader/_component";
 import PortfolioDetails from "./pages/portfolio/portfolio_details";
+import EditPortfolio from "./pages/portfolio/edit_portfolio";
 
 function App() {
   const [userSession] = useState(getUserSession());
@@ -138,6 +139,10 @@ function App() {
               <Route
                 path="portfolio-details/:id"
                 element={<PortfolioDetails />}
+              />
+              <Route
+                path="portfolio/edit-portfolio/:id"
+                element={<EditPortfolio />}
               />
               <Route path="after-upload" element={<Test />} />
               <Route path="feedback" element={<NoFeedback />} />

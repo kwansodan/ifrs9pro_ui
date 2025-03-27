@@ -1,13 +1,16 @@
-import { CategoryProps, UploadDataProps } from "../../core/interfaces";
+import { CategoryProps } from "../../core/interfaces";
 import { Images } from "../../data/Assets";
 import Button from "../../components/button/_component";
 import { useState } from "react";
+import { CreateSecondStepPortfolioApi } from "../../core/services/portfolio.service";
+import { showToast } from "../../core/hooks/alert";
 
-function FourthStep({ close }: UploadDataProps) {
+function FourthStep({ close, id }: any) {
+  const [isCreating, setIsCreating] = useState<boolean>(false);
   const [categories, setCategories] = useState<CategoryProps[]>([
-    { category: "Stage 1", range: "0 - 120" },
-    { category: "Stage 2", range: "121 - 240" },
-    { category: "Stage 3", range: "241+" },
+    { category: "stage_1", range: "0-30" },
+    { category: "stage_2", range: "31-89" },
+    { category: "stage_3", range: "90-179" },
   ]);
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -16,7 +19,7 @@ function FourthStep({ close }: UploadDataProps) {
     setEditingIndex(index);
   };
 
-  const handleSaveClick = () => {
+  const handleToggle = () => {
     setEditingIndex(null);
   };
 
@@ -29,16 +32,64 @@ function FourthStep({ close }: UploadDataProps) {
     updatedCategories[index][field] = value;
     setCategories(updatedCategories);
   };
+
+  const handleSubmit = () => {
+    setIsCreating(true);
+
+    if (!id) {
+      showToast("Please create third step of portfolio.", false);
+      setIsCreating(false);
+      return;
+    }
+
+    for (const item of categories) {
+      const { category, range } = item;
+
+      if (!range?.trim()) {
+        showToast(
+          `Please ensure all fields are filled. Missing values in "${category}"`,
+          false
+        );
+        setIsCreating(false);
+        return;
+      }
+    }
+
+    const payload = categories.reduce((acc, item) => {
+      const key = item.category.toLowerCase();
+
+      acc[key] = {
+        days_range: item.range ?? "",
+      };
+
+      return acc;
+    }, {} as Record<string, { days_range: string }>);
+
+    if (id) {
+      CreateSecondStepPortfolioApi(id, payload)
+        .then(() => {
+          setIsCreating(false);
+          showToast("Portfolio creation done successfully", true);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        })
+        .catch((err) => {
+          setIsCreating(false);
+          showToast(err?.response?.data?.detail || "Submission failed", false);
+        });
+    }
+  };
   return (
     <>
-      <div className="p-8 py-6 bg-white rounded-lg">
-        {/* Table */}
-        <div className="pt-4 overflow-x-auto">
+      <div className="px-6 py-8 bg-white rounded-lg">
+        <div className="overflow-x-auto">
+          <h3 className="text-[14px] font-bold mt-2">ECL Staging</h3>
           <table className="w-full border rounded-lg">
             <thead>
               <tr className="text-left text-gray-700 bg-gray-100">
-                <th className="p-3">Loan stages</th>
-                <th className="p-3">NDIA</th>
+                <th className="p-3">Category</th>
+                <th className="p-3">Days range</th>
                 <th className="p-3"></th>
               </tr>
             </thead>
@@ -47,7 +98,6 @@ function FourthStep({ close }: UploadDataProps) {
                 <tr key={index} className="border-t hover:bg-gray-50">
                   <td className="p-3">{item.category}</td>
 
-                  {/* Days range input field */}
                   <td className="p-3">
                     <input
                       type="text"
@@ -60,14 +110,13 @@ function FourthStep({ close }: UploadDataProps) {
                     />
                   </td>
 
-                  {/* Edit/Save button */}
                   <td className="p-3 text-gray-500 cursor-pointer hover:text-gray-700">
                     {editingIndex === index ? (
                       <img
                         src={Images.edit}
                         className="w-[14px] h-[14px]"
                         alt=""
-                        onClick={handleSaveClick}
+                        onClick={handleToggle}
                       />
                     ) : (
                       <img
@@ -83,7 +132,7 @@ function FourthStep({ close }: UploadDataProps) {
             </tbody>
           </table>
         </div>
-        {/* Buttons */}
+
         <div className="flex justify-end mt-3">
           <Button
             text="Cancel"
@@ -91,7 +140,9 @@ function FourthStep({ close }: UploadDataProps) {
             className="px-4 !w-[90px] !text-[14px] bg-white border border-gray-400 rounded-[10px] mr-2"
           />
           <Button
-            text="Submit"
+            onClick={handleSubmit}
+            isLoading={isCreating}
+            text="Create portfolio"
             className="bg-[#166E94] !text-[14px] !w-[170px] text-white px-4 py-2 rounded-[10px]"
           />
         </div>

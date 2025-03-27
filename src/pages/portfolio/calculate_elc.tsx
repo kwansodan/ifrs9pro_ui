@@ -1,5 +1,5 @@
-import { CategoryProps, UploadDataProps } from "../../core/interfaces";
-import { Images } from "../../data/Assets";
+import { UploadDataProps } from "../../core/interfaces";
+
 import Button from "../../components/button/_component";
 import { useState } from "react";
 import { CreatePortfolioECLCalculation } from "../../core/services/portfolio.service";
@@ -9,31 +9,31 @@ import { showToast } from "../../core/hooks/alert";
 function CalculateEcl({ close }: UploadDataProps) {
   const { id } = useParams();
   const [calculating, setCalculating] = useState<boolean>(false);
-  const [categories, setCategories] = useState<CategoryProps[]>([
-    { category: "stage_1", range: "0-30" },
-    { category: "stage_2", range: "31-89" },
-    { category: "stage_3", range: "90-179" },
-  ]);
+  // const [categories, setCategories] = useState<CategoryProps[]>([
+  //   { category: "stage_1", range: "0-30" },
+  //   { category: "stage_2", range: "31-89" },
+  //   { category: "stage_3", range: "90-179" },
+  // ]);
 
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  // const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  const handleEditClick = (index: number) => {
-    setEditingIndex(index);
-  };
+  // const handleEditClick = (index: number) => {
+  //   setEditingIndex(index);
+  // };
 
-  const handleToggle = () => {
-    setEditingIndex(null);
-  };
+  // const handleToggle = () => {
+  //   setEditingIndex(null);
+  // };
 
-  const handleInputChange = (
-    index: number,
-    field: keyof CategoryProps,
-    value: string
-  ) => {
-    const updatedCategories = [...categories];
-    updatedCategories[index][field] = value;
-    setCategories(updatedCategories);
-  };
+  // const handleInputChange = (
+  //   index: number,
+  //   field: keyof CategoryProps,
+  //   value: string
+  // ) => {
+  //   const updatedCategories = [...categories];
+  //   updatedCategories[index][field] = value;
+  //   setCategories(updatedCategories);
+  // };
 
   const handleSubmit = () => {
     setCalculating(true);
@@ -47,31 +47,31 @@ function CalculateEcl({ close }: UploadDataProps) {
       showToast("All fields required", false);
       return;
     }
-    for (const item of categories) {
-      const { category, range } = item;
+    // for (const item of categories) {
+    //   const { category, range } = item;
 
-      if (!range?.trim()) {
-        showToast(
-          `Please ensure all fields are filled. Missing values in "${category}"`,
-          false
-        );
-        setCalculating(false);
-        return;
-      }
-    }
+    //   if (!range?.trim()) {
+    //     showToast(
+    //       `Please ensure all fields are filled. Missing values in "${category}"`,
+    //       false
+    //     );
+    //     setCalculating(false);
+    //     return;
+    //   }
+    // }
 
-    const payload = categories.reduce((acc, item) => {
-      const key = item.category.toLowerCase();
+    // const payload = categories.reduce((acc, item) => {
+    //   const key = item.category.toLowerCase();
 
-      acc[key] = {
-        days_range: item.range ?? "",
-      };
+    //   acc[key] = {
+    //     days_range: item.range ?? "",
+    //   };
 
-      return acc;
-    }, {} as Record<string, { days_range: string }>);
+    //   return acc;
+    // }, {} as Record<string, { days_range: string }>);
 
     if (id && reporting_date) {
-      CreatePortfolioECLCalculation(id, reporting_date, payload)
+      CreatePortfolioECLCalculation(id, reporting_date)
         .then(() => {
           setCalculating(false);
           showToast("Operation successful", true);
@@ -88,7 +88,7 @@ function CalculateEcl({ close }: UploadDataProps) {
   return (
     <>
       <div className="py-6 bg-white rounded-lg">
-        <div className="overflow-x-auto">
+        {/* <div className="overflow-x-auto">
           <table className="w-full border rounded-lg">
             <thead>
               <tr className="text-left text-gray-700 bg-gray-100">
@@ -135,7 +135,7 @@ function CalculateEcl({ close }: UploadDataProps) {
               ))}
             </tbody>
           </table>
-        </div>
+        </div> */}
         <small>Reporting date</small>
         <div className="w-full">
           <input

@@ -1,5 +1,7 @@
 import { getAxios } from "../utility";
 
+export const GetDashboardStats = async () => await getAxios().get("/dashboard");
+
 export const GetAdminRequests = async () =>
   await getAxios().get("/admin/requests");
 

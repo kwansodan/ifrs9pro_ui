@@ -9,6 +9,9 @@ export const CreateSecondStepPortfolioApi = async (id: number, payload: any) =>
 export const GetAllPortfolios = async () =>
   await getAxios().get("/portfolios/");
 
+export const GetPortfolio = async (id: number | string) =>
+  await getAxios().get("/portfolios/" + id);
+
 export const DeleteAPortfolio = async (id: number) =>
   await getAxios().delete("/portfolios/" + id);
 
@@ -19,18 +22,20 @@ export const CreatePortfolioIngestion = async (
 
 export const CreatePortfolioECLCalculation = async (
   id: number | string,
-  reporting_date: string | HTMLInputElement,
-  payload: any
+  reporting_date: string | HTMLInputElement
 ) =>
   await getAxios().post(
-    `/portfolios/${id}/stage-loans-ecl?reporting_date=${reporting_date}/`,
-    payload
+    `/portfolios/calculate-ecl-provision?reporting_date=${reporting_date}`,
+    {
+      portfolio_id: id,
+    }
   );
 
 export const CreatePortfolioLocalImpairmentCalculation = async (
   id: number | string,
   payload: any
-) => await getAxios().post(`/portfolios/${id}/stage-loans-local`, payload);
+) =>
+  await getAxios().post(`/portfolios/${id}/calculate-local-provision`, payload);
 
 export const GenerateReports = async (id: number | string, payload: any) =>
   await getAxios().post(`/reports/${id}/generate`, payload);

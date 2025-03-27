@@ -179,7 +179,7 @@ function AdminAccess() {
         </div>
       )}
       <div className="flex items-center justify-between bg-[#f8f9fa] rounded-t-lg py-[10px] px-[12px] mt-6 max-w-[1160px]">
-        <h1 className="text-[16px] font-semibold">Portfolios</h1>
+        <h1 className="text-[16px] font-semibold">Access requests</h1>
 
         <div className="flex items-center gap-4">
           <div className="relative">

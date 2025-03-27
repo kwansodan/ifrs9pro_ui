@@ -1,17 +1,22 @@
+import { useState } from "react";
 import Button from "../../components/button/_component";
 import { showToast } from "../../core/hooks/alert";
 import { UploadDataProps } from "../../core/interfaces";
 import { DeleteAdminUser } from "../../core/services/users.service";
 function DeleteUser({ close, rowId, userName }: UploadDataProps) {
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const confirmDelete = () => {
+    setIsDeleting(true);
     DeleteAdminUser(Number(rowId))
       .then(() => {
+        setIsDeleting(false);
         showToast("Operation successful", true);
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       })
       .catch((err) => {
+        setIsDeleting(false);
         showToast(err?.response?.data.detail, false);
       });
   };
@@ -32,6 +37,7 @@ function DeleteUser({ close, rowId, userName }: UploadDataProps) {
           />
           <Button
             onClick={confirmDelete}
+            isLoading={isDeleting}
             text="Delete"
             className="bg-[#FF3B30] !text-[14px] !w-[90px] text-white px-4 py-2 rounded-[10px]"
           />
