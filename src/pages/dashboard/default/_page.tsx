@@ -39,22 +39,30 @@ function Default() {
         <h3 className="text-[#6F6F6F] text-[14px] font-normal mt-6">
           {currentDate}
         </h3>
+        <div className="flex items-center">
+          <h3 className="text-[#1E1E1E] text-[18px]">{greeting} User</h3>
+          <img
+            className="w-[20px] h-[20px] ml-2"
+            src={Images.greeting}
+            alt=""
+          />
+        </div>
         {dashboardStatsQuery?.isFetching ? (
           <>
-            <DashboardLoader />
+            <div className="flex items-center">
+              <DashboardLoader />
+              <DashboardLoader />
+              <DashboardLoader />
+            </div>
+            <div className="flex items-center -mt-[13rem]">
+              <DashboardLoader />
+              <DashboardLoader />
+              <DashboardLoader />
+            </div>
           </>
         ) : (
           <>
             <div>
-              <div className="flex items-center">
-                <h3 className="text-[#1E1E1E] text-[18px]">{greeting} User</h3>
-                <img
-                  className="w-[20px] h-[20px] ml-2"
-                  src={Images.greeting}
-                  alt=""
-                />
-              </div>
-
               <h3 className="text-[16px] font-semibold mt-7">
                 Portfolio overview
               </h3>
@@ -66,7 +74,6 @@ function Default() {
                     dashboardStatsQuery.data &&
                     dashboardStatsQuery.data.data.portfolio_overview.total_loans
                   }
-                  parentClassName="slide-in-left "
                   valueClassName="text-[#AFAFAF]"
                 />
                 <Card
@@ -77,7 +84,6 @@ function Default() {
                     dashboardStatsQuery.data.data.portfolio_overview
                       .total_ecl_amount
                   }
-                  parentClassName="slide-in-left "
                   valueClassName="text-[#AFAFAF]"
                 />
                 <Card
@@ -88,7 +94,6 @@ function Default() {
                     dashboardStatsQuery.data.data.portfolio_overview
                       .total_risk_reserve
                   }
-                  parentClassName="slide-in-left "
                   valueClassName="text-[#AFAFAF]"
                 />
               </div>
@@ -105,7 +110,6 @@ function Default() {
                     dashboardStatsQuery.data.data.customer_overview
                       .total_customers
                   }
-                  parentClassName="slide-in-left "
                   valueClassName="text-[#AFAFAF]"
                 />
                 <Card
@@ -116,7 +120,6 @@ function Default() {
                     dashboardStatsQuery.data.data.customer_overview
                       .institutional
                   }
-                  parentClassName="slide-in-left "
                   valueClassName="text-[#AFAFAF]"
                 />
                 <Card
@@ -126,7 +129,6 @@ function Default() {
                     dashboardStatsQuery.data &&
                     dashboardStatsQuery.data.data.customer_overview.individual
                   }
-                  parentClassName="slide-in-left "
                   valueClassName="text-[#AFAFAF]"
                 />
                 <Card
@@ -136,7 +138,6 @@ function Default() {
                     dashboardStatsQuery.data &&
                     dashboardStatsQuery.data.data.customer_overview.mixed
                   }
-                  parentClassName="slide-in-left "
                   valueClassName="text-[#AFAFAF]"
                 />
               </div>

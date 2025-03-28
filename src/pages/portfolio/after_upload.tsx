@@ -8,8 +8,13 @@ import { Modal } from "../../components/modal/_component";
 import Comment from "./comment";
 import EditComment from "./edit";
 import { options, series } from "../../data";
+import { useParams } from "react-router-dom";
+import { useQualityIssues } from "../../core/hooks/portfolio";
 
 function AfterUpload() {
+  const { id } = useParams();
+  const { qualityIssuesQuery } = useQualityIssues(Number(id));
+
   const [activeTab, setActiveTab] = useState("Summary");
   const [calculateActiveTab, setCalculateActiveTab] = useState("Summary");
   const [openCommentModal, setOpenCommentModal] = useState<boolean>(false);
@@ -19,6 +24,14 @@ function AfterUpload() {
     { name: "Duplicate address", count: 15 },
     { name: "Missing repayment history", count: 45 },
   ];
+
+  const checkForQualityIssues =
+    qualityIssuesQuery &&
+    qualityIssuesQuery.data &&
+    qualityIssuesQuery.data.data &&
+    qualityIssuesQuery.data.data.detail === "No quality issues found"
+      ? false
+      : true;
   return (
     <>
       <Modal
@@ -125,51 +138,79 @@ function AfterUpload() {
                   className="w-[18px] h-[18px] mr-2"
                   alt=""
                 />
-                <span className="text-sm text-[#6F6F6F]">
-                  <strong>122</strong> quality issues detected. Review issues,
-                  provide comments and approve.
-                </span>
+                {!checkForQualityIssues ? (
+                  <>
+                    <span className="text-sm text-[#6F6F6F]">
+                      {qualityIssuesQuery &&
+                        qualityIssuesQuery.data &&
+                        qualityIssuesQuery.data.data &&
+                        qualityIssuesQuery.data.data.detail}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-sm text-[#6F6F6F]">
+                      <strong>12</strong>
+                      quality issues detected. Review issues, provide comments
+                      and approve.
+                    </span>
+                  </>
+                )}
               </div>
 
               <div className="bg-white border rounded-lg shadow-sm">
-                {issues.map((issue, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between p-4 border-b last:border-0"
-                  >
-                    <span className="text-gray-700">{issue.name}</span>
-                    <div className="flex items-center space-x-4">
-                      <span
-                        className={`font-semibold ${
-                          issue.count > 30 ? "text-[#FF3B30]" : "text-[#F7941E]"
-                        }`}
+                {!checkForQualityIssues ? (
+                  <></>
+                ) : (
+                  <>
+                    {issues.map((issue, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between p-4 border-b last:border-0"
                       >
-                        {issue.count}
-                      </span>
-                      <img
-                        onClick={() => setOpenEditModal(true)}
-                        title="view details"
-                        src={Images.see}
-                        className="w-[14px] h-[14px] cursor-pointer"
-                        alt=""
-                      />
-                      <img
-                        onClick={() => setOpenCommentModal(true)}
-                        title="add comment"
-                        src={Images.add_comment}
-                        className="w-[14px] h-[14px] cursor-pointer"
-                        alt=""
-                      />
-                    </div>
+                        <span className="text-gray-700">{issue.name}</span>
+                        <div className="flex items-center space-x-4">
+                          <span
+                            className={`font-semibold ${
+                              issue.count > 30
+                                ? "text-[#FF3B30]"
+                                : "text-[#F7941E]"
+                            }`}
+                          >
+                            {issue.count}
+                          </span>
+                          <img
+                            onClick={() => setOpenEditModal(true)}
+                            title="view details"
+                            src={Images.see}
+                            className="w-[14px] h-[14px] cursor-pointer"
+                            alt=""
+                          />
+                          <img
+                            onClick={() => setOpenCommentModal(true)}
+                            title="add comment"
+                            src={Images.add_comment}
+                            className="w-[14px] h-[14px] cursor-pointer"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
+              </div>
+              {checkForQualityIssues ? (
+                <>
+                  <div className="flex justify-end mt-4 text-center">
+                    <Button
+                      text={"Approve"}
+                      className="!text-center gap-2 py-2 font-normal !text-[14px] text-white !w-[120px] bg-[#166E94]"
+                    />
                   </div>
-                ))}
-              </div>
-              <div className="flex justify-end mt-4 text-center">
-                <Button
-                  text={"Approve"}
-                  className="!text-center gap-2 py-2 font-normal !text-[14px] text-white !w-[120px] bg-[#166E94]"
-                />
-              </div>
+                </>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         )}

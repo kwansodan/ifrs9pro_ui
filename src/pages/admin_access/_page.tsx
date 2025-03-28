@@ -9,7 +9,7 @@ import DeleteUser from "../users/delete_user";
 import ApproveRequest from "./approve_request";
 import { useAdminRequests } from "../../core/hooks/admin";
 import TableLoader from "../../components/table_loader/component";
-import moment from "moment";
+
 import { renderStatusColors } from "../../core/utility";
 
 function AdminAccess() {
@@ -68,23 +68,23 @@ function AdminAccess() {
     );
   };
 
-  const renderDate = (data: any) => {
-    return moment(data.row.created_at).format("lll");
-  };
+  // const renderDate = (data: any) => {
+  //   return moment(data.row.created_at).format("lll");
+  // };
 
   const columns = [
     { key: "email", name: "Email", width: 300 },
     { key: "admin_email", name: "Admin Email", width: 410 },
-    {
-      key: "created_at",
-      name: "Created At",
-      width: 340,
-      renderCell: renderDate,
-    },
+    // {
+    //   key: "created_at",
+    //   name: "Created At",
+    //   width: 340,
+    //   renderCell: renderDate,
+    // },
     {
       key: "status",
       name: "Status",
-      width: "100px",
+      width: "330px",
       renderCell: renderStatus,
     },
     {

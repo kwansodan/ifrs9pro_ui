@@ -10,11 +10,13 @@ import GenerateReport from "./generate_report";
 import AfterUpload from "./after_upload";
 import YesReport from "./yes_report";
 import { useParams } from "react-router-dom";
-import { usePorfolioReports } from "../../core/hooks/portfolio";
+import { usePorfolioReports, usePortfolio } from "../../core/hooks/portfolio";
 import PageLoader from "../../components/page_loader/_component";
+import TextLoader from "../../components/text_loader/component";
 
 function FilteredResults() {
   const { id } = useParams();
+  const { portfolioQuery } = usePortfolio(Number(id));
   const { portfoliosReportsQuery } = usePorfolioReports(Number(id));
   const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
   const [openEclModal, setOpenEclModal] = useState<boolean>(false);
@@ -22,6 +24,7 @@ function FilteredResults() {
     useState<boolean>(false);
   const [openGenerateReportModal, setOpenGenerateReportModal] =
     useState<boolean>(false);
+
   return (
     <>
       <Modal
@@ -66,8 +69,17 @@ function FilteredResults() {
         <aside className="w-1/4 p-4 bg-white rounded-lg shadow-md">
           <h2 className="mb-4 text-lg font-semibold">Personal loans</h2>
           <p className="mb-4 px-[12px] py-[7px] text-sm text-gray-500 text-[13px] bg-[#FAFAFA]">
-            Portfolio description goes. Eg. Commercial loan portfolio for first
-            quarter 2024
+            {portfolioQuery?.isFetching ? (
+              <>
+                <TextLoader />
+              </>
+            ) : (
+              <>
+                {portfolioQuery &&
+                  portfolioQuery.data &&
+                  portfolioQuery.data.data.description}
+              </>
+            )}
           </p>
           <hr />
           <div className="mt-5 space-y-3 text-sm">

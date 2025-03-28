@@ -9,6 +9,7 @@ import EditUser from "./edit_user";
 import DeleteUser from "./delete_user";
 import { useAdminUsers } from "../../core/hooks/users";
 import moment from "moment";
+import { motion } from "framer-motion";
 import TableLoader from "../../components/table_loader/component";
 
 function Users() {
@@ -201,16 +202,22 @@ function Users() {
           </>
         ) : (
           <>
-            <DataGrid
-              columns={columns}
-              rows={
-                (adminUsersQuery &&
-                  adminUsersQuery.data &&
-                  adminUsersQuery.data.data) ||
-                []
-              }
-              className="rdg-light custom-grid"
-            />
+            <motion.div
+              initial={{ y: -100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+            >
+              <DataGrid
+                columns={columns}
+                rows={
+                  (adminUsersQuery &&
+                    adminUsersQuery.data &&
+                    adminUsersQuery.data.data) ||
+                  []
+                }
+                className="rdg-light custom-grid"
+              />
+            </motion.div>
           </>
         )}
       </div>

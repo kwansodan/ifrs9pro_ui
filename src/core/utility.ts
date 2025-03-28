@@ -27,28 +27,41 @@ export const getAxios = () => {
 
   const token = localStorage.getItem("u_token");
 
-  const checkExpiry = () => {
-    const tokenExpiry = localStorage.getItem("u_token_expiry");
-    let now = moment();
-    let dateToCheck = moment(tokenExpiry);
-    if (dateToCheck.isBefore(now)) {
-      return true;
+  let currentDate = new Date();
+  let currentTimestamp = moment(currentDate).valueOf();
+  let expiry = localStorage.getItem("u_token_expiry");
+  if (expiry) {
+    let expiryTimestamp = parseInt(expiry, 10);
+    if (token != null && token !== "") {
+      instance.defaults.headers.common["Authorization"] = "Bearer " + token;
     }
-    return false;
-  };
-
-  if (token != null && token !== "") {
-    instance.defaults.headers.common["Authorization"] = "Bearer " + token;
+    if (expiryTimestamp < currentTimestamp) {
+      clearUserSession();
+    }
   }
+
+  // const checkExpiry = () => {
+  //   const tokenExpiry = localStorage.getItem("u_token_expiry");
+  //   let now = moment();
+  //   let dateToCheck = moment(tokenExpiry);
+  //   if (dateToCheck.isBefore(now)) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
+
+  // if (token != null && token !== "") {
+  //   instance.defaults.headers.common["Authorization"] = "Bearer " + token;
+  // }
 
   instance.interceptors.response.use(
     (response) => {
       if (response.status === 200 && response.data.data == 401) {
         clearUserSession();
       }
-      if (response.status === 401 || checkExpiry()) {
-        clearUserSession();
-      }
+      // if (response.status === 401 || checkExpiry()) {
+      //   clearUserSession();
+      // }
       return response;
     },
     (error) => {

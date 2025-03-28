@@ -50,3 +50,16 @@ export const DownloadReportHistory = async (
   id: number | string,
   report_id: number | string
 ) => await getAxios().get(`/reports/${id}/report/${report_id}/download`);
+
+export const GetQualityIssues = async (portfolio_id: number | string) =>
+  await getAxios().get(`/portfolios/${portfolio_id}/quality-issues`);
+
+export const AddCommentToQualityIssue = async (
+  portfolio_id: number | string,
+  issue_id: number | string,
+  payload: any
+) =>
+  await getAxios().post(
+    `/portfolios/${portfolio_id}/quality-issues/${issue_id}/comments`,
+    payload
+  );

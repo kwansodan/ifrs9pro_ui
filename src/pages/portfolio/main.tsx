@@ -10,6 +10,7 @@ import { Modal } from "../../components/modal/_component";
 import CreatePorfolio from "../../components/create_portfolio/_component";
 import DeletePortfolio from "./delete_portfolio";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 function PortfolioMain() {
   const navigate = useNavigate();
@@ -58,9 +59,9 @@ function PortfolioMain() {
     );
   };
 
-  const renderCreatedAtDate = (data: any) => {
-    return moment(data.row.created_at).format("lll");
-  };
+  // const renderCreatedAtDate = (data: any) => {
+  //   return moment(data.row.created_at).format("lll");
+  // };
 
   const renderUpdatedAtDate = (data: any) => {
     return moment(data.row.updated_at).format("lll");
@@ -74,26 +75,12 @@ function PortfolioMain() {
     { key: "funding_source", name: "Funding source", width: 150 },
     { key: "data_source", name: "Data source", width: 180 },
     { key: "repayment_source", name: "Repayment source", width: 180 },
-    { key: "credit_source", name: "Credit risk reserve", width: 180 },
-    { key: "loan_assets", name: "Loan assets", width: 180 },
-    {
-      key: "ecl_impairment_account",
-      name: "ECL impairment account",
-      width: 280,
-    },
-    {
-      key: "created_at",
-      name: "Created at",
-      width: 180,
-      renderCell: renderCreatedAtDate,
-    },
     {
       key: "updated_at",
       name: "Updated at",
       width: 180,
       renderCell: renderUpdatedAtDate,
     },
-
     {
       key: "update",
       name: "Actions",
@@ -197,7 +184,11 @@ function PortfolioMain() {
         {portfoliosQuery?.isFetching ? (
           <TableLoader />
         ) : (
-          <>
+          <motion.div
+            initial={{ y: -100, opacity: 0 }} // Start above the viewport
+            animate={{ y: 0, opacity: 1 }} // Move to normal position
+            transition={{ duration: 1.5, ease: "easeOut" }} // Slow drop effect
+          >
             <DataGrid
               columns={columns}
               rows={
@@ -209,7 +200,7 @@ function PortfolioMain() {
               }
               className="rdg-light custom-grid"
             />
-          </>
+          </motion.div>
         )}
       </div>
     </>
