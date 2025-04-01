@@ -69,7 +69,7 @@ function GenerateReport({ close }: UploadDataProps) {
         <div className="w-full ">
           <input
             placeholder="Select a date"
-            className="w-full border rounded-[10px] border-gray-300 px-[6px] py-[5px] focus:outline-[#166E94] text-gray-400"
+            className="w-full h-10 border rounded-[10px] border-gray-300 px-[6px] py-[5px] focus:outline-[#166E94] text-gray-400"
             type="date"
             id="report_date"
           />

@@ -46,9 +46,9 @@ function UploadData({ close }: UploadDataProps) {
         .then(() => {
           setIsDone(false);
           showToast("Submission successful", true);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 2000);
         })
         .catch((err) => {
           setIsDone(false);

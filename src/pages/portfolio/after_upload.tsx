@@ -7,16 +7,30 @@ import Button from "../../components/button/_component";
 import { Modal } from "../../components/modal/_component";
 import Comment from "./comment";
 import EditComment from "./edit";
-import { options, series } from "../../data";
 import { useParams } from "react-router-dom";
 import { useQualityIssues } from "../../core/hooks/portfolio";
+import { ApexOptions } from "apexcharts";
+import PageLoader from "../../components/page_loader/_component";
 
-function AfterUpload() {
+function AfterUpload({
+  total_loans,
+  total_loan_value,
+  average_loan,
+  total_customers,
+  has_ingested_data,
+  is_graph_loading,
+  ecl_summary_data,
+  bog_summary_data,
+  individual_customers,
+  institutions,
+  mixed,
+  active_customers,
+}: any) {
   const { id } = useParams();
   const { qualityIssuesQuery } = useQualityIssues(Number(id));
 
   const [activeTab, setActiveTab] = useState("Summary");
-  const [calculateActiveTab, setCalculateActiveTab] = useState("Summary");
+  const [calculateActiveTab, setCalculateActiveTab] = useState("ecl");
   const [openCommentModal, setOpenCommentModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const issues = [
@@ -32,6 +46,59 @@ function AfterUpload() {
     qualityIssuesQuery.data.data.detail === "No quality issues found"
       ? false
       : true;
+
+  const categories = ["stage_1", "stage_2", "stage_3"];
+  const bog_categories = ["current", "olem", "substandard", "doubtful", "loss"];
+
+  const numLoansData = ecl_summary_data
+    ? categories.map((stage) => ecl_summary_data?.[stage]?.num_loans ?? 0)
+    : [];
+
+  const bog_numLoansData = bog_summary_data
+    ? bog_categories.map((stage) => bog_summary_data?.[stage]?.num_loans ?? 0)
+    : [];
+
+  const ecl_options: ApexOptions = {
+    chart: {
+      type: "bar",
+      height: 350,
+    },
+    xaxis: {
+      categories: categories,
+      title: { text: "Stages" },
+    },
+    yaxis: {
+      title: { text: "Number of Loans" },
+    },
+  };
+
+  const ecl_series = [
+    {
+      name: "Number of Loans",
+      data: numLoansData,
+    },
+  ];
+
+  const bog_options: ApexOptions = {
+    chart: {
+      type: "bar",
+      height: 350,
+    },
+    xaxis: {
+      categories: bog_categories,
+      title: { text: "Stages" },
+    },
+    yaxis: {
+      title: { text: "Number of Loans" },
+    },
+  };
+
+  const bog_series = [
+    {
+      name: "Number of Loans",
+      data: bog_numLoansData,
+    },
+  ];
   return (
     <>
       <Modal
@@ -70,16 +137,12 @@ function AfterUpload() {
               </h3>
               <div className="flex gap-2">
                 {[
-                  { title: "Total loans", value: "2,543" },
-                  { title: "Total loan value", value: "$1.25 M" },
-                  { title: "Average loan amount", value: "$500" },
-                  { title: "Total customers", value: "1,093" },
+                  { title: "Total loans", value: total_loans },
+                  { title: "Total loan value", value: total_loan_value },
+                  { title: "Average loan amount", value: average_loan },
+                  { title: "Total customers", value: total_customers },
                 ].map((item, idx) => (
                   <React.Fragment key={idx}>
-                    {/* <div key={item.title} className="p-4 bg-gray-100 rounded-lg">
-                    <p className="text-sm text-gray-600">{item.title}</p>
-                    <p className="text-2xl font-semibold">{item.value}</p>
-                  </div> */}
                     <Card
                       key={idx}
                       parentClassName="!h-[110px]"
@@ -95,10 +158,13 @@ function AfterUpload() {
               </h3>
               <div className="flex gap-2">
                 {[
-                  { title: "Individual customers", value: "568" },
-                  { title: "Institutions", value: "325" },
-                  { title: "Mixed", value: "200" },
-                  { title: "Active customers", value: "1,005" },
+                  {
+                    title: "Individual customers",
+                    value: individual_customers,
+                  },
+                  { title: "Institutions", value: institutions },
+                  { title: "Mixed", value: mixed },
+                  { title: "Active customers", value: active_customers },
                 ].map((item, idx) => (
                   <Card
                     key={idx}
@@ -110,24 +176,47 @@ function AfterUpload() {
                 ))}
               </div>
             </div>
-
-            <div className=" p-3 bg-[#F0F0F0]">
-              <div className="flex justify-between">
-                <h2 className="text-lg font-semibold">Calculations summary</h2>
-                <Tabs
-                  tabTitle={["ECL summary", "BOG summary"]}
-                  activeTab={calculateActiveTab}
-                  setActiveTab={setCalculateActiveTab}
-                />
-              </div>
-              <Chart
-                options={options}
-                series={series}
-                type="scatter"
-                height={350}
-              />
-              ;
-            </div>
+            {is_graph_loading ? (
+              <>
+                <PageLoader />
+              </>
+            ) : (
+              <>
+                {has_ingested_data ? (
+                  <>
+                    <div className=" p-3 bg-[#F0F0F0]">
+                      <div className="flex justify-between">
+                        <h2 className="text-lg font-semibold">
+                          Calculations summary
+                        </h2>
+                        <Tabs
+                          tabTitle={["ECL summary", "BOG summary"]}
+                          activeTab={calculateActiveTab}
+                          setActiveTab={setCalculateActiveTab}
+                        />
+                      </div>
+                      {calculateActiveTab === "ECL summary" ? (
+                        <Chart
+                          options={ecl_options}
+                          series={ecl_series}
+                          type="bar"
+                          height={350}
+                        />
+                      ) : (
+                        <Chart
+                          options={bog_options}
+                          series={bog_series}
+                          type="bar"
+                          height={350}
+                        />
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>{null}</>
+                )}
+              </>
+            )}
           </>
         ) : (
           <div className="mt-4">

@@ -1,5 +1,4 @@
-import { CategoryProps, UploadDataProps } from "../../core/interfaces";
-import { Images } from "../../data/Assets";
+import { UploadDataProps } from "../../core/interfaces";
 import Button from "../../components/button/_component";
 import { useState } from "react";
 import { CreatePortfolioLocalImpairmentCalculation } from "../../core/services/portfolio.service";
@@ -9,75 +8,22 @@ import { showToast } from "../../core/hooks/alert";
 function CalculateLocalImpairment({ close }: UploadDataProps) {
   const { id } = useParams();
   const [calculating, setCalculating] = useState<boolean>(false);
-  const [categories, setCategories] = useState<CategoryProps[]>([
-    { category: "Current", rate: "4%" },
-    { category: "OLEM", rate: "4%" },
-    { category: "Substandard", rate: "4%" },
-    { category: "Doubtful", rate: "4%" },
-    { category: "Loss", rate: "4%" },
-  ]);
-
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-
-  const handleEditClick = (index: number) => {
-    setEditingIndex(index);
-  };
-
-  const handleToggle = () => {
-    setEditingIndex(null);
-  };
-
-  const handleInputChange = (
-    index: number,
-    field: keyof CategoryProps,
-    value: string
-  ) => {
-    const updatedCategories = [...categories];
-    updatedCategories[index][field] = value;
-    setCategories(updatedCategories);
-  };
 
   const handleSubmit = () => {
-    // const reportingDateElement = document.getElementById(
-    //   "reporting_date"
-    // ) as HTMLInputElement | null;
-    // const reporting_date = reportingDateElement?.value ?? "";
+    const reportingDateElement = document.getElementById(
+      "local-impairment"
+    ) as HTMLInputElement | null;
+    const reporting_date = reportingDateElement?.value ?? "";
 
-    // if (!id || !reporting_date) {
-    //   showToast("All fields required", false);
-    //   return;
-    // }
-    setCalculating(true);
-    for (const item of categories) {
-      const { category, rate } = item;
-
-      if (!rate?.trim()) {
-        showToast(
-          `Please ensure all fields are filled. Missing values in "${category}"`,
-          false
-        );
-        setCalculating(false);
-        return;
-      }
-
-      // if (isNaN(parseFloat(rate))) {
-      //   showToast(`Invalid rate in "${category}". Must be a number.`, false);
-      //   return;
-      // }
+    if (!id || !reporting_date) {
+      setCalculating(false);
+      showToast("All fields required", false);
+      return;
     }
+    setCalculating(true);
 
-    const payload = categories.reduce((acc, item) => {
-      const key = item.category.toLowerCase();
-      console.log("acc: ", acc);
-      acc[key] = {
-        provision_rate: item.rate ?? "",
-      };
-
-      return acc;
-    }, {} as Record<string, { provision_rate: string }>);
-    console.log("ha: ", payload);
-    if (id) {
-      CreatePortfolioLocalImpairmentCalculation(id, payload)
+    if (id && reporting_date) {
+      CreatePortfolioLocalImpairmentCalculation(id, reporting_date)
         .then(() => {
           setCalculating(false);
           showToast("Operation successful", true);
@@ -94,77 +40,15 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
   return (
     <>
       <div className="py-6 bg-white rounded-lg">
-        <div className="overflow-x-auto">
-          <table className="w-full border rounded-lg">
-            <thead>
-              <tr className="text-left text-gray-700 bg-gray-100">
-                <th className="p-3">Category</th>
-                <th className="p-3">Provision Rate</th>
-                {/* <th className="p-3">Rate (%)</th> */}
-                <th className="p-3"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {categories.map((item, index) => (
-                <tr key={index} className="border-t hover:bg-gray-50">
-                  <td className="p-3">{item.category}</td>
-
-                  <td className="p-3">
-                    <input
-                      type="text"
-                      className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                      value={item.rate}
-                      disabled={editingIndex !== index}
-                      onChange={(e) =>
-                        handleInputChange(index, "rate", e.target.value)
-                      }
-                    />
-                  </td>
-
-                  {/* Rate input field
-                  <td className="p-3">
-                    <input
-                      type="text"
-                      className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                      value={item.rate}
-                      disabled={editingIndex !== index}
-                      onChange={(e) =>
-                        handleInputChange(index, "rate", e.target.value)
-                      }
-                    />
-                  </td> */}
-
-                  <td className="p-3 text-gray-500 cursor-pointer hover:text-gray-700">
-                    {editingIndex === index ? (
-                      <img
-                        src={Images.edit}
-                        className="w-[14px] h-[14px]"
-                        alt=""
-                        onClick={handleToggle}
-                      />
-                    ) : (
-                      <img
-                        src={Images.edit}
-                        className="w-[14px] h-[14px]"
-                        alt=""
-                        onClick={() => handleEditClick(index)}
-                      />
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {/* <small>Reporting date</small>
+        <small>Reporting date</small>
         <div className="w-full">
           <input
             placeholder="Select a date"
             className=" w-full border rounded-[10px] border-gray-300 px-[6px] py-[5px] focus:outline-[#166E94] text-gray-400"
             type="date"
-            id="reporting_date"
+            id="local-impairment"
           />
-        </div> */}
+        </div>
         <div className="flex justify-end mt-3">
           <Button
             text="Cancel"
@@ -174,7 +58,7 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
           <Button
             onClick={handleSubmit}
             isLoading={calculating}
-            text="Calculate impairment"
+            text="Calculate Impairment"
             className="bg-[#166E94] !text-[14px] !w-[170px] text-white px-4 py-2 rounded-[10px]"
           />
         </div>

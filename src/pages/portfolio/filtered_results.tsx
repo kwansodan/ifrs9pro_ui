@@ -25,6 +25,27 @@ function FilteredResults() {
   const [openGenerateReportModal, setOpenGenerateReportModal] =
     useState<boolean>(false);
 
+  const dataSummary =
+    portfolioQuery &&
+    portfolioQuery.data &&
+    portfolioQuery.data.data &&
+    portfolioQuery.data.data;
+
+  const handleOpenUploadData = () => {
+    if (dataSummary && dataSummary.has_ingested_data) {
+      if (
+        window.confirm(
+          "Ingestion already done. This ingestion will overwrite the previous one. Do you want to continue?"
+        )
+      ) {
+        setOpenUploadModal(true);
+      } else {
+        setOpenUploadModal(false);
+      }
+    } else {
+      setOpenUploadModal(true);
+    }
+  };
   return (
     <>
       <Modal
@@ -69,7 +90,7 @@ function FilteredResults() {
         <aside className="w-1/4 p-4 bg-white rounded-lg shadow-md">
           <h2 className="mb-4 text-lg font-semibold">Personal loans</h2>
           <p className="mb-4 px-[12px] py-[7px] text-sm text-gray-500 text-[13px] bg-[#FAFAFA]">
-            {portfolioQuery?.isFetching ? (
+            {portfolioQuery?.isLoading ? (
               <>
                 <TextLoader />
               </>
@@ -107,7 +128,7 @@ function FilteredResults() {
             <h3 className="text-[#1E1E1E] mb-2 font-medium">Actions</h3>
             <div className="flex mb-6 space-x-4">
               <Button
-                onClick={() => setOpenUploadModal(true)}
+                onClick={handleOpenUploadData}
                 text={
                   <>
                     <img
@@ -164,7 +185,39 @@ function FilteredResults() {
               />
             </div>
           </div>
-          <AfterUpload />
+          {portfolioQuery?.isLoading ? (
+            <>
+              <PageLoader />
+            </>
+          ) : (
+            <>
+              <AfterUpload
+                is_graph_loading={portfolioQuery.isFetching}
+                has_ingested_data={dataSummary.has_ingested_data}
+                total_loans={dataSummary.overview.total_loans}
+                total_loan_value={dataSummary.overview.total_loan_value}
+                average_loan={dataSummary.overview.average_loan_amount}
+                total_customers={dataSummary.overview.total_customers}
+                individual_customers={
+                  dataSummary.customer_summary.individual_customers
+                }
+                ecl_summary_data={
+                  (dataSummary.staging_summary &&
+                    dataSummary.staging_summary?.ecl) ||
+                  {}
+                }
+                bog_summary_data={
+                  (dataSummary.staging_summary &&
+                    dataSummary.staging_summary?.local_impairment) ||
+                  {}
+                }
+                institutions={dataSummary.customer_summary.institutions}
+                mixed={dataSummary.customer_summary.mixed}
+                active_customers={dataSummary.customer_summary.active_customers}
+              />
+            </>
+          )}
+
           <div>
             {portfoliosReportsQuery &&
             portfoliosReportsQuery.data &&

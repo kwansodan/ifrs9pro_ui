@@ -4,19 +4,26 @@ import { Images } from "../../data/Assets";
 import FilterTray from "../../components/filter_tray/_component";
 import Button from "../../components/button/_component";
 import { Modal } from "../../components/modal/_component";
-import NewUser from "../users/new_user";
-import EditUser from "../users/edit_user";
-import DeleteUser from "../users/delete_user";
+import ShareFeedback from "./share_feedback";
+import { useFeedback } from "../../core/hooks/feedback";
+import EditFeedback from "./edit_feedback";
+import DeleteFeedback from "./delete_feedback";
+import { renderFeedbackStatusColors } from "../../core/utility";
+import TableLoader from "../../components/table_loader/component";
 
-function Users() {
+function Feedback() {
+  const { feedbackQuery } = useFeedback();
   const [showFilter, setShowFilter] = useState<boolean>(false);
-  const [openNewUserModal, setOpenNewUserModal] = useState<boolean>(false);
-  const [openEditUserModal, setOpenEditUserModal] = useState<boolean>(false);
-  const [openDeleteUserModal, setOpenDeleteUserModal] =
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [openCreateFeedbackModal, setOpenCreateFeedbackModal] =
     useState<boolean>(false);
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
-  const menuRef = useRef<HTMLDivElement>(null);
 
+  const menuRef = useRef<HTMLDivElement>(null);
+  const feedbackData = feedbackQuery && feedbackQuery;
+
+  console.log("ads: ", feedbackData.data);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -46,56 +53,52 @@ function Users() {
     );
   };
 
-  const columns = [
-    { key: "name", name: "Name", width: 300 },
-    { key: "assetType", name: "Email", width: 350 },
-    { key: "customerType", name: "Role", width: 180 },
-    { key: "role", name: "Role", width: 150 },
+  const renderNameRow = (data: any) => {
+    const { first_name, last_name } = data.row.user;
+    return (
+      <div className="flex cursor-pointer">{first_name + " " + last_name}</div>
+    );
+  };
 
-    {
-      key: "update",
-      name: "Actions",
-      renderCell: renderActionsRow,
-      width: "100px",
-    },
+  const renderStatusRow = (data: any) => {
+    const { status } = data.row;
+    return (
+      <div
+        className={`flex cursor-pointer ${renderFeedbackStatusColors(status)}`}
+      >
+        {status}
+      </div>
+    );
+  };
+
+  const columns = [
+    { key: "name", name: "Name", width: 700, renderCell: renderNameRow },
+    { key: "status", name: "Status", width: 240, renderCell: renderStatusRow },
+    { key: "like", name: "Action", renderCell: renderActionsRow, width: 100 },
   ];
 
-  const rows = Array(15).fill({
-    name: "Personal loans",
-    assetType: "Debt",
-    customerType: "Individuals",
-    role: "Accepted",
-    totalValue: "$5,000,900",
-    lastCalculation: "Jan 24, 2025",
-  });
   return (
     <>
       <Modal
-        modalHeader="Add new user"
-        open={openNewUserModal}
-        close={() => setOpenNewUserModal(false)}
+        close={() => setOpenCreateFeedbackModal(false)}
+        open={openCreateFeedbackModal}
+        modalHeader="Share feedback"
       >
-        <div className="bg-white rounded-[20px]">
-          <NewUser close={() => setOpenNewUserModal(false)} />
-        </div>
+        <ShareFeedback cancel={() => setOpenCreateFeedbackModal(false)} />
       </Modal>
       <Modal
-        modalHeader="Edit user"
-        open={openEditUserModal}
-        close={() => setOpenEditUserModal(false)}
+        close={() => setOpenEditModal(false)}
+        open={openEditModal}
+        modalHeader="Share feedback"
       >
-        <div className="bg-white rounded-[20px]">
-          <EditUser close={() => setOpenEditUserModal(false)} />
-        </div>
+        <EditFeedback />
       </Modal>
       <Modal
-        modalHeader="Delete user"
-        open={openDeleteUserModal}
-        close={() => setOpenDeleteUserModal(false)}
+        close={() => setOpenDeleteModal(false)}
+        open={openDeleteModal}
+        modalHeader="Share feedback"
       >
-        <div className="bg-white rounded-[20px]">
-          <DeleteUser close={() => setOpenDeleteUserModal(false)} />
-        </div>
+        <DeleteFeedback />
       </Modal>
 
       {showActionsMenu && (
@@ -106,25 +109,25 @@ function Users() {
           <div className="p-4">
             <div
               onClick={() => {
-                setOpenEditUserModal(true);
+                setOpenEditModal(true);
               }}
               className="flex items-center cursor-pointer"
             >
               <img className="w-[14px] mr-1" src={Images.edit} alt="" />
               <span className="text-[#1E1E1E] text-[14px] font-normal">
-                Edit user
+                Edit feedback
               </span>
             </div>
 
             <div
               onClick={() => {
-                setOpenDeleteUserModal(true);
+                setOpenDeleteModal(true);
               }}
               className="flex items-center mt-2 cursor-pointer"
             >
               <img className="w-[14px] mr-1" src={Images.deleteIcon} alt="" />
               <span className="text-[#FF3B30] text-[14px] font-normal">
-                Delete user
+                Delete feedback
               </span>
             </div>
           </div>
@@ -147,28 +150,36 @@ function Users() {
             />
           </div>
           <Button
-            text="Export"
-            // onClick={() => setOpenCreatePortfolioModal(true)}
-            className="bg-[white] text-[#6F6F6F] border-[#6F6F6F] border-[1px] rounded-lg min-w-[100px]"
-          />
-          <Button
-            text="New user"
-            onClick={() => setOpenNewUserModal(true)}
-            className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[100px]"
+            text="Add new feedback"
+            onClick={() => setOpenCreateFeedbackModal(true)}
+            className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[150px]"
           />
         </div>
 
         {showFilter && <FilterTray closeFilter={() => setShowFilter(false)} />}
       </div>
       <div className="max-w-[1160px] h-[398px] border-[1px] border-[#F0F0F0] rounded-[11px]">
-        <DataGrid
-          columns={columns}
-          rows={rows}
-          className="rdg-light custom-grid"
-        />
+        {feedbackQuery?.isLoading ? (
+          <>
+            <TableLoader />
+          </>
+        ) : (
+          <>
+            <DataGrid
+              columns={columns}
+              rows={
+                (feedbackQuery &&
+                  feedbackQuery.data &&
+                  feedbackQuery.data.data) ||
+                []
+              }
+              className="rdg-light custom-grid"
+            />
+          </>
+        )}
       </div>
     </>
   );
 }
 
-export default Users;
+export default Feedback;

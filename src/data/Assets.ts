@@ -31,6 +31,8 @@ import tick from "../assets/images/svgs/tick.svg";
 import g_file from "../assets/images/svgs/g_file.svg";
 import g_report from "../assets/images/svgs/g_report.svg";
 import g_calc from "../assets/images/svgs/g_calc.svg";
+import like from "../assets/images/svgs/like.svg";
+import unlike from "../assets/images/svgs/unLinke.svg";
 
 export const Images = {
   openEye,
@@ -66,4 +68,6 @@ export const Images = {
   g_file,
   g_report,
   g_calc,
+  like,
+  unlike,
 };

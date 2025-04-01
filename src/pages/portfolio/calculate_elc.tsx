@@ -72,7 +72,8 @@ function CalculateEcl({ close }: UploadDataProps) {
 
     if (id && reporting_date) {
       CreatePortfolioECLCalculation(id, reporting_date)
-        .then(() => {
+        .then((res) => {
+          console.log("res: ", res);
           setCalculating(false);
           showToast("Operation successful", true);
           setTimeout(() => {

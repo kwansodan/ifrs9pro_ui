@@ -24,18 +24,17 @@ export const CreatePortfolioECLCalculation = async (
   id: number | string,
   reporting_date: string | HTMLInputElement
 ) =>
-  await getAxios().post(
-    `/portfolios/calculate-ecl-provision?reporting_date=${reporting_date}`,
-    {
-      portfolio_id: id,
-    }
+  await getAxios().get(
+    `/portfolios/${id}/calculate-ecl?reporting_date=${reporting_date}`
   );
 
 export const CreatePortfolioLocalImpairmentCalculation = async (
   id: number | string,
-  payload: any
+  reporting_date: string | HTMLInputElement
 ) =>
-  await getAxios().post(`/portfolios/${id}/calculate-local-provision`, payload);
+  await getAxios().get(
+    `/portfolios/${id}/calculate-local-impairment?reporting_date=${reporting_date}`
+  );
 
 export const GenerateReports = async (id: number | string, payload: any) =>
   await getAxios().post(`/reports/${id}/generate`, payload);

@@ -136,3 +136,14 @@ export const renderReportLabel = (value: string) => {
 
   return "Report not found";
 };
+
+export const renderFeedbackStatusColors = (status: string) => {
+  if (status.toLocaleLowerCase() === "submitted") return "text-[#3D88A8]";
+  if (status === "open") return "text-[#FF3B30]";
+  if (status === "closed") return "text-[#34C759]";
+  if (status === "in development") return "text-[#F7941E]";
+  if (status === "completed") return "text-[#3434C7]";
+  if (status === "returned") return "text-[#E4C00B]";
+
+  return "Status not found";
+};
