@@ -2,25 +2,23 @@ import { useActionState, useState } from "react";
 import { showToast } from "../../core/hooks/alert";
 import { CreateSecondStepPortfolioApi } from "../../core/services/portfolio.service";
 import Button from "../button/_component";
-import { useNavigate } from "react-router-dom";
 function SecondStep({ close, id, setStep }: any) {
-  const navigate = useNavigate();
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const handleSubmit = async (prevState: any, formData: FormData) => {
     setIsCreating(true);
     console.log("prev: ", prevState);
-    const creditReserve = formData.get("credit_source") as string;
-    const loanAssets = formData.get("loan_assets") as string;
-    const eclImpairmentAccount = formData.get(
+    const credit_risk_reserve = formData.get("credit_risk_reserve") as string;
+    const loan_assets = formData.get("loan_assets") as string;
+    const ecl_impairment_account = formData.get(
       "ecl_impairment_account"
     ) as string;
 
     const payload = {
-      creditReserve,
-      loanAssets,
-      eclImpairmentAccount,
+      credit_risk_reserve,
+      loan_assets,
+      ecl_impairment_account,
     };
-    if (!creditReserve || !loanAssets || !eclImpairmentAccount) {
+    if (!credit_risk_reserve || !loan_assets || !ecl_impairment_account) {
       showToast("Please fill in all fields.", false);
       setIsCreating(false);
       return;
@@ -37,9 +35,9 @@ function SecondStep({ close, id, setStep }: any) {
           if (res.status === 200 || res.status === 201) {
             showToast("Second step of portfolio created successfully.", true);
             setStep(3);
-            setTimeout(() => {
-              navigate("/dashboard/portfolio");
-            }, 1000);
+            // setTimeout(() => {
+            //   navigate("/dashboard/portfolio");
+            // }, 1000);
           }
         })
         .catch((err) => {
@@ -62,7 +60,7 @@ function SecondStep({ close, id, setStep }: any) {
             <label>Credit risk reserve</label>
             <input
               type="text"
-              name="credit_source"
+              name="credit_risk_reserve"
               placeholder="B5938492"
               className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />

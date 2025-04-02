@@ -59,16 +59,16 @@ export const getAxios = () => {
       if (response.status === 200 && response.data.data == 401) {
         clearUserSession();
       }
-      // if (response.status === 401 || checkExpiry()) {
+      // if (response.status.toLocaleLowerCase() === 401 || checkExpiry()) {
       //   clearUserSession();
       // }
       return response;
     },
     (error) => {
-      // if (error?.response?.status === 401) {
+      // if (error?.response?.status.toLocaleLowerCase() === 401) {
       //   clearUserSession();
       // }
-      if (error?.response?.status === 429) {
+      if (error?.response?.status.toLocaleLowerCase() === 429) {
         return Promise.resolve(error);
       }
       return Promise.reject(error);
@@ -139,11 +139,11 @@ export const renderReportLabel = (value: string) => {
 
 export const renderFeedbackStatusColors = (status: string) => {
   if (status.toLocaleLowerCase() === "submitted") return "text-[#3D88A8]";
-  if (status === "open") return "text-[#FF3B30]";
-  if (status === "closed") return "text-[#34C759]";
-  if (status === "in development") return "text-[#F7941E]";
-  if (status === "completed") return "text-[#3434C7]";
-  if (status === "returned") return "text-[#E4C00B]";
+  if (status.toLocaleLowerCase() === "open") return "text-[#FF3B30]";
+  if (status.toLocaleLowerCase() === "closed") return "text-[#34C759]";
+  if (status.toLocaleLowerCase() === "in development") return "text-[#F7941E]";
+  if (status.toLocaleLowerCase() === "completed") return "text-[#3434C7]";
+  if (status.toLocaleLowerCase() === "returned") return "text-[#E4C00B]";
 
   return "Status not found";
 };

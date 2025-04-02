@@ -53,10 +53,7 @@ function CreatePorfolio({ cancel }: any) {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const credit_source = formData.get("credit_source") as string;
-    const loan_assets = formData.get("loan_assets") as string;
-    const ecl_impairment_account = formData.get(
-      "ecl_impairment_account"
-    ) as string;
+
     const assetType = selectedAsset as string;
     const customerType = selectedCustomerType as string;
     const fundingSource = selectedFundingSource as string;
@@ -66,8 +63,6 @@ function CreatePorfolio({ cancel }: any) {
       name,
       description,
       credit_source,
-      loan_assets,
-      ecl_impairment_account,
       asset_type: assetType,
       customer_type: customerType,
       funding_source: fundingSource,
@@ -78,8 +73,6 @@ function CreatePorfolio({ cancel }: any) {
       !name ||
       !description ||
       !credit_source ||
-      !loan_assets ||
-      !ecl_impairment_account ||
       !assetType ||
       !customerType ||
       !fundingSource ||
@@ -201,24 +194,7 @@ function CreatePorfolio({ cancel }: any) {
                   className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 />
               </div>
-              <div className="mt-3">
-                <label>Loan assets</label>
-                <input
-                  type="name"
-                  name="loan_assets"
-                  placeholder="Enter loan assets"
-                  className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-                />
-              </div>
-              <div className="mt-3">
-                <label>Ecl impairment account</label>
-                <input
-                  type="name"
-                  name="ecl_impairment_account"
-                  placeholder="Enter impairment account"
-                  className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-                />
-              </div>
+
               <div className="flex items-center justify-between mt-3">
                 <div className="flex flex-col">
                   <label>Repayment source</label>

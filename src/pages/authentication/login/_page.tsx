@@ -47,7 +47,15 @@ function Login() {
         })
         .catch((err) => {
           setButtonLoading(false);
-          showToast(err?.response?.data.detail, false);
+          if (err?.response?.status === 500) {
+            showToast("Server error: Please try again later.", false);
+          } else {
+            showToast(
+              err?.response?.data?.detail ||
+                "Server error: Please try again later.",
+              false
+            );
+          }
         });
     } catch {
       setButtonLoading(false);

@@ -13,6 +13,7 @@ import { CategoryProps } from "../../core/interfaces";
 import { Images } from "../../data/Assets";
 import { usePortfolio } from "../../core/hooks/portfolio";
 import { useParams } from "react-router-dom";
+import PageLoader from "../../components/page_loader/_component";
 
 function EditPortfolio() {
   const { id } = useParams();
@@ -22,6 +23,14 @@ function EditPortfolio() {
   const [repaymentValue, setRepaymentValue] = useState<boolean>(false);
   const [isSubmittingFirstStep, setIsSubmittingFirstStep] =
     useState<boolean>(false);
+  const [assetHasChanged, setAssetHasChanged] = useState<boolean>(false);
+  const [customerTypeHasChanged, setCustomerTypeHasChanged] =
+    useState<boolean>(false);
+  const [fundingSourceHasChanged, setFundingSourceHasChanged] =
+    useState<boolean>(false);
+  const [dataSourceHasChanged, setDataSourceHasChanged] =
+    useState<boolean>(false);
+
   const [selectedCustomerType, setSelectedCustomerType] = useState<string>("");
   const [selectedFundingSource, setSelectedFundingSource] =
     useState<string>("");
@@ -65,18 +74,22 @@ function EditPortfolio() {
 
   const handleAssetChange = (selectedOption: any) => {
     setSelectedAsset(selectedOption.value);
+    setAssetHasChanged(true);
   };
 
   const handleCustomerTypeChange = (selectedOption: any) => {
     setSelectedCustomerType(selectedOption.value);
+    setCustomerTypeHasChanged(true);
   };
 
   const handleFundingSourceChange = (selectedOption: any) => {
     setSelectedFundingSource(selectedOption.value);
+    setFundingSourceHasChanged(true);
   };
 
   const handleDataSourceChange = (selectedOption: any) => {
     setSelectedDataSource(selectedOption.value);
+    setDataSourceHasChanged(true);
   };
 
   const handleRepaymentToggle = (
@@ -124,10 +137,14 @@ function EditPortfolio() {
       credit_source,
       loan_assets,
       ecl_impairment_account,
-      asset_type: assetType,
-      customer_type: customerType,
-      funding_source: fundingSource,
-      data_source: dataSource,
+      asset_type: assetHasChanged ? assetType : data?.asset_type,
+      customer_type: customerTypeHasChanged
+        ? customerType
+        : data?.customer_type,
+      funding_source: fundingSourceHasChanged
+        ? fundingSource
+        : data?.funding_source,
+      data_source: dataSourceHasChanged ? dataSource : data?.data_source,
       repayment_source: repaymentSource,
     };
     if (
@@ -160,187 +177,170 @@ function EditPortfolio() {
         });
     } catch (err) {
       setIsSubmittingFirstStep(false);
-      showToast("Login failed. Please try again.", false);
       return;
     }
   };
 
   const [state, formAction] = useActionState(handleSubmit, null);
   console.log("state: ", state);
-
+  const data =
+    portfolioQuery && portfolioQuery.data && portfolioQuery.data.data;
   return (
-    <form action={formAction}>
-      <div className="p-8">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="mt-3">
-            <label>Portfolio name</label>
-            <input
-              type="name"
-              name="name"
-              defaultValue={
-                portfolioQuery &&
-                portfolioQuery.data &&
-                portfolioQuery.data.data.name
-              }
-              placeholder="Enter portfolio name"
-              className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-            />
+    <>
+      {portfolioQuery?.isLoading ? (
+        <>
+          <div className="flex items-center justify-center h-screen">
+            <PageLoader />
           </div>
-          <div className="mt-3">
-            <label>Description</label>
-            <textarea
-              name="description"
-              defaultValue={
-                portfolioQuery &&
-                portfolioQuery.data &&
-                portfolioQuery.data.data.description
-              }
-              placeholder="Enter portfolio description"
-              className="w-full h-[100px] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-            />
-          </div>
-          <div className="mt-3">
-            <label>Asset type</label>
-            <Select
-              className="min-w-[280px] mr-2"
-              onChange={handleAssetChange}
-              options={assetsOptions}
-              placeholder="Select asset type"
-            />
-          </div>
-          <div className="mt-3">
-            <label>Customer type</label>
-            <Select
-              className="min-w-[280px] mr-2"
-              onChange={handleCustomerTypeChange}
-              options={customerTypeOptions}
-              placeholder="Select customer type"
-            />
-          </div>
+        </>
+      ) : (
+        <>
+          <form action={formAction}>
+            <div className="p-8">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="mt-3">
+                  <label>Portfolio name</label>
+                  <input
+                    type="name"
+                    name="name"
+                    defaultValue={data && data?.name}
+                    placeholder="Enter portfolio name"
+                    className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                  />
+                </div>
+                <div className="mt-3">
+                  <label>Description</label>
+                  <textarea
+                    name="description"
+                    defaultValue={data && data?.description}
+                    placeholder="Enter portfolio description"
+                    className="w-full h-[100px] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                  />
+                </div>
+                <div className="mt-3">
+                  <label>Asset type</label>
+                  <Select
+                    className="min-w-[280px] mr-2"
+                    onChange={handleAssetChange}
+                    options={assetsOptions}
+                    placeholder={(data && data.asset_type) || ""}
+                  />
+                </div>
+                <div className="mt-3">
+                  <label>Customer type</label>
+                  <Select
+                    className="min-w-[280px] mr-2"
+                    onChange={handleCustomerTypeChange}
+                    options={customerTypeOptions}
+                    placeholder={(data && data.customer_type) || ""}
+                  />
+                </div>
 
-          <div className="mt-3">
-            <label>Funding source</label>
-            <Select
-              className="min-w-[280px] mr-2"
-              onChange={handleFundingSourceChange}
-              options={fundingSourceOptions}
-              placeholder="Select funding source"
-            />
-          </div>
-          <div className="mt-3">
-            <label>Data source</label>
-            <Select
-              className="min-w-[280px] mr-2"
-              onChange={handleDataSourceChange}
-              options={dataSourceOptions}
-              placeholder="Select data source"
-            />
-          </div>
-          <div className="mt-3">
-            <label>Credit source</label>
-            <input
-              type="name"
-              name="credit_source"
-              placeholder="Enter credit source"
-              className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-            />
-          </div>
-          <div className="mt-3">
-            <label>Loan assets</label>
-            <input
-              type="name"
-              name="loan_assets"
-              placeholder="Enter loan assets"
-              className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-            />
-          </div>
-          <div className="mt-3">
-            <label>Ecl impairment account</label>
-            <input
-              type="name"
-              name="ecl_impairment_account"
-              placeholder="Enter impairment account"
-              className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-            />
-          </div>
-        </div>
+                <div className="mt-3">
+                  <label>Funding source</label>
+                  <Select
+                    className="min-w-[280px] mr-2"
+                    onChange={handleFundingSourceChange}
+                    options={fundingSourceOptions}
+                    placeholder={(data && data.funding_source) || ""}
+                  />
+                </div>
+                <div className="mt-3">
+                  <label>Data source</label>
+                  <Select
+                    className="min-w-[280px] mr-2"
+                    onChange={handleDataSourceChange}
+                    options={dataSourceOptions}
+                    placeholder={(data && data.data_source) || ""}
+                  />
+                </div>
+                <div className="mt-3">
+                  <label>Credit source</label>
+                  <input
+                    type="name"
+                    name="credit_source"
+                    defaultValue={(data && data.credit_source) || ""}
+                    className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                  />
+                </div>
+              </div>
 
-        <div className="flex items-center mt-3">
-          <div className="flex flex-col">
-            <label>Repayment source</label>
-            <span className="text-[#AFAFAF] text-[14px]">
-              Choose between manual transfer or at source
-            </span>
-          </div>
+              <div className="flex items-center mt-3">
+                <div className="flex flex-col">
+                  <label>Repayment source</label>
+                  <span className="text-[#AFAFAF] text-[14px]">
+                    Choose between manual transfer or at source
+                  </span>
+                </div>
 
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              checked={repaymentValue}
-              onChange={handleRepaymentToggle}
-              className="sr-only peer"
-            />
-            <div className="w-[42px] h-[23px] bg-gray-200 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-[#D2D5DA] peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#166E94]"></div>
-          </label>
-        </div>
-      </div>
-      <hr className="my-6" />
-      <div className="grid grid-cols-3 gap-3">
-        <div className="mt-3">
-          <label>Credit risk reserve</label>
-          <input
-            type="text"
-            name="credit_source"
-            placeholder="B5938492"
-            className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-          />
-        </div>
-        <div className="mt-3">
-          <label>Loan assets</label>
-          <input
-            type="text"
-            name="loan_assets"
-            placeholder="A000567"
-            className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-          />
-        </div>
-        <div className="mt-3">
-          <label>ECL impairment account</label>
-          <input
-            type="text"
-            name="ecl_impairment_account"
-            placeholder="C98342432"
-            className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-          />
-        </div>
-      </div>
-      <hr className="my-6" />
-      <table className="w-full border rounded-lg">
-        <thead>
-          <tr className="text-left text-gray-700 bg-gray-100">
-            <th className="p-3">Category</th>
-            <th className="p-3">Days range</th>
-            <th className="p-3"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map((item, index) => (
-            <tr key={index} className="border-t hover:bg-gray-50">
-              <td className="p-3">{item.category}</td>
-
-              <td className="p-3">
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={repaymentValue}
+                    onChange={handleRepaymentToggle}
+                    className="sr-only peer"
+                  />
+                  <div className="w-[42px] h-[23px] bg-gray-200 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-[#D2D5DA] peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#166E94]"></div>
+                </label>
+              </div>
+            </div>
+            <hr className="my-6" />
+            <div className="grid grid-cols-3 gap-3">
+              <div className="mt-3">
+                <label>Credit risk reserve</label>
                 <input
                   type="text"
-                  className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                  value={item.range}
-                  disabled={editingIndex !== index}
-                  onChange={(e) =>
-                    handleInputChange(index, "range", e.target.value)
-                  }
+                  name="credit_source"
+                  defaultValue={(data && data.credit_risk_reserve) || ""}
+                  className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 />
-              </td>
+              </div>
+              <div className="mt-3">
+                <label>Loan assetss</label>
+                <input
+                  type="name"
+                  name="loan_assets"
+                  defaultValue={(data && data.loan_assets) || ""}
+                  className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                />
+              </div>
+              <div className="mt-3">
+                <label>Ecl impairment account</label>
+                <input
+                  type="name"
+                  name="ecl_impairment_account"
+                  defaultValue={(data && data.ecl_impairment_account) || ""}
+                  className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                />
+              </div>
+            </div>
+            <hr className="my-6" />
+            <table className="w-full border rounded-lg">
+              <thead>
+                <tr className="text-left text-gray-700 bg-gray-100">
+                  <th className="p-3">Category</th>
+                  <th className="p-3">Days range</th>
+                  <th className="p-3"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories.map((item, index) => (
+                  <tr key={index} className="border-t hover:bg-gray-50">
+                    <td className="p-3">{item.category}</td>
 
-              {/* Rate input field
+                    <td className="p-3">
+                      <input
+                        type="text"
+                        className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                        value={item.range}
+                        disabled={editingIndex !== index}
+                        onChange={(e) =>
+                          handleInputChange(index, "range", e.target.value)
+                        }
+                      />
+                    </td>
+
+                    {/* Rate input field
                         <td className="p-3">
                           <input
                             type="text"
@@ -353,85 +353,92 @@ function EditPortfolio() {
                           />
                         </td> */}
 
-              <td className="p-3 text-gray-500 cursor-pointer hover:text-gray-700">
-                {editingIndex === index ? (
-                  <img
-                    src={Images.edit}
-                    className="w-[14px] h-[14px]"
-                    alt=""
-                    onClick={handleToggle}
-                  />
-                ) : (
-                  <img
-                    src={Images.edit}
-                    className="w-[14px] h-[14px]"
-                    alt=""
-                    onClick={() => handleEditClick(index)}
-                  />
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                    <td className="p-3 text-gray-500 cursor-pointer hover:text-gray-700">
+                      {editingIndex === index ? (
+                        <img
+                          src={Images.edit}
+                          className="w-[14px] h-[14px]"
+                          alt=""
+                          onClick={handleToggle}
+                        />
+                      ) : (
+                        <img
+                          src={Images.edit}
+                          className="w-[14px] h-[14px]"
+                          alt=""
+                          onClick={() => handleEditClick(index)}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-      <hr className="my-6" />
+            <hr className="my-6" />
 
-      <table className="w-full border rounded-lg">
-        <thead>
-          <tr className="text-left text-gray-700 bg-gray-100">
-            <th className="p-3">Category</th>
-            <th className="p-3">Days range</th>
-            <th className="p-3"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {fourthCategories.map((item, index) => (
-            <tr key={index} className="border-t hover:bg-gray-50">
-              <td className="p-3">{item.category}</td>
+            <table className="w-full border rounded-lg">
+              <thead>
+                <tr className="text-left text-gray-700 bg-gray-100">
+                  <th className="p-3">Category</th>
+                  <th className="p-3">Days range</th>
+                  <th className="p-3"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {fourthCategories.map((item, index) => (
+                  <tr key={index} className="border-t hover:bg-gray-50">
+                    <td className="p-3">{item.category}</td>
 
-              <td className="p-3">
-                <input
-                  type="text"
-                  className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                  value={item.range}
-                  disabled={editingIndex !== index}
-                  onChange={(e) =>
-                    handleFourthInputChange(index, "range", e.target.value)
-                  }
-                />
-              </td>
+                    <td className="p-3">
+                      <input
+                        type="text"
+                        className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                        value={item.range}
+                        disabled={editingIndex !== index}
+                        onChange={(e) =>
+                          handleFourthInputChange(
+                            index,
+                            "range",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </td>
 
-              <td className="p-3 text-gray-500 cursor-pointer hover:text-gray-700">
-                {fourthEditingIndex === index ? (
-                  <img
-                    src={Images.edit}
-                    className="w-[14px] h-[14px]"
-                    alt=""
-                    onClick={handleFourthToggle}
-                  />
-                ) : (
-                  <img
-                    src={Images.edit}
-                    className="w-[14px] h-[14px]"
-                    alt=""
-                    onClick={() => handleFourthEditClick(index)}
-                  />
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="flex justify-end p-2">
-        <Button
-          isLoading={isSubmittingFirstStep}
-          text="Edit"
-          type="submit"
-          className="bg-[#166E94] font-normal mt-3 text-white text-[12px] !rounded-[10px] !w-[90px] "
-        />
-      </div>
-    </form>
+                    <td className="p-3 text-gray-500 cursor-pointer hover:text-gray-700">
+                      {fourthEditingIndex === index ? (
+                        <img
+                          src={Images.edit}
+                          className="w-[14px] h-[14px]"
+                          alt=""
+                          onClick={handleFourthToggle}
+                        />
+                      ) : (
+                        <img
+                          src={Images.edit}
+                          className="w-[14px] h-[14px]"
+                          alt=""
+                          onClick={() => handleFourthEditClick(index)}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="flex justify-end p-2">
+              <Button
+                isLoading={isSubmittingFirstStep}
+                text="Edit"
+                type="submit"
+                className="bg-[#166E94] font-normal mt-3 text-white text-[12px] !rounded-[10px] !w-[90px] "
+              />
+            </div>
+          </form>
+        </>
+      )}
+    </>
   );
 }
 

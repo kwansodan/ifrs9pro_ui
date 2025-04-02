@@ -7,18 +7,32 @@ function DeletePortfolio({ id, close, name }: any) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const confirmDelete = () => {
     setIsDeleting(true);
-    DeleteAPortfolio(id)
-      .then(() => {
-        setIsDeleting(false);
-        showToast("Operation successful", true);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      })
-      .catch((err) => {
-        setIsDeleting(false);
-        showToast(err?.response?.data.detail, false);
-      });
+    try {
+      DeleteAPortfolio(id)
+        .then(() => {
+          setIsDeleting(false);
+          showToast("Operation successful", true);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        })
+        .catch((err) => {
+          setIsDeleting(false);
+
+          if (err?.response?.status === 500) {
+            showToast("Server error: Please try again later.", false);
+          } else {
+            showToast(
+              err?.response?.data?.detail ||
+                "Server error: Please try again later.",
+              false
+            );
+          }
+        });
+    } catch (error) {
+      setIsDeleting(false);
+      showToast("Sorry, an error occurred", false);
+    }
   };
   return (
     <div className="p-10 bg-white">

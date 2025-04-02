@@ -5,10 +5,9 @@ import { useState } from "react";
 import { CreateSecondStepPortfolioApi } from "../../core/services/portfolio.service";
 
 import { showToast } from "../../core/hooks/alert";
-import { useNavigate } from "react-router-dom";
 
 function ThirdStep({ close, id, setStep }: any) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [categories, setCategories] = useState<CategoryProps[]>([
     { category: "Current", range: "0-30" },
@@ -77,9 +76,9 @@ function ThirdStep({ close, id, setStep }: any) {
             showToast("Third step of portfolio created successfully.", true);
 
             setStep(4);
-            setTimeout(() => {
-              navigate("/dashboard/portfolio");
-            }, 1000);
+            // setTimeout(() => {
+            //   navigate("/dashboard/portfolio");
+            // }, 1000);
           }
         })
         .catch((err) => {
