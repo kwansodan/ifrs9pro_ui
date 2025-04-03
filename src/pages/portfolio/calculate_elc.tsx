@@ -81,8 +81,9 @@ function CalculateEcl({ close }: UploadDataProps) {
           }, 1500);
         })
         .catch((err) => {
+          console.log("err: ", err);
           setCalculating(false);
-          showToast(err?.response?.data?.detail || "Submission failed", false);
+          showToast("Submission failed", false);
         });
     }
   };

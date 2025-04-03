@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetAllFeedbacks } from "../services/feedback.service";
+import { GetAllFeedbacks, GetFeedback } from "../services/feedback.service";
 
 export const useFeedback = () => {
   const feedbackQuery = useQuery({
@@ -8,5 +8,15 @@ export const useFeedback = () => {
   });
   return {
     feedbackQuery,
+  };
+};
+
+export const useGetAFeedback = (id: number | string) => {
+  const aFeedBackQuery = useQuery({
+    queryKey: ["aFeedBackQuery"],
+    queryFn: () => GetFeedback(id),
+  });
+  return {
+    aFeedBackQuery,
   };
 };

@@ -18,6 +18,7 @@ function Users() {
   const [openEditUserModal, setOpenEditUserModal] = useState<boolean>(false);
   const [openDeleteUserModal, setOpenDeleteUserModal] =
     useState<boolean>(false);
+  const [query, setQuery] = useState("");
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
   const [id, setId] = useState<number>();
   const [userName, setUserName] = useState<string>("");
@@ -39,7 +40,14 @@ function Users() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showActionsMenu]);
-
+  const filteredData =
+    adminUsersQuery &&
+    adminUsersQuery.data &&
+    adminUsersQuery.data.data?.filter((e: any) => {
+      if (query === "") return e.role;
+      else if (e?.role?.toLowerCase().includes(query.toLocaleLowerCase()))
+        return e;
+    });
   const renderActionsRow = (data: any) => {
     const { id, first_name, last_name } = data.row;
 
@@ -75,7 +83,6 @@ function Users() {
   const columns = [
     { key: "name", name: "Name", width: 300, renderCell: renderFullName },
     { key: "email", name: "Email", width: 350 },
-    { key: "recovery_email", name: "Role", width: 180 },
     { key: "role", name: "Role", width: 150 },
     {
       key: "created_at",
@@ -172,6 +179,8 @@ function Users() {
           <div className="relative">
             <input
               type="text"
+              placeholder="Search by role..."
+              onChange={(e) => setQuery(e.target.value)}
               className="pl-10 h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
             <img
@@ -209,12 +218,7 @@ function Users() {
             >
               <DataGrid
                 columns={columns}
-                rows={
-                  (adminUsersQuery &&
-                    adminUsersQuery.data &&
-                    adminUsersQuery.data.data) ||
-                  []
-                }
+                rows={filteredData || []}
                 className="rdg-light custom-grid"
               />
             </motion.div>

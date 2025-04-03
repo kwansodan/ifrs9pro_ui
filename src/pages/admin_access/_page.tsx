@@ -15,6 +15,7 @@ import { renderStatusColors } from "../../core/utility";
 function AdminAccess() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [showFilter, setShowFilter] = useState(false);
+  const [query, setQuery] = useState("");
   const [actionToBeTaken, setActionToBeTaken] = useState<string>("");
   const [requestId, setRequestId] = useState<number>();
   const [openCreatePortfolioModal, setOpenCreatePortfolioModal] =
@@ -25,7 +26,14 @@ function AdminAccess() {
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
 
   const { adminRequestsQuery } = useAdminRequests();
-
+  const filteredData =
+    adminRequestsQuery &&
+    adminRequestsQuery.data &&
+    adminRequestsQuery.data.data?.filter((e: any) => {
+      if (query === "") return e.status;
+      else if (e?.status?.toLowerCase().includes(query.toLocaleLowerCase()))
+        return e;
+    });
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -185,6 +193,8 @@ function AdminAccess() {
           <div className="relative">
             <input
               type="text"
+              placeholder="Search by status..."
+              onChange={(e) => setQuery(e.target.value)}
               className="pl-10 h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
             <img
@@ -218,12 +228,7 @@ function AdminAccess() {
           <>
             <DataGrid
               columns={columns}
-              rows={
-                (adminRequestsQuery &&
-                  adminRequestsQuery.data &&
-                  adminRequestsQuery.data.data) ||
-                []
-              }
+              rows={filteredData || []}
               className="rdg-light custom-grid"
             />
           </>

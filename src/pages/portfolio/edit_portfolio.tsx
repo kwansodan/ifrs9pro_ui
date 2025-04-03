@@ -1,7 +1,7 @@
-import React, { useActionState, useState } from "react";
+import React, { useActionState, useEffect, useState } from "react";
 import Select from "react-select";
 import { showToast } from "../../core/hooks/alert";
-import { CreatePortfolioApi } from "../../core/services/portfolio.service";
+import { CreateSecondStepPortfolioApi } from "../../core/services/portfolio.service";
 import {
   assetsOptions,
   customerTypeOptions,
@@ -12,10 +12,11 @@ import Button from "../../components/button/_component";
 import { CategoryProps } from "../../core/interfaces";
 import { Images } from "../../data/Assets";
 import { usePortfolio } from "../../core/hooks/portfolio";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PageLoader from "../../components/page_loader/_component";
 
 function EditPortfolio() {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const { portfolioQuery } = usePortfolio(Number(id));
@@ -40,19 +41,67 @@ function EditPortfolio() {
     null
   );
 
-  const [categories, setCategories] = useState<CategoryProps[]>([
-    { category: "Current", range: "0-30" },
-    { category: "OLEM", range: "31-89" },
-    { category: "Substandard", range: "90-179" },
-    { category: "Doubtful", range: "180-359" },
-    { category: "Loss", range: "360+" },
-  ]);
+  const data =
+    portfolioQuery && portfolioQuery.data && portfolioQuery.data.data;
 
-  const [fourthCategories, setFourthCategories] = useState<CategoryProps[]>([
-    { category: "stage_1", range: "0-30" },
-    { category: "stage_2", range: "31-89" },
-    { category: "stage_3", range: "90-179" },
-  ]);
+  useEffect(() => {
+    portfolioQuery.refetch();
+  }, [Number(id)]);
+  const [categories, setCategories] = useState<CategoryProps[]>([]);
+  useEffect(() => {
+    if (data?.staging_summary?.local_impairment?.config) {
+      setCategories([
+        {
+          category: "Current",
+          range:
+            data.staging_summary.local_impairment.config.current?.days_range ||
+            "",
+        },
+        {
+          category: "OLEM",
+          range:
+            data.staging_summary.local_impairment.config.olem?.days_range || "",
+        },
+        {
+          category: "Substandard",
+          range:
+            data.staging_summary.local_impairment.config.substandard
+              ?.days_range || "",
+        },
+        {
+          category: "Doubtful",
+          range:
+            data.staging_summary.local_impairment.config.doubtful?.days_range ||
+            "",
+        },
+        {
+          category: "Loss",
+          range:
+            data.staging_summary.local_impairment.config.loss?.days_range || "",
+        },
+      ]);
+    }
+  }, [data]);
+
+  const [fourthCategories, setFourthCategories] = useState<CategoryProps[]>([]);
+  useEffect(() => {
+    if (data?.staging_summary?.ecl?.config) {
+      setFourthCategories([
+        {
+          category: "stage_1",
+          range: data.staging_summary.ecl.config.stage_1?.days_range || "",
+        },
+        {
+          category: "stage_2",
+          range: data.staging_summary.ecl.config.stage_2?.days_range || "",
+        },
+        {
+          category: "stage_3",
+          range: data.staging_summary.ecl.config.stage_3?.days_range || "",
+        },
+      ]);
+    }
+  }, [data]);
 
   const handleFourthEditClick = (index: number) => {
     setFourthEditingIndex(index);
@@ -67,7 +116,7 @@ function EditPortfolio() {
     field: keyof CategoryProps,
     value: string
   ) => {
-    const updatedCategories = [...categories];
+    const updatedCategories = [...fourthCategories];
     updatedCategories[index][field] = value;
     setFourthCategories(updatedCategories);
   };
@@ -131,6 +180,25 @@ function EditPortfolio() {
     const fundingSource = selectedFundingSource as string;
     const dataSource = selectedDataSource as string;
     const repaymentSource = repaymentValue as boolean;
+    const categoriesPayload = categories.reduce((acc, item) => {
+      const key = item.category.toLowerCase();
+
+      acc[key] = {
+        days_range: item.range ?? "",
+      };
+
+      return acc;
+    }, {} as Record<string, { days_range: string }>);
+
+    const fourthCategoriesPayload = fourthCategories.reduce((acc, item) => {
+      const key = item.category.toLowerCase();
+
+      acc[key] = {
+        days_range: item.range ?? "",
+      };
+
+      return acc;
+    }, {} as Record<string, { days_range: string }>);
     const payload = {
       name,
       description,
@@ -146,30 +214,21 @@ function EditPortfolio() {
         : data?.funding_source,
       data_source: dataSourceHasChanged ? dataSource : data?.data_source,
       repayment_source: repaymentSource,
+      categoriesPayload,
+      fourthCategoriesPayload,
     };
-    if (
-      !name ||
-      !description ||
-      !credit_source ||
-      !loan_assets ||
-      !ecl_impairment_account ||
-      !assetType ||
-      !customerType ||
-      !fundingSource ||
-      !dataSource
-    ) {
-      setIsSubmittingFirstStep(false);
-      showToast("Please fill in all fields.", false);
-      return;
-    }
 
+    console.log("payload: ", payload);
     try {
-      CreatePortfolioApi(payload)
+      CreateSecondStepPortfolioApi(Number(id), payload)
         .then((res) => {
           setIsSubmittingFirstStep(false);
           if (res.status === 200 || res.status === 201) {
-            showToast("First step of portfolio created successfully.", true);
+            showToast("Edit made successfully.", true);
           }
+          setTimeout(() => {
+            navigate("/dashboard/portfolio");
+          }, 1800);
         })
         .catch((err) => {
           setIsSubmittingFirstStep(false);
@@ -183,8 +242,7 @@ function EditPortfolio() {
 
   const [state, formAction] = useActionState(handleSubmit, null);
   console.log("state: ", state);
-  const data =
-    portfolioQuery && portfolioQuery.data && portfolioQuery.data.data;
+
   return (
     <>
       {portfolioQuery?.isLoading ? (
@@ -254,15 +312,6 @@ function EditPortfolio() {
                     placeholder={(data && data.data_source) || ""}
                   />
                 </div>
-                <div className="mt-3">
-                  <label>Credit source</label>
-                  <input
-                    type="name"
-                    name="credit_source"
-                    defaultValue={(data && data.credit_source) || ""}
-                    className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-                  />
-                </div>
               </div>
 
               <div className="flex items-center mt-3">
@@ -276,7 +325,7 @@ function EditPortfolio() {
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={repaymentValue}
+                    defaultChecked={data?.repayment_source}
                     onChange={handleRepaymentToggle}
                     className="sr-only peer"
                   />
@@ -340,19 +389,6 @@ function EditPortfolio() {
                       />
                     </td>
 
-                    {/* Rate input field
-                        <td className="p-3">
-                          <input
-                            type="text"
-                            className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                            value={item.rate}
-                            disabled={editingIndex !== index}
-                            onChange={(e) =>
-                              handleInputChange(index, "rate", e.target.value)
-                            }
-                          />
-                        </td> */}
-
                     <td className="p-3 text-gray-500 cursor-pointer hover:text-gray-700">
                       {editingIndex === index ? (
                         <img
@@ -395,7 +431,7 @@ function EditPortfolio() {
                         type="text"
                         className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                         value={item.range}
-                        disabled={editingIndex !== index}
+                        disabled={fourthEditingIndex !== index}
                         onChange={(e) =>
                           handleFourthInputChange(
                             index,

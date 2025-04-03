@@ -5,3 +5,12 @@ export const SendFeedback = async (payload: any) =>
 
 export const GetAllFeedbacks = async () =>
   await getAxios().get("/user/feedback");
+
+export const GetFeedback = async (id: number | string) =>
+  await getAxios().get(`/user/feedback/${id}`);
+
+export const UpdateFeedback = async (id: number | string, payload: any) =>
+  await getAxios().put(`/admin/feedback/${id}/status`, payload);
+
+export const DeleteAFeedback = async (id: number | string) =>
+  await getAxios().delete(`/admin/feedback/${id}`);

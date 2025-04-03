@@ -68,9 +68,9 @@ export const getAxios = () => {
       // if (error?.response?.status.toLocaleLowerCase() === 401) {
       //   clearUserSession();
       // }
-      if (error?.response?.status.toLocaleLowerCase() === 429) {
-        return Promise.resolve(error);
-      }
+      // if (error?.response?.status.toLocaleLowerCase() === 429) {
+      //   return Promise.resolve(error);
+      // }
       return Promise.reject(error);
     }
   );

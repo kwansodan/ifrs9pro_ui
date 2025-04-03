@@ -2,12 +2,12 @@ import { useState } from "react";
 import Button from "../../components/button/_component";
 import { showToast } from "../../core/hooks/alert";
 import { UploadDataProps } from "../../core/interfaces";
-import { DeleteAdminUser } from "../../core/services/users.service";
-function DeleteFeedback({ close, rowId, userName }: UploadDataProps) {
+import { DeleteAFeedback } from "../../core/services/feedback.service";
+function DeleteFeedback({ close, rowId }: UploadDataProps) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const confirmDelete = () => {
     setIsDeleting(true);
-    DeleteAdminUser(Number(rowId))
+    DeleteAFeedback(Number(rowId))
       .then(() => {
         setIsDeleting(false);
         showToast("Operation successful", true);
@@ -22,11 +22,9 @@ function DeleteFeedback({ close, rowId, userName }: UploadDataProps) {
   };
   return (
     <>
-      <div className="p-8">
+      <div className="p-8 bg-white">
         <p className="text-[#1E1E1E] text-[14px] my-8">
-          Are you sure you want to delete{" "}
-          <span className="font-medium">{userName}</span>? This action cannot be
-          undone
+          Are you sure you want to delete this? This action cannot be undone
         </p>
 
         <div className="flex justify-end mt-3">

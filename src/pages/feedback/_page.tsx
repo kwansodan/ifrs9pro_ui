@@ -18,12 +18,11 @@ function Feedback() {
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openCreateFeedbackModal, setOpenCreateFeedbackModal] =
     useState<boolean>(false);
+  const [feedBackId, setFeedbackId] = useState<number>(0);
+  const [query, setQuery] = useState("");
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
-  const feedbackData = feedbackQuery && feedbackQuery;
-
-  console.log("ads: ", feedbackData.data);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -40,24 +39,29 @@ function Feedback() {
     };
   }, [showActionsMenu]);
 
-  const renderActionsRow = () => {
+  const renderActionsRow = (data: any) => {
+    const { is_creator } = data.row;
+
+    setFeedbackId(data.row.id);
     return (
       <div className="flex cursor-pointer">
-        <img
-          onClick={() => setShowActionsMenu(!showActionsMenu)}
-          src={Images.options}
-          className="w-[24px]"
-          alt=""
-        />
+        {is_creator ? (
+          <img
+            onClick={() => setShowActionsMenu(!showActionsMenu)}
+            src={Images.options}
+            className="w-[24px]"
+            alt=""
+          />
+        ) : (
+          <img src={Images.unlike} className="w-[18px]" alt="" />
+        )}
       </div>
     );
   };
 
   const renderNameRow = (data: any) => {
-    const { first_name, last_name } = data.row.user;
-    return (
-      <div className="flex cursor-pointer">{first_name + " " + last_name}</div>
-    );
+    const { description } = data.row;
+    return <div className="flex cursor-pointer">{description}</div>;
   };
 
   const renderStatusRow = (data: any) => {
@@ -72,10 +76,19 @@ function Feedback() {
   };
 
   const columns = [
-    { key: "name", name: "Name", width: 700, renderCell: renderNameRow },
+    { key: "name", name: "Feedback", width: 700, renderCell: renderNameRow },
     { key: "status", name: "Status", width: 240, renderCell: renderStatusRow },
     { key: "like", name: "Action", renderCell: renderActionsRow, width: 100 },
   ];
+
+  const filteredData =
+    feedbackQuery &&
+    feedbackQuery.data &&
+    feedbackQuery.data.data?.filter((e: any) => {
+      if (query === "") return e.status;
+      else if (e?.status?.toLowerCase().includes(query.toLocaleLowerCase()))
+        return e;
+    });
 
   return (
     <>
@@ -89,16 +102,22 @@ function Feedback() {
       <Modal
         close={() => setOpenEditModal(false)}
         open={openEditModal}
-        modalHeader="Share feedback"
+        modalHeader="Edit feedback"
       >
-        <EditFeedback />
+        <EditFeedback
+          close={() => setOpenEditModal(false)}
+          rowId={feedBackId}
+        />
       </Modal>
       <Modal
         close={() => setOpenDeleteModal(false)}
         open={openDeleteModal}
         modalHeader="Share feedback"
       >
-        <DeleteFeedback />
+        <DeleteFeedback
+          close={() => setOpenDeleteModal(false)}
+          rowId={feedBackId}
+        />
       </Modal>
 
       {showActionsMenu && (
@@ -134,12 +153,14 @@ function Feedback() {
         </div>
       )}
       <div className="flex items-center justify-between bg-[#f8f9fa] rounded-t-lg py-[10px] px-[12px] mt-6 max-w-[1160px]">
-        <h1 className="text-[16px] font-semibold">Users</h1>
+        <h1 className="text-[16px] font-semibold">Feedbacks</h1>
 
         <div className="flex items-center gap-4">
           <div className="relative">
             <input
               type="text"
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by status..."
               className="pl-10 h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
             <img
@@ -167,12 +188,7 @@ function Feedback() {
           <>
             <DataGrid
               columns={columns}
-              rows={
-                (feedbackQuery &&
-                  feedbackQuery.data &&
-                  feedbackQuery.data.data) ||
-                []
-              }
+              rows={filteredData || []}
               className="rdg-light custom-grid"
             />
           </>

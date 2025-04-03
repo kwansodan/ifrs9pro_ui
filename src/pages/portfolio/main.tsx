@@ -15,10 +15,10 @@ import { motion } from "framer-motion";
 function PortfolioMain() {
   const navigate = useNavigate();
   const { portfoliosQuery } = usePortfolios();
-  console.log(portfoliosQuery);
   const menuRef = useRef<HTMLDivElement>(null);
   const [openCreatePortfolioModal, setOpenCreatePortfolioModal] =
     useState<boolean>(false);
+  const [query, setQuery] = useState("");
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<number>(0);
   const [portfolioName, setPortfolioName] = useState<string>("");
@@ -59,9 +59,15 @@ function PortfolioMain() {
     );
   };
 
-  // const renderCreatedAtDate = (data: any) => {
-  //   return moment(data.row.created_at).format("lll");
-  // };
+  const filteredData =
+    portfoliosQuery &&
+    portfoliosQuery.data &&
+    portfoliosQuery.data.data &&
+    portfoliosQuery.data.data.items?.filter((e: any) => {
+      if (query === "") return e.name;
+      else if (e?.name?.toLowerCase().includes(query.toLocaleLowerCase()))
+        return e;
+    });
 
   const renderUpdatedAtDate = (data: any) => {
     return moment(data.row.updated_at).format("lll");
@@ -157,6 +163,8 @@ function PortfolioMain() {
           <div className="relative">
             <input
               type="text"
+              placeholder="Search by portfolio name..."
+              onChange={(e) => setQuery(e.target.value)}
               className="pl-10 h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
             <img
@@ -191,13 +199,7 @@ function PortfolioMain() {
           >
             <DataGrid
               columns={columns}
-              rows={
-                (portfoliosQuery &&
-                  portfoliosQuery.data &&
-                  portfoliosQuery.data.data &&
-                  portfoliosQuery.data.data.items) ||
-                []
-              }
+              rows={filteredData || []}
               className="rdg-light custom-grid"
             />
           </motion.div>

@@ -7,6 +7,7 @@ import TableLoader from "../../../components/table_loader/component";
 import PortfolioMain from "../../portfolio/main";
 import { useDashboardStats } from "../../../core/hooks/dashboard";
 import DashboardLoader from "../../../components/dashboard_loader/component";
+import TextLoader from "../../../components/text_loader/component";
 
 function Default() {
   const { portfoliosQuery } = usePortfolios();
@@ -32,7 +33,10 @@ function Default() {
     setCurrentDate(formattedDate);
     setGreeting(greetingMessage);
   }, []);
-
+  const dashboardStats =
+    dashboardStatsQuery &&
+    dashboardStatsQuery.data &&
+    dashboardStatsQuery.data.data;
   return (
     <>
       <div>
@@ -40,12 +44,25 @@ function Default() {
           {currentDate}
         </h3>
         <div className="flex items-center">
-          <h3 className="text-[#1E1E1E] text-[18px]">{greeting} User</h3>
-          <img
-            className="w-[20px] h-[20px] ml-2"
-            src={Images.greeting}
-            alt=""
-          />
+          <h3 className="text-[#1E1E1E] text-[18px]">
+            {dashboardStatsQuery?.isLoading ? (
+              <>
+                <TextLoader />
+              </>
+            ) : (
+              <>
+                <div className="flex items-center">
+                  {greeting}{" "}
+                  {(dashboardStats && dashboardStats?.name) ?? "user"}{" "}
+                  <img
+                    className="w-[20px] h-[20px] ml-2"
+                    src={Images.greeting}
+                    alt=""
+                  />
+                </div>
+              </>
+            )}
+          </h3>
         </div>
         {dashboardStatsQuery?.isFetching ? (
           <>
@@ -69,30 +86,19 @@ function Default() {
               <div className="flex gap-4">
                 <Card
                   title={"Total local impairment"}
-                  value={
-                    dashboardStatsQuery &&
-                    dashboardStatsQuery.data &&
-                    dashboardStatsQuery.data.data.portfolio_overview.total_loans
-                  }
+                  value={dashboardStats.portfolio_overview.total_loans}
                   valueClassName="text-[#AFAFAF]"
                 />
                 <Card
                   title={"Total ECL"}
-                  value={
-                    dashboardStatsQuery &&
-                    dashboardStatsQuery.data &&
-                    dashboardStatsQuery.data.data.portfolio_overview
-                      .total_ecl_amount
-                  }
+                  value={dashboardStats.portfolio_overview.total_ecl_amount}
                   valueClassName="text-[#AFAFAF]"
                 />
                 <Card
                   title={"Risk reserve"}
                   value={
-                    dashboardStatsQuery &&
-                    dashboardStatsQuery.data &&
-                    dashboardStatsQuery.data.data.portfolio_overview
-                      .total_risk_reserve
+                    dashboardStats &&
+                    dashboardStats.portfolio_overview.total_risk_reserve
                   }
                   valueClassName="text-[#AFAFAF]"
                 />
@@ -105,38 +111,31 @@ function Default() {
                 <Card
                   title={"Number of customers"}
                   value={
-                    dashboardStatsQuery &&
-                    dashboardStatsQuery.data &&
-                    dashboardStatsQuery.data.data.customer_overview
-                      .total_customers
+                    dashboardStats &&
+                    dashboardStats.customer_overview.total_customers
                   }
                   valueClassName="text-[#AFAFAF]"
                 />
                 <Card
                   title={"Institutional loans"}
                   value={
-                    dashboardStatsQuery &&
-                    dashboardStatsQuery.data &&
-                    dashboardStatsQuery.data.data.customer_overview
-                      .institutional
+                    dashboardStats &&
+                    dashboardStats.customer_overview.institutional
                   }
                   valueClassName="text-[#AFAFAF]"
                 />
                 <Card
                   title={"Consumer loans"}
                   value={
-                    dashboardStatsQuery &&
-                    dashboardStatsQuery.data &&
-                    dashboardStatsQuery.data.data.customer_overview.individual
+                    dashboardStats &&
+                    dashboardStats.customer_overview.individual
                   }
                   valueClassName="text-[#AFAFAF]"
                 />
                 <Card
                   title={"Mixed"}
                   value={
-                    dashboardStatsQuery &&
-                    dashboardStatsQuery.data &&
-                    dashboardStatsQuery.data.data.customer_overview.mixed
+                    dashboardStats && dashboardStats.customer_overview.mixed
                   }
                   valueClassName="text-[#AFAFAF]"
                 />

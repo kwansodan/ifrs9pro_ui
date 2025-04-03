@@ -52,7 +52,6 @@ function CreatePorfolio({ cancel }: any) {
     setIsSubmittingFirstStep(true);
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
-    const credit_source = formData.get("credit_source") as string;
 
     const assetType = selectedAsset as string;
     const customerType = selectedCustomerType as string;
@@ -62,7 +61,6 @@ function CreatePorfolio({ cancel }: any) {
     const payload = {
       name,
       description,
-      credit_source,
       asset_type: assetType,
       customer_type: customerType,
       funding_source: fundingSource,
@@ -72,7 +70,6 @@ function CreatePorfolio({ cancel }: any) {
     if (
       !name ||
       !description ||
-      !credit_source ||
       !assetType ||
       !customerType ||
       !fundingSource ||
@@ -183,16 +180,6 @@ function CreatePorfolio({ cancel }: any) {
                     placeholder="Select data source"
                   />
                 </div>
-              </div>
-
-              <div className="mt-3">
-                <label>Credit source</label>
-                <input
-                  type="name"
-                  name="credit_source"
-                  placeholder="Enter credit source"
-                  className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-                />
               </div>
 
               <div className="flex items-center justify-between mt-3">

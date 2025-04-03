@@ -66,6 +66,15 @@ export const roles = [
   { value: "reviewer", label: "Reviewer" },
 ];
 
+export const feedbackStatuses = [
+  { value: "Submitted", label: "Submitted" },
+  { value: "Open", label: "Open" },
+  { value: "Closed", label: "Closed" },
+  { value: "In development", label: "In development" },
+  { value: "Completed", label: "Completed" },
+  { value: "Returned", label: "Returned" },
+];
+
 export const status = [
   { value: "pending", label: "Pending" },
   { value: "approved", label: "Approved" },

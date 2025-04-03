@@ -1,12 +1,9 @@
 import { useActionState, useState } from "react";
-import { Modal } from "../../components/modal/_component";
 import Button from "../../components/button/_component";
 import { SendFeedback } from "../../core/services/feedback.service";
 import { showToast } from "../../core/hooks/alert";
 
 function ShareFeedback({ cancel }: any) {
-  const [openSecondStepCreatePortfolio, setOpenSecondStepCreatePortfolio] =
-    useState<boolean>(false);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
 
   const submit = async (prevState: any, formData: FormData) => {
@@ -23,7 +20,7 @@ function ShareFeedback({ cancel }: any) {
     try {
       SendFeedback(payload)
         .then((res) => {
-          showToast(res.data.message, true);
+          showToast(res.data.message ?? "Operation successful", true);
           setButtonLoading(false);
           setTimeout(() => {
             window.location.reload();
@@ -31,7 +28,7 @@ function ShareFeedback({ cancel }: any) {
         })
         .catch((err) => {
           setButtonLoading(false);
-          showToast(err?.response?.data.detail, false);
+          showToast(err?.response?.data.detail[0].msg, false);
         });
     } catch {
       setButtonLoading(false);
@@ -43,11 +40,6 @@ function ShareFeedback({ cancel }: any) {
   console.log("state: ", state);
   return (
     <>
-      <Modal
-        close={() => setOpenSecondStepCreatePortfolio(false)}
-        open={openSecondStepCreatePortfolio}
-        modalHeader="Create Portfolio"
-      ></Modal>
       <div className="bg-white min-w-[500px] rounded-[20px]">
         <form action={formAction}>
           <div className="p-8 ">
@@ -62,9 +54,7 @@ function ShareFeedback({ cancel }: any) {
           <hr />
           <div className="flex justify-end p-2">
             <div
-              onClick={() => {
-                cancel();
-              }}
+              onClick={() => cancel()}
               className="flex items-center justify-center cursor-pointer bg-white !py-0 mr-3 border-[1px] border-[#6F6F6F] font-normal mt-3 text-[#6F6F6F] text-[12px] !rounded-[10px] !w-[90px] "
             >
               Cancel
