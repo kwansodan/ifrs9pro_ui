@@ -67,14 +67,15 @@ function EditUser({ close, rowId }: UploadDataProps) {
 
     if (!first_name || !last_name || !email || !recovery_email) {
       showToast("Please fill in all fields.", false);
+      setIsSubmitting(false);
       return;
     }
 
     try {
       UpdateAUser(Number(rowId), payload)
-        .then((res) => {
+        .then(() => {
           setIsSubmitting(false);
-          showToast(res.data.message, true);
+          showToast("Edit successful", true);
           setTimeout(() => {
             window.location.reload();
           }, 2000);

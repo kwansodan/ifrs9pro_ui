@@ -24,6 +24,9 @@ export interface ModalProps {
 }
 export interface FilterTrayProps {
   closeFilter?: () => void;
+  onApply?: any;
+  initialFilters?: any;
+  clearFilters?: () => void;
 }
 
 export interface UploadProps {
@@ -45,6 +48,18 @@ export interface CategoryProps {
   category: string;
   range?: string;
   rate?: string;
+}
+
+type AssetType = "Debt" | "Equity";
+type FundingSource =
+  | "Private investors"
+  | "Pension fund"
+  | "Mutual fund"
+  | "Other funds";
+
+export interface FilterValues {
+  asset_type: AssetType[];
+  funding_source: FundingSource[];
 }
 
 export type IFrontentConfig = {

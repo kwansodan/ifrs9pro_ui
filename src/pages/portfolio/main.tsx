@@ -11,6 +11,7 @@ import CreatePorfolio from "../../components/create_portfolio/_component";
 import DeletePortfolio from "./delete_portfolio";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { FilterValues } from "../../core/interfaces";
 
 function PortfolioMain() {
   const navigate = useNavigate();
@@ -23,7 +24,15 @@ function PortfolioMain() {
   const [requestId, setRequestId] = useState<number>(0);
   const [portfolioName, setPortfolioName] = useState<string>("");
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const [filters, setFilters] = useState<FilterValues>({
+    asset_type: [],
+    funding_source: [],
+  });
 
+  const handleApplyFilter = (newFilters: any) => {
+    console.log("newFilters: ", newFilters);
+    setFilters(newFilters);
+  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -60,14 +69,29 @@ function PortfolioMain() {
   };
 
   const filteredData =
-    portfoliosQuery &&
-    portfoliosQuery.data &&
-    portfoliosQuery.data.data &&
-    portfoliosQuery.data.data.items?.filter((e: any) => {
-      if (query === "") return e.name;
-      else if (e?.name?.toLowerCase().includes(query.toLocaleLowerCase()))
-        return e;
-    });
+    portfoliosQuery?.data?.data?.items?.filter((e: any) => {
+      // Apply search filter
+      const matchesSearch =
+        query === "" || e?.name?.toLowerCase().includes(query.toLowerCase());
+
+      // Apply asset type filter
+      const matchesAssetType =
+        filters.asset_type.length === 0 ||
+        filters.asset_type.some(
+          (type: string) => type.toLowerCase() === e.asset_type.toLowerCase()
+        );
+
+      // Apply funding source filter
+      const matchesFundingSource =
+        filters.funding_source.length === 0 ||
+        filters.funding_source.some(
+          (source: string) =>
+            source.toLowerCase() === e.funding_source.toLowerCase()
+        );
+
+      // Only return items that match ALL criteria
+      return matchesSearch && matchesAssetType && matchesFundingSource;
+    }) || [];
 
   const renderUpdatedAtDate = (data: any) => {
     return moment(data.row.updated_at).format("lll");
@@ -94,7 +118,13 @@ function PortfolioMain() {
       width: "100px",
     },
   ];
-
+  const handleClearFilters = () => {
+    setFilters({
+      asset_type: [],
+      funding_source: [],
+    });
+    setShowFilter(false);
+  };
   return (
     <>
       <Modal
@@ -168,7 +198,6 @@ function PortfolioMain() {
               className="pl-10 h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
             <img
-              onClick={() => setShowFilter(!showFilter)}
               className="w-[13px] h-[13px] absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
               src={Images.search}
               alt=""
@@ -186,7 +215,14 @@ function PortfolioMain() {
             className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[144px] min-h-[35px]"
           />
         </div>
-        {showFilter && <FilterTray closeFilter={() => setShowFilter(false)} />}
+        {showFilter && (
+          <FilterTray
+            closeFilter={() => setShowFilter(false)}
+            onApply={handleApplyFilter}
+            initialFilters={filters}
+            clearFilters={handleClearFilters}
+          />
+        )}
       </div>
       <div className="max-w-[1160px] h-[398px] border-[1px] border-[#F0F0F0] rounded-[11px]">
         {portfoliosQuery?.isFetching ? (
