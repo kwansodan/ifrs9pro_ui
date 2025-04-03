@@ -11,10 +11,13 @@ import { useAdminUsers } from "../../core/hooks/users";
 import moment from "moment";
 import { motion } from "framer-motion";
 import TableLoader from "../../components/table_loader/component";
+import { showToast } from "../../core/hooks/alert";
+import { ExportUsers } from "../../core/services/users.service";
 
 function Users() {
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const [openNewUserModal, setOpenNewUserModal] = useState<boolean>(false);
+  const [isExporting, setIsExporting] = useState<boolean>(false);
   const [openEditUserModal, setOpenEditUserModal] = useState<boolean>(false);
   const [openDeleteUserModal, setOpenDeleteUserModal] =
     useState<boolean>(false);
@@ -104,6 +107,37 @@ function Users() {
     },
   ];
 
+  const handleExportUsers = () => {
+    setIsExporting(true);
+    ExportUsers()
+      .then((res) => {
+        setIsExporting(false);
+
+        const blob = new Blob([res.data], { type: "text/csv" });
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "users_export.csv";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        window.URL.revokeObjectURL(url);
+
+        setTimeout(() => {
+          showToast("Export successful!", true);
+        }, 2000);
+      })
+      .catch((err) => {
+        setIsExporting(false);
+        showToast(
+          err?.response?.data?.detail || "Export failed. Please try again",
+          false
+        );
+      });
+  };
+
   return (
     <>
       <Modal
@@ -192,7 +226,8 @@ function Users() {
           </div>
           <Button
             text="Export"
-            // onClick={() => setOpenCreatePortfolioModal(true)}
+            onClick={() => handleExportUsers()}
+            isLoading={isExporting}
             className="bg-[white] text-[#6F6F6F] border-[#6F6F6F] border-[1px] rounded-lg min-w-[100px]"
           />
           <Button

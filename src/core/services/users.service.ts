@@ -13,3 +13,6 @@ export const GetAUser = async (id: number) =>
 
 export const UpdateAUser = async (id: number, payload: any) =>
   await getAxios().put("/admin/users/" + id, payload);
+
+export const ExportUsers = async () =>
+  await getAxios().get("/admin/users/export");
