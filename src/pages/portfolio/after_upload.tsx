@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import { useQualityIssues } from "../../core/hooks/portfolio";
 import { ApexOptions } from "apexcharts";
 import PageLoader from "../../components/page_loader/_component";
+import { currencyFormatter } from "../../core/utility";
 
 function AfterUpload({
   total_loans,
@@ -23,9 +24,9 @@ function AfterUpload({
   bog_summary_data,
   individual_customers,
   institutions,
-  mixed,
-  active_customers,
-}: any) {
+}: // mixed,
+// active_customers,
+any) {
   const { id } = useParams();
   const { qualityIssuesQuery } = useQualityIssues(Number(id));
 
@@ -68,13 +69,13 @@ function AfterUpload({
       title: { text: "Stages" },
     },
     yaxis: {
-      title: { text: "Number of Loans" },
+      title: { text: "Loan amount" },
     },
   };
 
   const ecl_series = [
     {
-      name: "Number of Loans",
+      name: "Loan amount",
       data: numLoansData,
     },
   ];
@@ -89,13 +90,13 @@ function AfterUpload({
       title: { text: "Stages" },
     },
     yaxis: {
-      title: { text: "Number of Loans" },
+      title: { text: "Loan amount" },
     },
   };
 
   const bog_series = [
     {
-      name: "Number of Loans",
+      name: "Loan amount",
       data: bog_numLoansData,
     },
   ];
@@ -137,16 +138,45 @@ function AfterUpload({
               </h3>
               <div className="flex gap-2">
                 {[
-                  { title: "Total loans", value: total_loans },
-                  { title: "Total loan value", value: total_loan_value },
-                  { title: "Average loan amount", value: average_loan },
+                  { title: "Loan count", value: total_loans },
+                  {
+                    title: "Total loan value",
+                    value: currencyFormatter.format(total_loan_value),
+                  },
+                  {
+                    title: "Average loan amount",
+                    value: currencyFormatter.format(average_loan),
+                  },
                   { title: "Total customers", value: total_customers },
                 ].map((item, idx) => (
                   <React.Fragment key={idx}>
                     <Card
                       key={idx}
                       parentClassName="!h-[110px]"
-                      valueClassName="!text-[33px] !text-[#1E1E1E]"
+                      valueClassName="!text-[27px] !text-[#1E1E1E]"
+                      title={item.title}
+                      value={item.value}
+                    />
+                  </React.Fragment>
+                ))}
+              </div>
+              <div className="flex gap-2 mt-3">
+                {[
+                  { title: "ECL", value: 0 },
+                  {
+                    title: "BOG impairment",
+                    value: 0,
+                  },
+                  {
+                    title: "Risk reserve",
+                    value: 0,
+                  },
+                ].map((item, idx) => (
+                  <React.Fragment key={idx}>
+                    <Card
+                      key={idx}
+                      parentClassName="!h-[110px]"
+                      valueClassName="!text-[27px] !text-[#1E1E1E]"
                       title={item.title}
                       value={item.value}
                     />
@@ -163,8 +193,8 @@ function AfterUpload({
                     value: individual_customers,
                   },
                   { title: "Institutions", value: institutions },
-                  { title: "Mixed", value: mixed },
-                  { title: "Active customers", value: active_customers },
+                  // { title: "Mixed", value: mixed },
+                  // { title: "Active customers", value: active_customers },
                 ].map((item, idx) => (
                   <Card
                     key={idx}

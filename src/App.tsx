@@ -9,7 +9,6 @@ import DashboardLayout from "./pages/layout/_dashboard_layout";
 import Main from "./pages/dashboard/main/_page";
 import NotFound from "./components/404/_component";
 import Porfolio from "./pages/portfolio/_page";
-import PortfolioMain from "./pages/portfolio/main";
 import Test from "./pages/portfolio/test";
 import Users from "./pages/users/_page";
 import NoFeedback from "./pages/feedback/no_feedback";
@@ -134,7 +133,7 @@ function App() {
               <Route index element={<Home />} />
               <Route path="main" element={<Main />} />
               <Route path="portfolio" element={<Porfolio />} />
-              <Route path="portfolio-main" element={<PortfolioMain />} />
+              {/* <Route path="portfolio-main" element={<PortfolioMain />} /> */}
               <Route
                 path="portfolio-details/:id"
                 element={<PortfolioDetails />}

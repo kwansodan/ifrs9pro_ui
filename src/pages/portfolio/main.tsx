@@ -100,17 +100,17 @@ function PortfolioMain() {
   };
 
   const columns = [
-    { key: "name", name: "Name", width: 200 },
-    { key: "description", name: "Description", width: 280 },
-    { key: "asset_type", name: "Asset type", width: 150 },
-    { key: "customer_type", name: "Customer type", width: 180 },
-    { key: "funding_source", name: "Funding source", width: 150 },
-    { key: "data_source", name: "Data source", width: 180 },
-    { key: "repayment_source", name: "Repayment source", width: 180 },
+    { key: "name", name: "Name", resizable: true },
+    { key: "description", name: "Description", resizable: true },
+    { key: "asset_type", name: "Asset type", resizable: true },
+    { key: "customer_type", name: "Customer type", resizable: true },
+    { key: "funding_source", name: "Funding source", resizable: true },
+    // { key: "data_source", name: "Data source", width: 180 },
+    // { key: "repayment_source", name: "Repayment source", width: 180 },
     {
       key: "updated_at",
       name: "Updated at",
-      width: 180,
+      resizable: true,
       renderCell: renderUpdatedAtDate,
     },
 
@@ -125,6 +125,7 @@ function PortfolioMain() {
     location.pathname === "/dashboard"
       ? columns.filter((col) => col.key !== "update")
       : columns;
+
   const handleClearFilters = () => {
     setFilters({
       asset_type: [],
@@ -202,19 +203,23 @@ function PortfolioMain() {
               type="text"
               placeholder="Search by portfolio name..."
               onChange={(e) => setQuery(e.target.value)}
-              className="pl-10 h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+              className="pl-10 text-sm h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
             <img
               className="w-[13px] h-[13px] absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
               src={Images.search}
               alt=""
             />
-            <img
-              onClick={() => setShowFilter(!showFilter)}
-              className="w-[20px] h-[20px] absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
-              src={Images.filter}
-              alt=""
-            />
+            {location.pathname === "/dashboard" ? (
+              <></>
+            ) : (
+              <img
+                onClick={() => setShowFilter(!showFilter)}
+                className="w-[20px] h-[20px] absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                src={Images.filter}
+                alt=""
+              />
+            )}
           </div>
           <Button
             text="New portfolio"

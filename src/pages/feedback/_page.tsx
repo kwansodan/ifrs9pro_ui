@@ -103,9 +103,24 @@ function Feedback() {
   };
 
   const columns = [
-    { key: "name", name: "Feedback", width: 700, renderCell: renderNameRow },
-    { key: "status", name: "Status", width: 240, renderCell: renderStatusRow },
-    { key: "like", name: "Action", renderCell: renderActionsRow, width: 100 },
+    {
+      key: "name",
+      name: "Feedback",
+      resizable: true,
+      renderCell: renderNameRow,
+    },
+    {
+      key: "status",
+      name: "Status",
+      resizable: true,
+      renderCell: renderStatusRow,
+    },
+    {
+      key: "like",
+      name: "Action",
+      renderCell: renderActionsRow,
+      resizable: true,
+    },
   ];
 
   const filteredData =
@@ -188,7 +203,7 @@ function Feedback() {
               type="text"
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by status..."
-              className="pl-10 h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+              className="pl-10 text-sm h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
             <img
               onClick={() => setShowFilter(!showFilter)}

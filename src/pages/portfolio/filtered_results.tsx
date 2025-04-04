@@ -67,7 +67,7 @@ function FilteredResults() {
         </div>
       </Modal>
       <Modal
-        modalHeader="Calculate local impairment"
+        modalHeader="Calculate BOG impairment"
         open={openLocalImpairmentModal}
         close={() => setOpenLocalImpairmentModal(false)}
       >
@@ -164,7 +164,7 @@ function FilteredResults() {
                       src={Images.calc_local}
                       alt=""
                     />
-                    Calculate local impairment
+                    Calculate BOG impairment
                   </>
                 }
                 className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[260px] !h-[45px] bg-[#D9EFF9]"

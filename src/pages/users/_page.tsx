@@ -84,19 +84,19 @@ function Users() {
   };
 
   const columns = [
-    { key: "name", name: "Name", width: 300, renderCell: renderFullName },
-    { key: "email", name: "Email", width: 350 },
-    { key: "role", name: "Role", width: 150 },
+    { key: "name", name: "Name", resizable: true, renderCell: renderFullName },
+    { key: "email", name: "Email", resizable: true },
+    { key: "role", name: "Role", resizable: true },
     {
       key: "created_at",
       name: "Created At",
-      width: 340,
+      resizable: true,
       renderCell: renderDate,
     },
     {
       key: "updated_at",
       name: "Updated At",
-      width: 340,
+      resizable: true,
       renderCell: renderUpdatedAt,
     },
     {
@@ -215,7 +215,7 @@ function Users() {
               type="text"
               placeholder="Search by role..."
               onChange={(e) => setQuery(e.target.value)}
-              className="pl-10 h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+              className="pl-10 text-sm h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
             <img
               onClick={() => setShowFilter(!showFilter)}

@@ -81,8 +81,8 @@ function AdminAccess() {
   // };
 
   const columns = [
-    { key: "email", name: "Email", width: 300 },
-    { key: "admin_email", name: "Admin Email", width: 410 },
+    { key: "email", name: "Email", resizable: true },
+    { key: "admin_email", name: "Admin Email", resizable: true },
     // {
     //   key: "created_at",
     //   name: "Created At",
@@ -92,7 +92,7 @@ function AdminAccess() {
     {
       key: "status",
       name: "Status",
-      width: "330px",
+      resizable: true,
       renderCell: renderStatus,
     },
     {
@@ -195,7 +195,7 @@ function AdminAccess() {
               type="text"
               placeholder="Search by status..."
               onChange={(e) => setQuery(e.target.value)}
-              className="pl-10 h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+              className="pl-10 text-sm h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
             <img
               onClick={() => setShowFilter(!showFilter)}

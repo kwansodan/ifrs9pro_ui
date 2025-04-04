@@ -7,7 +7,7 @@ function Card({ title, value, valueClassName, parentClassName }: CardProps) {
       initial={{ scale: 0.5, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 1.2, ease: "easeOut" }}
-      className={` ${parentClassName} relative w-full h-[211px] p-4 border border-gray-200 rounded-[11px] shadow-sm md:w-1/3`}
+      className={` ${parentClassName} relative w-full h-[211px] p-4 border border-gray-200 rounded-[11px] shadow-sm `}
     >
       <h3 className={`text-[16px] font-medium text-[#6F6F6F]`}>{title}</h3>
       <p
