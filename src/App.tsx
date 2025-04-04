@@ -12,7 +12,6 @@ import Porfolio from "./pages/portfolio/_page";
 import PortfolioMain from "./pages/portfolio/main";
 import Test from "./pages/portfolio/test";
 import Users from "./pages/users/_page";
-import Help from "./pages/help/_page";
 import NoFeedback from "./pages/feedback/no_feedback";
 import RequestAccess from "./pages/authentication/access/request_access";
 import AdminRequest from "./pages/authentication/access/admin_request";
@@ -147,7 +146,6 @@ function App() {
               <Route path="after-upload" element={<Test />} />
               <Route path="feedback" element={<NoFeedback />} />
               <Route path="users" element={<Users />} />
-              <Route path="help" element={<Help />} />
               <Route path="admin-access" element={<AdminAccess />} />
               <Route path="password-change" element={<PasswordChange />} />
             </Route>

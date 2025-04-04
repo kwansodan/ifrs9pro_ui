@@ -14,3 +14,9 @@ export const UpdateFeedback = async (id: number | string, payload: any) =>
 
 export const DeleteAFeedback = async (id: number | string) =>
   await getAxios().delete(`/admin/feedback/${id}`);
+
+export const LikeFeedback = async (id: number | string) =>
+  await getAxios().post(`/user/feedback/${id}/like`);
+
+export const SendHelp = async (payload: any) =>
+  await getAxios().post("/user/help", payload);

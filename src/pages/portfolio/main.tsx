@@ -54,16 +54,18 @@ function PortfolioMain() {
     const { id, name } = data.row;
     return (
       <div className="flex cursor-pointer">
-        <img
-          onClick={() => {
-            setRequestId(id);
-            setPortfolioName(name);
-            setShowActionsMenu((prev) => !prev);
-          }}
-          src={Images.options}
-          className="w-[24px]"
-          alt=""
-        />
+        <>
+          <img
+            onClick={() => {
+              setRequestId(id);
+              setPortfolioName(name);
+              setShowActionsMenu((prev) => !prev);
+            }}
+            src={Images.options}
+            className="w-[24px]"
+            alt=""
+          />
+        </>
       </div>
     );
   };
@@ -111,6 +113,7 @@ function PortfolioMain() {
       width: 180,
       renderCell: renderUpdatedAtDate,
     },
+
     {
       key: "update",
       name: "Actions",
@@ -118,6 +121,10 @@ function PortfolioMain() {
       width: "100px",
     },
   ];
+  const filteredColumns =
+    location.pathname === "/dashboard"
+      ? columns.filter((col) => col.key !== "update")
+      : columns;
   const handleClearFilters = () => {
     setFilters({
       asset_type: [],
@@ -234,7 +241,7 @@ function PortfolioMain() {
             transition={{ duration: 1.5, ease: "easeOut" }} // Slow drop effect
           >
             <DataGrid
-              columns={columns}
+              columns={filteredColumns}
               rows={filteredData || []}
               className="rdg-light custom-grid"
             />

@@ -4,16 +4,20 @@ import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/button/_component";
 import { Dropdown, Ripple, initTWE } from "tw-elements";
 import { clearUserSession } from "../../core/utility";
-import { useState } from "react";
+import { useActionState, useState } from "react";
+import { Modal } from "../../components/modal/_component";
+import { SendHelp } from "../../core/services/feedback.service";
+import { showToast } from "../../core/hooks/alert";
 
 const DashboardLayout = () => {
+  const [openHelpModal, setOpenHelpModal] = useState<boolean>(false);
   initTWE({ Dropdown, Ripple });
   const [showLogout, setShowLogout] = useState<boolean>(false);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+
   const pathname = useLocation();
   const navigate = useNavigate();
-  const gotoHelp = () => {
-    navigate("/dashboard/help");
-  };
+
   const gotoHome = () => {
     navigate("/dashboard");
   };
@@ -21,8 +25,77 @@ const DashboardLayout = () => {
     setShowLogout(!showLogout);
   };
 
+  const submit = async (prevState: any, formData: FormData) => {
+    setButtonLoading(true);
+    console.log("prev: ", prevState);
+    const description = formData.get("description") as string | null;
+    if (!description) {
+      showToast("Please enter your ask", false);
+      setButtonLoading(false);
+      return;
+    }
+
+    const payload = { description };
+    try {
+      SendHelp(payload)
+        .then((res) => {
+          showToast(res.data.message ?? "Operation successful", true);
+          setButtonLoading(false);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        })
+        .catch((err) => {
+          setButtonLoading(false);
+          showToast(err?.response?.data.detail[0].msg, false);
+        });
+    } catch {
+      setButtonLoading(false);
+      showToast("Login failed. Please try again.", false);
+      return;
+    }
+  };
+
+  const [state, formAction] = useActionState(submit, null);
+  console.log("state: ", state);
+
   return (
     <>
+      <Modal
+        open={openHelpModal}
+        close={() => setOpenHelpModal(false)}
+        modalHeader="Get help"
+      >
+        <div className="p-8 bg-white rounded-[20px]">
+          <hr className="my-3" />
+          <form action={formAction}>
+            <div className="p-8 ">
+              <div className="mt-3">
+                <textarea
+                  name="description"
+                  placeholder="Ask a question"
+                  className="w-[30rem] h-[100px] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                />
+              </div>
+            </div>
+            <hr />
+            <div className="flex justify-end p-2">
+              <div
+                onClick={() => setOpenHelpModal(false)}
+                className="flex items-center justify-center cursor-pointer bg-white !py-0 mr-3 border-[1px] border-[#6F6F6F] font-normal mt-3 text-[#6F6F6F] text-[12px] !rounded-[10px] !w-[90px] "
+              >
+                Cancel
+              </div>
+
+              <Button
+                text="Submit"
+                isLoading={buttonLoading}
+                className="bg-[#166E94] font-normal mt-3 text-white text-[12px] !rounded-[10px] !w-[90px] "
+              />
+            </div>
+          </form>
+        </div>
+      </Modal>
       <div>
         <nav className="md:px-12 flex items-center justify-between mx-auto max-w-[1689px] w-full px-6 py-4">
           <img
@@ -107,7 +180,7 @@ const DashboardLayout = () => {
               </ul>
             </div>
             <Button
-              onClick={gotoHelp}
+              onClick={() => setOpenHelpModal(true)}
               text="Help"
               className="!border-[1px] !border-[#6F6F6F] !w-[64px] h-[30px] !rounded-[100px] bg-white flex items-center mx-3"
             />

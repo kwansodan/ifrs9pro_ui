@@ -83,7 +83,7 @@ function CalculateEcl({ close }: UploadDataProps) {
         .catch((err) => {
           console.log("err: ", err);
           setCalculating(false);
-          showToast("Submission failed", false);
+          showToast(err?.response?.data.detail ?? "Submission failed", false);
         });
     }
   };

@@ -10,10 +10,13 @@ import EditFeedback from "./edit_feedback";
 import DeleteFeedback from "./delete_feedback";
 import { renderFeedbackStatusColors } from "../../core/utility";
 import TableLoader from "../../components/table_loader/component";
+import { LikeFeedback } from "../../core/services/feedback.service";
+import { showToast } from "../../core/hooks/alert";
 
 function Feedback() {
   const { feedbackQuery } = useFeedback();
   const [showFilter, setShowFilter] = useState<boolean>(false);
+  const [likeFeedbacks, setLikeFeedbacks] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openCreateFeedbackModal, setOpenCreateFeedbackModal] =
@@ -39,8 +42,25 @@ function Feedback() {
     };
   }, [showActionsMenu]);
 
+  const triggerFeedbackLike = (id: any) => {
+    setLikeFeedbacks(true);
+    try {
+      LikeFeedback(id)
+        .then((res) => {
+          console.log("res: ", res);
+        })
+        .catch((err) => {
+          setLikeFeedbacks(false);
+          showToast(err?.response?.data.detail, false);
+        });
+    } catch (error) {
+      setLikeFeedbacks(false);
+      showToast("Action failed. Please try again", false);
+    }
+  };
+
   const renderActionsRow = (data: any) => {
-    const { is_creator } = data.row;
+    const { is_creator, id, is_liked_by_user } = data.row;
 
     setFeedbackId(data.row.id);
     return (
@@ -53,7 +73,14 @@ function Feedback() {
             alt=""
           />
         ) : (
-          <img src={Images.unlike} className="w-[18px]" alt="" />
+          <img
+            onClick={() => triggerFeedbackLike(id)}
+            src={
+              likeFeedbacks || is_liked_by_user ? Images.like : Images.unlike
+            }
+            className="w-[18px]"
+            alt=""
+          />
         )}
       </div>
     );
