@@ -94,7 +94,7 @@ function Default() {
                 />
                 <Card
                   title={"Total BOG impairment"}
-                  value={currencyFormatter.format(
+                  value={currencyFormatter(
                     dashboardStats &&
                       dashboardStats.portfolio_overview.total_loans
                   )}
@@ -102,7 +102,7 @@ function Default() {
                 />
                 <Card
                   title={"Total ECL"}
-                  value={currencyFormatter.format(
+                  value={currencyFormatter(
                     dashboardStats &&
                       dashboardStats.portfolio_overview.total_ecl_amount
                   )}
@@ -110,7 +110,7 @@ function Default() {
                 />
                 <Card
                   title={"Risk reserve"}
-                  value={currencyFormatter.format(
+                  value={currencyFormatter(
                     dashboardStats &&
                       dashboardStats.portfolio_overview.total_risk_reserve
                   )}

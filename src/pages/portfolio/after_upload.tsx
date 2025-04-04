@@ -141,11 +141,11 @@ any) {
                   { title: "Loan count", value: total_loans },
                   {
                     title: "Total loan value",
-                    value: currencyFormatter.format(total_loan_value),
+                    value: currencyFormatter(total_loan_value),
                   },
                   {
                     title: "Average loan amount",
-                    value: currencyFormatter.format(average_loan),
+                    value: currencyFormatter(average_loan),
                   },
                   { title: "Total customers", value: total_customers },
                 ].map((item, idx) => (

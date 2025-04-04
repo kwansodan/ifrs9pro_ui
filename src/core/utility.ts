@@ -148,8 +148,9 @@ export const renderFeedbackStatusColors = (status: string) => {
   return "Status not found";
 };
 
-export const currencyFormatter = new Intl.NumberFormat("en-GH", {
-  style: "currency",
-  currency: "GHS",
-  minimumFractionDigits: 0,
-});
+export const currencyFormatter = (amount: number): string => {
+  return `₵${amount.toLocaleString("en-GH", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })}`;
+};
