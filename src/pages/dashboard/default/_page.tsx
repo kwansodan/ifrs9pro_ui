@@ -77,7 +77,7 @@ function Default() {
               <DashboardLoader />
               <DashboardLoader />
               <DashboardLoader />
-              <DashboardLoader />
+              {/* <DashboardLoader /> */}
             </div>
           </>
         ) : (
@@ -146,13 +146,13 @@ function Default() {
                   }
                   valueClassName="text-[#AFAFAF] md:!text-[44px]"
                 />
-                <Card
+                {/* <Card
                   title={"Mixed"}
                   value={
                     dashboardStats && dashboardStats.customer_overview.mixed
                   }
                   valueClassName="text-[#AFAFAF] md:!text-[44px]"
-                />
+                /> */}
               </div>
             </div>
           </>
