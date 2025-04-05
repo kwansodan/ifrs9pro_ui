@@ -62,3 +62,8 @@ export const AddCommentToQualityIssue = async (
     `/portfolios/${portfolio_id}/quality-issues/${issue_id}/comments`,
     payload
   );
+
+export const ApproveQualityIssue = async (portfolio_id: number | string) =>
+  await getAxios().post(
+    `/portfolios/${portfolio_id}/approve-all-quality-issues`
+  );

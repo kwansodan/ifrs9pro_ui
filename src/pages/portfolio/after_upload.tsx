@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import Tabs from "../../components/tabs/tab";
 import Card from "../../components/card/_component";
@@ -6,12 +6,14 @@ import { Images } from "../../data/Assets";
 import Button from "../../components/button/_component";
 import { Modal } from "../../components/modal/_component";
 import Comment from "./comment";
-import EditComment from "./edit";
 import { useParams } from "react-router-dom";
 import { useQualityIssues } from "../../core/hooks/portfolio";
 import { ApexOptions } from "apexcharts";
 import PageLoader from "../../components/page_loader/_component";
 import { currencyFormatter } from "../../core/utility";
+import { ApproveQualityIssue } from "../../core/services/portfolio.service";
+import { showToast } from "../../core/hooks/alert";
+import ViewDuplicate from "./view_duplicates";
 
 function AfterUpload({
   total_loans,
@@ -31,14 +33,12 @@ any) {
   const { qualityIssuesQuery } = useQualityIssues(Number(id));
 
   const [activeTab, setActiveTab] = useState("Summary");
-  const [calculateActiveTab, setCalculateActiveTab] = useState("ecl");
+  const [issue_id, setSelectedIssueId] = useState<string | null>(null);
+  const [details_issue_id, setDetailsId] = useState<string | null>(null);
+  const [calculateActiveTab, setCalculateActiveTab] = useState("ECL summary");
   const [openCommentModal, setOpenCommentModal] = useState<boolean>(false);
+  const [approving, setApproving] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-  const issues = [
-    { name: "Duplicate names", count: 15 },
-    { name: "Duplicate address", count: 15 },
-    { name: "Missing repayment history", count: 45 },
-  ];
 
   const checkForQualityIssues =
     qualityIssuesQuery &&
@@ -48,15 +48,28 @@ any) {
       ? false
       : true;
 
+  useEffect(() => {
+    qualityIssuesQuery.refetch();
+  }, [issue_id]);
+
+  const actualIssues =
+    qualityIssuesQuery &&
+    qualityIssuesQuery.data &&
+    qualityIssuesQuery.data.data &&
+    qualityIssuesQuery.data.data;
   const categories = ["stage_1", "stage_2", "stage_3"];
   const bog_categories = ["current", "olem", "substandard", "doubtful", "loss"];
 
   const numLoansData = ecl_summary_data
-    ? categories.map((stage) => ecl_summary_data?.[stage]?.num_loans ?? 0)
+    ? categories.map(
+        (stage) => ecl_summary_data?.[stage]?.outstanding_loan_balance ?? 0
+      )
     : [];
 
   const bog_numLoansData = bog_summary_data
-    ? bog_categories.map((stage) => bog_summary_data?.[stage]?.num_loans ?? 0)
+    ? bog_categories.map(
+        (stage) => bog_summary_data?.[stage]?.outstanding_loan_balance ?? 0
+      )
     : [];
 
   const ecl_options: ApexOptions = {
@@ -100,6 +113,23 @@ any) {
       data: bog_numLoansData,
     },
   ];
+
+  const approveIssue = () => {
+    setApproving(true);
+    ApproveQualityIssue(Number(id))
+      .then((res) => {
+        setApproving(false);
+        showToast(res.data.message ?? "Approval successful", true);
+      })
+      .catch((err) => {
+        setApproving(false);
+        showToast(
+          err?.response?.data.detail[0].msg ??
+            "An error occurred, please try again",
+          false
+        );
+      });
+  };
   return (
     <>
       <Modal
@@ -108,16 +138,24 @@ any) {
         close={() => setOpenCommentModal(false)}
       >
         <div className="p-12 bg-white rounded-[20px]">
-          <Comment close={() => setOpenCommentModal(false)} />
+          <Comment
+            issue_id={issue_id}
+            close={() => setOpenCommentModal(false)}
+            portfolio_id={id}
+          />
         </div>
       </Modal>
       <Modal
-        modalHeader="Add comment"
+        modalHeader="View duplicate names"
         open={openEditModal}
         close={() => setOpenEditModal(false)}
       >
         <div className="p-12 bg-white rounded-[20px]">
-          <EditComment close={() => setOpenEditModal(false)} />
+          <ViewDuplicate
+            affected_records={
+              actualIssues?.[Number(details_issue_id)]?.affected_records || []
+            }
+          />
         </div>
       </Modal>
       <div className="bg-white border rounded-lg shadow-sm ">
@@ -269,7 +307,7 @@ any) {
                 ) : (
                   <>
                     <span className="text-sm text-[#6F6F6F]">
-                      <strong>12</strong>
+                      <strong>{actualIssues && actualIssues?.length}</strong>{" "}
                       quality issues detected. Review issues, provide comments
                       and approve.
                     </span>
@@ -282,39 +320,45 @@ any) {
                   <></>
                 ) : (
                   <>
-                    {issues.map((issue, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center justify-between p-4 border-b last:border-0"
-                      >
-                        <span className="text-gray-700">{issue.name}</span>
-                        <div className="flex items-center space-x-4">
-                          <span
-                            className={`font-semibold ${
-                              issue.count > 30
-                                ? "text-[#FF3B30]"
-                                : "text-[#F7941E]"
-                            }`}
-                          >
-                            {issue.count}
+                    {actualIssues &&
+                      actualIssues?.map((issue: any, idx: number) => (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between p-4 border-b last:border-0"
+                        >
+                          <span className="text-gray-700">
+                            {issue?.description}
                           </span>
-                          <img
-                            onClick={() => setOpenEditModal(true)}
-                            title="view details"
-                            src={Images.see}
-                            className="w-[14px] h-[14px] cursor-pointer"
-                            alt=""
-                          />
-                          <img
-                            onClick={() => setOpenCommentModal(true)}
-                            title="add comment"
-                            src={Images.add_comment}
-                            className="w-[14px] h-[14px] cursor-pointer"
-                            alt=""
-                          />
+                          <div className="flex items-center space-x-4">
+                            <span
+                              title="Number of affected records"
+                              className={`cursor-default  font-semibold text-[#F7941E]`}
+                            >
+                              {issue?.affected_records.length}
+                            </span>
+                            <img
+                              onClick={() => {
+                                setOpenEditModal(true);
+                                setDetailsId(issue && issue.id);
+                              }}
+                              title="view details"
+                              src={Images.see}
+                              className="w-[14px] h-[14px] cursor-pointer"
+                              alt=""
+                            />
+                            <img
+                              onClick={() => {
+                                setOpenCommentModal(true);
+                                setSelectedIssueId(issue && issue.id);
+                              }}
+                              title="add comment"
+                              src={Images.add_comment}
+                              className="w-[14px] h-[14px] cursor-pointer"
+                              alt=""
+                            />
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                   </>
                 )}
               </div>
@@ -322,7 +366,9 @@ any) {
                 <>
                   <div className="flex justify-end mt-4 text-center">
                     <Button
+                      isLoading={approving}
                       text={"Approve"}
+                      onClick={approveIssue}
                       className="!text-center gap-2 py-2 font-normal !text-[14px] text-white !w-[120px] bg-[#166E94]"
                     />
                   </div>

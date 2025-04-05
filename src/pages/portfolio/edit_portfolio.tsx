@@ -49,58 +49,56 @@ function EditPortfolio() {
   }, [Number(id)]);
   const [categories, setCategories] = useState<CategoryProps[]>([]);
   useEffect(() => {
-    if (data?.staging_summary?.local_impairment?.config) {
-      setCategories([
-        {
-          category: "Current",
-          range:
-            data.staging_summary.local_impairment.config.current?.days_range ||
-            "",
-        },
-        {
-          category: "OLEM",
-          range:
-            data.staging_summary.local_impairment.config.olem?.days_range || "",
-        },
-        {
-          category: "Substandard",
-          range:
-            data.staging_summary.local_impairment.config.substandard
-              ?.days_range || "",
-        },
-        {
-          category: "Doubtful",
-          range:
-            data.staging_summary.local_impairment.config.doubtful?.days_range ||
-            "",
-        },
-        {
-          category: "Loss",
-          range:
-            data.staging_summary.local_impairment.config.loss?.days_range || "",
-        },
-      ]);
-    }
+    setCategories([
+      {
+        category: "Current",
+        range:
+          data?.staging_summary?.local_impairment?.config?.current
+            ?.days_range || "",
+      },
+      {
+        category: "OLEM",
+        range:
+          data?.staging_summary?.local_impairment?.config?.olem?.days_range ||
+          "",
+      },
+      {
+        category: "Substandard",
+        range:
+          data?.staging_summary?.local_impairment?.config?.substandard
+            ?.days_range || "",
+      },
+      {
+        category: "Doubtful",
+        range:
+          data?.staging_summary?.local_impairment?.config?.doubtful
+            ?.days_range || "",
+      },
+      {
+        category: "Loss",
+        range:
+          data?.staging_summary?.local_impairment?.config?.loss?.days_range ||
+          "",
+      },
+    ]);
   }, [data]);
 
   const [fourthCategories, setFourthCategories] = useState<CategoryProps[]>([]);
   useEffect(() => {
-    if (data?.staging_summary?.ecl?.config) {
-      setFourthCategories([
-        {
-          category: "stage_1",
-          range: data.staging_summary.ecl.config.stage_1?.days_range || "",
-        },
-        {
-          category: "stage_2",
-          range: data.staging_summary.ecl.config.stage_2?.days_range || "",
-        },
-        {
-          category: "stage_3",
-          range: data.staging_summary.ecl.config.stage_3?.days_range || "",
-        },
-      ]);
-    }
+    setFourthCategories([
+      {
+        category: "stage_1",
+        range: data?.staging_summary?.ecl?.config?.stage_1?.days_range || "",
+      },
+      {
+        category: "stage_2",
+        range: data?.staging_summary?.ecl?.config?.stage_2?.days_range || "",
+      },
+      {
+        category: "stage_3",
+        range: data?.staging_summary?.ecl?.config?.stage_3?.days_range || "",
+      },
+    ]);
   }, [data]);
 
   const handleFourthEditClick = (index: number) => {
@@ -218,7 +216,6 @@ function EditPortfolio() {
       fourthCategoriesPayload,
     };
 
-    console.log("payload: ", payload);
     try {
       CreateSecondStepPortfolioApi(Number(id), payload)
         .then((res) => {
@@ -248,7 +245,7 @@ function EditPortfolio() {
       {portfolioQuery?.isLoading ? (
         <>
           <div className="flex items-center justify-center h-screen">
-            <PageLoader />
+            <PageLoader loadingHeader={"loading"} />
           </div>
         </>
       ) : (

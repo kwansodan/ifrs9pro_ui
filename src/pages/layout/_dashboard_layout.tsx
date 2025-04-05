@@ -49,11 +49,15 @@ const DashboardLayout = () => {
         })
         .catch((err) => {
           setButtonLoading(false);
-          showToast(err?.response?.data.detail[0].msg, false);
+          showToast(
+            err?.response?.data.detail[0].msg ??
+              "An error occurred, please try again",
+            false
+          );
         });
     } catch {
       setButtonLoading(false);
-      showToast("Login failed. Please try again.", false);
+      showToast("An error occurred. Please try again.", false);
       return;
     }
   };

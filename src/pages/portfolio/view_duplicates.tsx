@@ -1,40 +1,26 @@
 import Button from "../../components/button/_component";
 
-function ViewDuplicate() {
-  const issues = [
-    { name: "Name", appearance: "Number of appearance" },
-    { name: "Duplicate names", appearance: "2 times" },
-    { name: "Duplicate address", appearance: "2 times" },
-    { name: "Missing repayment history", appearance: "2 times" },
-  ];
+function ViewDuplicate({ affected_records }: any) {
+  console.log("affected_records: ", affected_records && affected_records);
   return (
     <>
-      <div className="mt-8 bg-white border rounded-lg text-[14px] shadow-sm">
-        {issues.map((issue, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-between p-4 border-b last:border-0"
-          >
-            <span
-              className={`text-gray-700 ${
-                issue.name === "Name" ? "font-semibold" : ""
-              }`}
+      <div className="mt-8 bg-white w-[32rem] border rounded-lg text-[14px] shadow-sm">
+        {affected_records &&
+          affected_records?.map((issue: any, index: number) => (
+            <div
+              key={index}
+              className="flex items-center justify-between p-4 border-b last:border-0"
             >
-              {issue.name}
-            </span>
-            <div className="flex items-center space-x-4">
-              <span
-                className={`${
-                  issue.appearance === "Number of appearance"
-                    ? "font-semibold"
-                    : ""
-                }`}
-              >
-                {issue.appearance}
+              <span className={`text-gray-700 font-semibold`}>
+                {issue?.name}
               </span>
+              <div className="flex items-center space-x-4">
+                <span className="font-semibold">
+                  {affected_records && affected_records?.length}
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
 
       <div className="flex justify-end mt-3">

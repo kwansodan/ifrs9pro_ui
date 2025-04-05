@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/button/_component";
 import NoReport from "../../components/no_report/_component";
 import { Images } from "../../data/Assets";
@@ -30,6 +30,10 @@ function FilteredResults() {
     portfolioQuery.data &&
     portfolioQuery.data.data &&
     portfolioQuery.data.data;
+
+  useEffect(() => {
+    portfolioQuery.refetch();
+  }, [id]);
 
   const handleOpenUploadData = () => {
     if (dataSummary && dataSummary?.has_ingested_data) {

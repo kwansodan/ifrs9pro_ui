@@ -1,7 +1,6 @@
 import Button from "../../components/button/_component";
-import { UploadDataProps } from "../../core/interfaces";
 
-function EditComment({ close }: UploadDataProps) {
+function CommentDetails({ close }: any) {
   return (
     <>
       <hr className="my-6" />
@@ -19,7 +18,7 @@ function EditComment({ close }: UploadDataProps) {
       <div className="flex items-center justify-end">
         <Button
           text="Cancel"
-          onClick={close}
+          onClick={close()}
           className="bg-white !text-center gap-2 py-2 font-normal rounded-[10px] border-[1px] mr-2 !text-[14px] text-[#6F6F6F] !w-[120px] border-[#6F6F6F] "
         />
         <Button
@@ -31,4 +30,4 @@ function EditComment({ close }: UploadDataProps) {
   );
 }
 
-export default EditComment;
+export default CommentDetails;
