@@ -6,7 +6,6 @@ import { useGetAFeedback } from "../../core/hooks/feedback";
 import { UpdateFeedback } from "../../core/services/feedback.service";
 import Select from "react-select";
 import { feedbackStatuses } from "../../data";
-import TextLoader from "../../components/text_loader/component";
 function EditFeedback({ close, rowId }: UploadDataProps) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedFeedback, setSelectedFeedback] = useState<string>("");
