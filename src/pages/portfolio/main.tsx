@@ -30,7 +30,6 @@ function PortfolioMain() {
   });
 
   const handleApplyFilter = (newFilters: any) => {
-    console.log("newFilters: ", newFilters);
     setFilters(newFilters);
   };
   useEffect(() => {
@@ -236,7 +235,13 @@ function PortfolioMain() {
           />
         )}
       </div>
-      <div className="max-w-[1160px] h-[398px] border-[1px] border-[#F0F0F0] rounded-[11px]">
+      <div
+        className={`${
+          location.pathname === "/dashboard"
+            ? "max-w-[1260px]"
+            : "max-w-[1160px]"
+        }  h-[398px] border-[1px] border-[#F0F0F0] rounded-[11px]`}
+      >
         {portfoliosQuery?.isFetching ? (
           <TableLoader />
         ) : (

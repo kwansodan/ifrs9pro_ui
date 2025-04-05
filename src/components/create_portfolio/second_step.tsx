@@ -41,8 +41,13 @@ function SecondStep({ close, id, setStep }: any) {
           }
         })
         .catch((err) => {
+          console.log("err: ", err);
           setIsCreating(false);
-          showToast(err?.response?.data.detail, false);
+          showToast(
+            err?.response?.data.detail[0].msg ??
+              "An error occured. Please try again",
+            false
+          );
         });
     } catch (err) {
       showToast("Login failed. Please try again.", false);

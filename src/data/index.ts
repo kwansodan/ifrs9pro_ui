@@ -83,7 +83,7 @@ export const status = [
 ];
 
 export const customerTypeOptions = [
-  { value: "individuals", label: "Individuals" },
+  { value: "consumers", label: "Consumers" },
   { value: "institution", label: "Institution" },
   { value: "mixed", label: "Mixed" },
 ];
@@ -99,9 +99,11 @@ export const dataSourceOptions = [
   {
     value: "connect to external application",
     label: "Connect to external application",
+    isDisabled: true,
   },
   { value: "upload data", label: "Upload data" },
 ];
+
 export const options: ApexOptions = {
   chart: { type: "scatter" }, // Change type to scatter
   dataLabels: { enabled: false },
