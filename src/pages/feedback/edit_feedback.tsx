@@ -6,15 +6,15 @@ import { useGetAFeedback } from "../../core/hooks/feedback";
 import { UpdateFeedback } from "../../core/services/feedback.service";
 import Select from "react-select";
 import { feedbackStatuses } from "../../data";
+import TextLoader from "../../components/text_loader/component";
 function EditFeedback({ close, rowId }: UploadDataProps) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedFeedback, setSelectedFeedback] = useState<string>("");
-  const { aFeedBackQuery } = useGetAFeedback(Number(rowId));
 
   useEffect(() => {
     aFeedBackQuery.refetch();
-  }, [rowId]);
-
+  }, [rowId && rowId]);
+  const { aFeedBackQuery } = useGetAFeedback(Number(rowId));
   const handleSubmit = async (prevState: any) => {
     console.log("prev: ", prevState);
     setIsSubmitting(true);
@@ -58,28 +58,37 @@ function EditFeedback({ close, rowId }: UploadDataProps) {
       <div className="p-8 bg-white">
         <form action={formAction}>
           <div className="p-8 ">
-            <div className="mt-3">
-              <textarea
-                name="description"
-                disabled
-                defaultValue={
-                  aFeedBackQuery &&
-                  aFeedBackQuery.data &&
-                  aFeedBackQuery.data.data &&
-                  aFeedBackQuery.data.data.description
-                }
-                className="w-96 h-[100px] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-              />
-            </div>
+            {/* {aFeedBackQuery?.isFetching ? (
+              <>
+                <TextLoader />
+              </>
+            ) : (
+              <>
+                <div className="mt-3">
+                  <textarea
+                    name="description"
+                    disabled
+                    defaultValue={
+                      aFeedBackQuery &&
+                      aFeedBackQuery.data &&
+                      aFeedBackQuery.data.data &&
+                      aFeedBackQuery.data.data.description
+                    }
+                    className="w-96 h-[100px] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                  />
+                </div>
+              </>
+            )} */}
+
             <label className="text-[#1E1E1E] text-[14px] font-medium">
-              Role
+              Status
             </label>
             <Select
-              className="w-full "
+              className="w-80 "
               onChange={handleFeedbackChange}
               options={feedbackStatuses}
               id="asset-type"
-              placeholder="Select role"
+              placeholder="Select status"
             />
           </div>
           <hr />

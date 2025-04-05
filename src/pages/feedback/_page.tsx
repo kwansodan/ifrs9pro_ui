@@ -62,12 +62,14 @@ function Feedback() {
   const renderActionsRow = (data: any) => {
     const { is_creator, id, is_liked_by_user } = data.row;
 
-    setFeedbackId(data.row.id);
     return (
       <div className="flex cursor-pointer">
         {is_creator ? (
           <img
-            onClick={() => setShowActionsMenu(!showActionsMenu)}
+            onClick={() => {
+              setShowActionsMenu(!showActionsMenu);
+              setFeedbackId(data.row.id);
+            }}
             src={Images.options}
             className="w-[24px]"
             alt=""
