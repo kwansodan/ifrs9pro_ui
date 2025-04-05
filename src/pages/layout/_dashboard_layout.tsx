@@ -8,8 +8,10 @@ import { useActionState, useState } from "react";
 import { Modal } from "../../components/modal/_component";
 import { SendHelp } from "../../core/services/feedback.service";
 import { showToast } from "../../core/hooks/alert";
+import { useGetNotifications } from "../../core/hooks/feedback";
 
 const DashboardLayout = () => {
+  const { notificationsQuery } = useGetNotifications();
   const [openHelpModal, setOpenHelpModal] = useState<boolean>(false);
   initTWE({ Dropdown, Ripple });
   const [showLogout, setShowLogout] = useState<boolean>(false);
@@ -58,7 +60,10 @@ const DashboardLayout = () => {
 
   const [state, formAction] = useActionState(submit, null);
   console.log("state: ", state);
-
+  const notificationsData =
+    notificationsQuery &&
+    notificationsQuery.data &&
+    notificationsQuery.data.data;
   return (
     <>
       <Modal
@@ -137,46 +142,27 @@ const DashboardLayout = () => {
                   alt=""
                 />
               </button>
+
               <ul
                 className="absolute z-[1000] w-[20rem] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-base shadow-lg data-[twe-dropdown-show]:block"
                 aria-labelledby="notificationdropdownMenuButton1"
                 data-twe-dropdown-menu-ref
               >
-                <li className="flex items-center justify-between px-4 py-2 text-sm font-normal text-black bg-white whitespace-nowrap dark:active:bg-neutral-800/25">
-                  <div className="flex items-center">
-                    <img className="mr-2" src={Images.g_file} alt="" /> New data
-                    uploaded{" "}
-                  </div>{" "}
-                  <span className="text-xs text-gray-500">2 days ago</span>
-                </li>
-                <li className="flex items-center justify-between px-4 py-2 text-sm font-normal text-black bg-white whitespace-nowrap dark:active:bg-neutral-800/25">
-                  <div className="flex items-center">
-                    <img className="mr-2" src={Images.g_calc} alt="" /> ECL
-                    calculation completed{" "}
-                  </div>
-                  <span className="text-xs text-gray-500">2 days ago</span>
-                </li>
-                <li className="flex items-center justify-between px-4 py-2 text-sm font-normal text-black bg-white whitespace-nowrap dark:active:bg-neutral-800/25">
-                  <div className="flex items-center">
-                    <img className="mr-2" src={Images.g_report} alt="" /> Report
-                    generated{" "}
-                  </div>{" "}
-                  <span className="text-xs text-gray-500">2 days ago</span>
-                </li>
-                <li className="flex items-center justify-between px-4 py-2 text-sm font-normal text-black bg-white whitespace-nowrap dark:active:bg-neutral-800/25">
-                  <div className="flex items-center">
-                    <img className="mr-2" src={Images.g_report} alt="" /> Report
-                    generated{" "}
-                  </div>{" "}
-                  <span className="text-xs text-gray-500">2 days ago</span>
-                </li>
-                <li className="flex items-center justify-between px-4 py-2 text-sm font-normal text-black bg-white whitespace-nowrap dark:active:bg-neutral-800/25">
-                  <div className="flex items-center">
-                    <img className="mr-2" src={Images.g_calc} alt="" /> ECL
-                    calculation completed{" "}
-                  </div>
-                  <span className="text-xs text-gray-500">2 days ago</span>
-                </li>
+                {notificationsData &&
+                  notificationsData?.map((item: any, idx: number) => (
+                    <li
+                      key={idx}
+                      className="flex items-center justify-between px-4 py-2 text-sm font-normal text-black bg-white whitespace-nowrap dark:active:bg-neutral-800/25"
+                    >
+                      <div className="flex items-center">
+                        <img className="mr-2" src={Images.g_file} alt="" />{" "}
+                        {item?.text}
+                      </div>{" "}
+                      <span className="text-xs text-gray-500">
+                        {item?.time_ago}
+                      </span>
+                    </li>
+                  ))}
               </ul>
             </div>
             <Button

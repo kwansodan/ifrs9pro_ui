@@ -20,3 +20,6 @@ export const LikeFeedback = async (id: number | string) =>
 
 export const SendHelp = async (payload: any) =>
   await getAxios().post("/user/help", payload);
+
+export const GetNotifications = async () =>
+  await getAxios().get(`/user/notifications`);

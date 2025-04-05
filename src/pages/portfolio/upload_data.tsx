@@ -62,7 +62,11 @@ function UploadData({ close }: UploadDataProps) {
         })
         .catch((err) => {
           setIsDone(false);
-          showToast(err?.response?.data?.detail, false);
+          showToast(
+            err?.response?.data?.detail ??
+              "An error occurred, please try again",
+            false
+          );
         });
     }
   };

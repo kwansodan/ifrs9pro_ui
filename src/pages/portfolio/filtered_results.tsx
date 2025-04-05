@@ -32,7 +32,7 @@ function FilteredResults() {
     portfolioQuery.data.data;
 
   const handleOpenUploadData = () => {
-    if (dataSummary && dataSummary.has_ingested_data) {
+    if (dataSummary && dataSummary?.has_ingested_data) {
       if (
         window.confirm(
           "Ingestion already done. This ingestion will overwrite the previous one. Do you want to continue?"

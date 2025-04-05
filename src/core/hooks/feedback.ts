@@ -1,5 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetAllFeedbacks, GetFeedback } from "../services/feedback.service";
+import {
+  GetAllFeedbacks,
+  GetFeedback,
+  GetNotifications,
+} from "../services/feedback.service";
 
 export const useFeedback = () => {
   const feedbackQuery = useQuery({
@@ -18,5 +22,15 @@ export const useGetAFeedback = (id: number | string) => {
   });
   return {
     aFeedBackQuery,
+  };
+};
+
+export const useGetNotifications = () => {
+  const notificationsQuery = useQuery({
+    queryKey: ["notificationsQuery"],
+    queryFn: () => GetNotifications(),
+  });
+  return {
+    notificationsQuery,
   };
 };
