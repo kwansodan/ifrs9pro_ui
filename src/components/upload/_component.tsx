@@ -54,7 +54,7 @@ function Upload({ UploadTitle, setFile, templateLink }: UploadProps) {
   };
   return (
     <>
-      <div className="max-w-md mx-auto w-72">
+      <div className=" w-[25rem]">
         <h3 className="my-2 text-[14px] font-medium text-gray-700">
           {UploadTitle}
         </h3>
@@ -109,7 +109,7 @@ function Upload({ UploadTitle, setFile, templateLink }: UploadProps) {
           )}
         </span>
 
-        <hr className="my-5" />
+        <hr className="my-" />
       </div>
     </>
   );

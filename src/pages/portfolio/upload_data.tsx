@@ -73,7 +73,7 @@ function UploadData({ close }: UploadDataProps) {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 mb-4">
+      <div className="flex flex-col w-full">
         <Upload
           templateLink={"/Customer_data.xlsx"}
           setFile={getCustomerDataFile}

@@ -57,7 +57,7 @@ function FilteredResults() {
         open={openUploadModal}
         close={() => setOpenUploadModal(false)}
       >
-        <div className="bg-white min-w-[600px] pt-5 pb-3 px-16 rounded-[20px]">
+        <div className="bg-white pt-5 pb-3 px-16 rounded-[20px]">
           <UploadData close={() => setOpenUploadModal(false)} />
         </div>
       </Modal>
