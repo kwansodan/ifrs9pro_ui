@@ -14,7 +14,7 @@ import ThirdStep from "./third_step";
 import FourthStep from "./fourth_step";
 
 function CreatePorfolio({ cancel }: any) {
-  const [step, setStep] = useState<number>(2);
+  const [step, setStep] = useState<number>(1);
   const [portfolioId, setPortfolioId] = useState<string>("");
   const [selectedAsset, setSelectedAsset] = useState<string>("");
   const [repaymentValue, setRepaymentValue] = useState<boolean>(false);
