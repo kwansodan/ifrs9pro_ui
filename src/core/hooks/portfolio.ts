@@ -10,6 +10,8 @@ export const usePortfolios = () => {
   const portfoliosQuery = useQuery({
     queryKey: ["portfoliosQuery"],
     queryFn: () => GetAllPortfolios(),
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true,
   });
   return {
     portfoliosQuery,
@@ -31,6 +33,8 @@ export const usePorfolioReports = (id: number) => {
   const portfoliosReportsQuery = useQuery({
     queryKey: ["portfoliosReportsQuery"],
     queryFn: () => GetReportHistory(id),
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true,
   });
   return {
     portfoliosReportsQuery,

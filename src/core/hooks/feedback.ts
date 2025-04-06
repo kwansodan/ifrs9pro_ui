@@ -9,6 +9,8 @@ export const useFeedback = () => {
   const feedbackQuery = useQuery({
     queryKey: ["feedbackQuery"],
     queryFn: () => GetAllFeedbacks(),
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true,
   });
   return {
     feedbackQuery,
