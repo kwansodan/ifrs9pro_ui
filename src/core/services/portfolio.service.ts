@@ -67,3 +67,9 @@ export const ApproveQualityIssue = async (portfolio_id: number | string) =>
   await getAxios().post(
     `/portfolios/${portfolio_id}/approve-all-quality-issues`
   );
+
+export const DownloadQualityIssuesReport = async (
+  id: number | string,
+  issue_id: number | string
+) =>
+  await getAxios().get(`/portfolios/${id}/quality-issues/${issue_id}/download`);

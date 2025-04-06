@@ -80,7 +80,6 @@ function App() {
       )}
       <BrowserRouter>
         <Routes>
-          {/* Public Routes - Only accessible if NOT logged in */}
           {!userSession ? (
             <>
               <Route path="/" element={<Login />} />
@@ -103,7 +102,6 @@ function App() {
               <Route path="/expired-link" element={<ExpiredLink />} />
             </>
           ) : (
-            // Redirect to dashboard if user tries to access public routes when logged in
             <>
               <Route path="/" element={<Navigate to="/dashboard" />} />
               <Route
@@ -127,7 +125,6 @@ function App() {
             </>
           )}
 
-          {/* Private Routes - Only accessible if logged in */}
           {userSession ? (
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<Home />} />
@@ -149,7 +146,6 @@ function App() {
               <Route path="password-change" element={<PasswordChange />} />
             </Route>
           ) : (
-            // Redirect to login if user tries to access private routes when not logged in
             <Route path="/dashboard/*" element={<Navigate to="/" />} />
           )}
 

@@ -196,28 +196,31 @@ function FilteredResults() {
           ) : (
             <>
               <AfterUpload
-                is_graph_loading={portfolioQuery.isFetching}
-                has_ingested_data={dataSummary.has_ingested_data}
-                total_loans={dataSummary.overview.total_loans}
-                total_loan_value={dataSummary.overview.total_loan_value}
-                average_loan={dataSummary.overview.average_loan_amount}
-                total_customers={dataSummary.overview.total_customers}
+                has_all_issues_approved={dataSummary?.has_all_issues_approved}
+                is_graph_loading={portfolioQuery?.isFetching}
+                has_ingested_data={dataSummary?.has_ingested_data}
+                total_loans={dataSummary?.overview.total_loans}
+                total_loan_value={dataSummary?.overview.total_loan_value}
+                average_loan={dataSummary?.overview.average_loan_amount}
+                total_customers={dataSummary?.overview.total_customers}
                 individual_customers={
-                  dataSummary.customer_summary.individual_customers
+                  dataSummary?.customer_summary.individual_customers
                 }
                 ecl_summary_data={
-                  (dataSummary.staging_summary &&
-                    dataSummary.staging_summary?.ecl) ||
+                  (dataSummary?.staging_summary &&
+                    dataSummary?.staging_summary?.ecl) ||
                   {}
                 }
                 bog_summary_data={
-                  (dataSummary.staging_summary &&
-                    dataSummary.staging_summary?.local_impairment) ||
+                  (dataSummary?.staging_summary &&
+                    dataSummary?.staging_summary?.local_impairment) ||
                   {}
                 }
-                institutions={dataSummary.customer_summary.institutions}
-                mixed={dataSummary.customer_summary.mixed}
-                active_customers={dataSummary.customer_summary.active_customers}
+                institutions={dataSummary?.customer_summary.institutions}
+                mixed={dataSummary?.customer_summary.mixed}
+                active_customers={
+                  dataSummary?.customer_summary.active_customers
+                }
               />
             </>
           )}

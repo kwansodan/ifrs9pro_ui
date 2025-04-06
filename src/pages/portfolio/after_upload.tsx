@@ -16,6 +16,7 @@ import { showToast } from "../../core/hooks/alert";
 import ViewDuplicate from "./view_duplicates";
 
 function AfterUpload({
+  has_all_issues_approved,
   total_loans,
   total_loan_value,
   average_loan,
@@ -57,6 +58,7 @@ any) {
     qualityIssuesQuery.data &&
     qualityIssuesQuery.data.data &&
     qualityIssuesQuery.data.data;
+
   const categories = ["stage_1", "stage_2", "stage_3"];
   const bog_categories = ["current", "olem", "substandard", "doubtful", "loss"];
 
@@ -130,6 +132,10 @@ any) {
         );
       });
   };
+  const selectedIssue = Array.isArray(actualIssues)
+    ? actualIssues.find((issue: any) => issue.id === Number(details_issue_id))
+    : null;
+
   return (
     <>
       <Modal
@@ -152,9 +158,8 @@ any) {
       >
         <div className="p-12 bg-white rounded-[20px]">
           <ViewDuplicate
-            affected_records={
-              actualIssues?.[Number(details_issue_id)]?.affected_records || []
-            }
+            selectedIssueId={details_issue_id}
+            affected_records={selectedIssue?.affected_records || []}
           />
         </div>
       </Modal>
@@ -365,12 +370,23 @@ any) {
               {checkForQualityIssues ? (
                 <>
                   <div className="flex justify-end mt-4 text-center">
-                    <Button
-                      isLoading={approving}
-                      text={"Approve"}
-                      onClick={approveIssue}
-                      className="!text-center gap-2 py-2 font-normal !text-[14px] text-white !w-[120px] bg-[#166E94]"
-                    />
+                    {has_all_issues_approved && has_all_issues_approved ? (
+                      <>
+                        <Button
+                          text={"Approved"}
+                          className="!text-center gap-2 py-2 font-normal !text-[14px] text-white !w-[120px] bg-[#34C7592E]"
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          isLoading={approving}
+                          text={"Approve"}
+                          onClick={approveIssue}
+                          className="!text-center gap-2 py-2 font-normal !text-[14px] text-white !w-[120px] bg-[#166E94]"
+                        />
+                      </>
+                    )}
                   </div>
                 </>
               ) : (

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { CreatePortfolioECLCalculation } from "../../core/services/portfolio.service";
 import { useParams } from "react-router-dom";
 import { showToast } from "../../core/hooks/alert";
+import { Images } from "../../data/Assets";
 
 function CalculateEcl({ close }: UploadDataProps) {
   const { id } = useParams();
@@ -87,6 +88,11 @@ function CalculateEcl({ close }: UploadDataProps) {
         });
     }
   };
+  const features = [
+    "Historical payment behavior",
+    "Loan-to-value ratio",
+    "Delinquency history",
+  ];
   return (
     <>
       <div className="py-6 bg-white rounded-lg">
@@ -146,6 +152,28 @@ function CalculateEcl({ close }: UploadDataProps) {
             type="date"
             id="ecl_reporting_date"
           />
+        </div>
+        <div className="my-4 bg-[#D9EFF929] border w-full border-[#e5f0fb] rounded-xl p-6 shadow-sm">
+          <h3 className="mb-2 text-[14px] font-semibold text-[#04161E]">
+            Prediction features
+          </h3>
+          <p className="mb-4 text-xs text-[#6F6F6F]">
+            The following features will be used for ECL prediction
+          </p>
+          <ul className="space-y-3">
+            {features.map((feature) => (
+              <li
+                key={feature}
+                className="flex items-center text-sm text-gray-700"
+              >
+                <img
+                  src={Images.check}
+                  className="text-[#52a5f8] w-4 h-4 mr-2"
+                />
+                {feature}
+              </li>
+            ))}
+          </ul>
         </div>
         <div className="flex justify-end mt-3">
           <Button

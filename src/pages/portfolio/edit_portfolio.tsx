@@ -16,9 +16,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import PageLoader from "../../components/page_loader/_component";
 
 function EditPortfolio() {
-  const navigate = useNavigate();
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const { portfolioQuery } = usePortfolio(Number(id));
   const [selectedAsset, setSelectedAsset] = useState<string>("");
   const [repaymentValue, setRepaymentValue] = useState<boolean>(false);
@@ -41,13 +40,14 @@ function EditPortfolio() {
     null
   );
 
-  const data =
-    portfolioQuery && portfolioQuery.data && portfolioQuery.data.data;
-
   useEffect(() => {
     portfolioQuery.refetch();
   }, [Number(id)]);
+
+  const data =
+    portfolioQuery && portfolioQuery.data && portfolioQuery.data.data;
   const [categories, setCategories] = useState<CategoryProps[]>([]);
+
   useEffect(() => {
     setCategories([
       {
@@ -81,7 +81,7 @@ function EditPortfolio() {
           "",
       },
     ]);
-  }, [data]);
+  }, [data, id]);
 
   const [fourthCategories, setFourthCategories] = useState<CategoryProps[]>([]);
   useEffect(() => {
@@ -99,7 +99,7 @@ function EditPortfolio() {
         range: data?.staging_summary?.ecl?.config?.stage_3?.days_range || "",
       },
     ]);
-  }, [data]);
+  }, [data, id]);
 
   const handleFourthEditClick = (index: number) => {
     setFourthEditingIndex(index);
@@ -168,7 +168,7 @@ function EditPortfolio() {
     setIsSubmittingFirstStep(true);
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
-    const credit_source = formData.get("credit_source") as string;
+    const credit_risk_reserve = formData.get("credit_risk_reserve") as string;
     const loan_assets = formData.get("loan_assets") as string;
     const ecl_impairment_account = formData.get(
       "ecl_impairment_account"
@@ -178,7 +178,7 @@ function EditPortfolio() {
     const fundingSource = selectedFundingSource as string;
     const dataSource = selectedDataSource as string;
     const repaymentSource = repaymentValue as boolean;
-    const categoriesPayload = categories.reduce((acc, item) => {
+    const categories_summary = categories.reduce((acc, item) => {
       const key = item.category.toLowerCase();
 
       acc[key] = {
@@ -188,7 +188,7 @@ function EditPortfolio() {
       return acc;
     }, {} as Record<string, { days_range: string }>);
 
-    const fourthCategoriesPayload = fourthCategories.reduce((acc, item) => {
+    const staging_summary = fourthCategories.reduce((acc, item) => {
       const key = item.category.toLowerCase();
 
       acc[key] = {
@@ -200,7 +200,7 @@ function EditPortfolio() {
     const payload = {
       name,
       description,
-      credit_source,
+      credit_risk_reserve,
       loan_assets,
       ecl_impairment_account,
       asset_type: assetHasChanged ? assetType : data?.asset_type,
@@ -212,8 +212,8 @@ function EditPortfolio() {
         : data?.funding_source,
       data_source: dataSourceHasChanged ? dataSource : data?.data_source,
       repayment_source: repaymentSource,
-      categoriesPayload,
-      fourthCategoriesPayload,
+      categories_summary,
+      staging_summary,
     };
 
     try {
@@ -336,13 +336,13 @@ function EditPortfolio() {
                 <label>Credit risk reserve</label>
                 <input
                   type="text"
-                  name="credit_source"
+                  name="credit_risk_reserve"
                   defaultValue={(data && data.credit_risk_reserve) || ""}
                   className="w-full  text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 />
               </div>
               <div className="mt-3">
-                <label>Loan assetss</label>
+                <label>Loan assets</label>
                 <input
                   type="name"
                   name="loan_assets"

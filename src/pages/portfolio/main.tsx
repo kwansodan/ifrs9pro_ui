@@ -9,12 +9,12 @@ import TableLoader from "../../components/table_loader/component";
 import { Modal } from "../../components/modal/_component";
 import CreatePorfolio from "../../components/create_portfolio/_component";
 import DeletePortfolio from "./delete_portfolio";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FilterValues } from "../../core/interfaces";
 
 function PortfolioMain() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { portfoliosQuery } = usePortfolios();
   const menuRef = useRef<HTMLDivElement>(null);
   const [openCreatePortfolioModal, setOpenCreatePortfolioModal] =
@@ -112,7 +112,6 @@ function PortfolioMain() {
       resizable: true,
       renderCell: renderUpdatedAtDate,
     },
-
     {
       key: "update",
       name: "Actions",
@@ -160,7 +159,8 @@ function PortfolioMain() {
           <div className="p-4">
             <div
               onClick={() =>
-                navigate("/dashboard/portfolio/edit-portfolio/" + requestId)
+                (window.location.href =
+                  "/dashboard/portfolio/edit-portfolio/" + requestId)
               }
               className="flex cursor-pointer"
             >
@@ -172,7 +172,8 @@ function PortfolioMain() {
 
             <div
               onClick={() =>
-                navigate("/dashboard/portfolio-details/" + requestId)
+                (window.location.href =
+                  "/dashboard/portfolio-details/" + requestId)
               }
               className="flex mt-2 cursor-pointer"
             >
@@ -246,9 +247,9 @@ function PortfolioMain() {
           <TableLoader />
         ) : (
           <motion.div
-            initial={{ y: -100, opacity: 0 }} // Start above the viewport
-            animate={{ y: 0, opacity: 1 }} // Move to normal position
-            transition={{ duration: 1.5, ease: "easeOut" }} // Slow drop effect
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
           >
             <DataGrid
               columns={filteredColumns}

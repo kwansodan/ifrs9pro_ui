@@ -20,6 +20,7 @@ export const usePortfolio = (id: number | string) => {
   const portfolioQuery = useQuery({
     queryKey: ["portfolioQuery"],
     queryFn: () => GetPortfolio(id),
+    staleTime: 0,
   });
   return {
     portfolioQuery,

@@ -33,8 +33,10 @@ import g_report from "../assets/images/svgs/g_report.svg";
 import g_calc from "../assets/images/svgs/g_calc.svg";
 import like from "../assets/images/svgs/like.svg";
 import unlike from "../assets/images/svgs/unLinke.svg";
+import check from "../assets/images/svgs/checkm.svg";
 
 export const Images = {
+  check,
   openEye,
   closedEye,
   inbox,
