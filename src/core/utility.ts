@@ -149,7 +149,8 @@ export const renderFeedbackStatusColors = (status: string) => {
 };
 
 export const currencyFormatter = (amount: number): string => {
-  return `₵${amount.toLocaleString("en-GH", {
+  const safeAmount = isNaN(amount) ? 0 : amount;
+  return `₵${safeAmount.toLocaleString("en-GH", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   })}`;

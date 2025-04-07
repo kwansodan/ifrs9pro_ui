@@ -207,14 +207,14 @@ any) {
               </div>
               <div className="flex gap-2 mt-3">
                 {[
-                  { title: "ECL", value: currencyFormatter(ecl) },
+                  { title: "ECL", value: currencyFormatter(ecl) ?? 0 },
                   {
                     title: "BOG impairment",
-                    value: currencyFormatter(bog_impairment),
+                    value: currencyFormatter(bog_impairment) ?? 0,
                   },
                   {
                     title: "Risk reserve",
-                    value: currencyFormatter(bog_impairment - ecl),
+                    value: currencyFormatter(bog_impairment - ecl) ?? 0,
                   },
                 ].map((item, idx) => (
                   <React.Fragment key={idx}>
