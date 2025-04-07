@@ -196,6 +196,26 @@ function FilteredResults() {
           ) : (
             <>
               <AfterUpload
+                ecl={
+                  dataSummary?.calculation_summary?.ecl?.stage_1
+                    ?.provision_amount +
+                  dataSummary?.calculation_summary?.ecl?.stage_2
+                    ?.provision_amount +
+                  dataSummary?.calculation_summary?.ecl?.stage_3
+                    ?.provision_amount
+                }
+                bog_impairment={
+                  dataSummary?.calculation_summary?.local_impairment?.current
+                    ?.provision_amount +
+                  dataSummary?.calculation_summary?.local_impairment?.olem
+                    ?.provision_amount +
+                  dataSummary?.calculation_summary?.local_impairment
+                    ?.substandard?.provision_amount +
+                  dataSummary?.calculation_summary?.local_impairment?.doubtful
+                    ?.provision_amount +
+                  dataSummary?.calculation_summary?.local_impairment?.loss
+                    ?.provision_amount
+                }
                 has_all_issues_approved={dataSummary?.has_all_issues_approved}
                 is_graph_loading={portfolioQuery?.isFetching}
                 has_ingested_data={dataSummary?.has_ingested_data}

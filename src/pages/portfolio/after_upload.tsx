@@ -16,6 +16,8 @@ import { showToast } from "../../core/hooks/alert";
 import ViewDuplicate from "./view_duplicates";
 
 function AfterUpload({
+  ecl,
+  bog_impairment,
   has_all_issues_approved,
   total_loans,
   total_loan_value,
@@ -205,14 +207,14 @@ any) {
               </div>
               <div className="flex gap-2 mt-3">
                 {[
-                  { title: "ECL", value: 0 },
+                  { title: "ECL", value: currencyFormatter(ecl) },
                   {
                     title: "BOG impairment",
-                    value: 0,
+                    value: currencyFormatter(bog_impairment),
                   },
                   {
                     title: "Risk reserve",
-                    value: 0,
+                    value: currencyFormatter(bog_impairment - ecl),
                   },
                 ].map((item, idx) => (
                   <React.Fragment key={idx}>

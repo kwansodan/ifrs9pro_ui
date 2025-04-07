@@ -86,7 +86,7 @@ function Default() {
               <h3 className="text-[16px] font-semibold mt-7">
                 Portfolio overview
               </h3>
-              <div className="grid grid-cols-3 gap-4 w-full">
+              <div className="grid w-full grid-cols-3 gap-4">
                 <Card
                   title={"Portfolio count"}
                   value={dashboardStats.portfolios.length}
@@ -96,7 +96,7 @@ function Default() {
                   title={"Total BOG impairment"}
                   value={currencyFormatter(
                     dashboardStats &&
-                      dashboardStats.portfolio_overview.total_loans
+                      dashboardStats.portfolio_overview.total_local_impairment
                   )}
                   valueClassName="text-[#AFAFAF] md:!text-[44px]"
                 />
