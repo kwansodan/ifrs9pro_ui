@@ -24,7 +24,7 @@ function AdminRequest() {
         setMessage(res.data.message);
       })
       .catch((error) => {
-        showToast(error?.response.data.detail, false);
+        showToast(error?.response.data.detail ?? "Operation failed", false);
         setTimeout(() => {
           navigate("/");
         }, 2000);
@@ -51,25 +51,24 @@ function AdminRequest() {
     if (!admin_email) {
       setButtonLoading(false);
       showToast("Please enter admin email.", false);
-      return { success: false, error: "Email and password are required." };
+      return;
     }
     try {
       UserSendRequestToAdmin(u_email, admin_email)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           setButtonLoading(false);
           navigate("/admin-verification");
+          showToast("Request sent", true);
         })
         .catch((err) => {
           setButtonLoading(false);
-          showToast(err?.response?.data.detail, false);
+          showToast(
+            err?.response?.data.detail ?? "An error occurred, please try again",
+            false
+          );
         });
-
-      return { success: true };
     } catch (err) {
-      console.error("Failed to login:", err);
-      setButtonLoading(false);
-      return { success: false, error: "Login failed. Please try again." };
+      showToast("An error occurred, please try again", false);
     }
   };
   const [state, formAction] = useActionState(handleRequestAccess, null);

@@ -82,11 +82,15 @@ function EditUser({ close, rowId }: UploadDataProps) {
         })
         .catch((err) => {
           setIsSubmitting(false);
-          showToast(err?.response?.data.detail, false);
+          showToast(
+            err?.response?.data.detail ??
+              "Editing user failed. Please try again",
+            false
+          );
         });
     } catch (err) {
       setIsSubmitting(false);
-      showToast("User creation failed. Please try again", false);
+      showToast("Editing user failed. Please try again", false);
     }
   };
 

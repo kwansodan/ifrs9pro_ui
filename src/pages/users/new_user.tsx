@@ -75,7 +75,11 @@ function NewUser({ close }: UploadDataProps) {
         })
         .catch((err) => {
           setIsSubmitting(false);
-          showToast(err?.response?.data.detail, false);
+          showToast(
+            err?.response?.data.detail ??
+              "User creation failed. Please try again",
+            false
+          );
         });
     } catch (err) {
       setIsSubmitting(false);

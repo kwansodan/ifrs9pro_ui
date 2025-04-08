@@ -76,18 +76,19 @@ function ThirdStep({ close, id, setStep }: any) {
             showToast("Third step of portfolio created successfully.", true);
 
             setStep(4);
-            // setTimeout(() => {
-            //   navigate("/dashboard/portfolio");
-            // }, 1000);
           }
         })
         .catch((err) => {
           setIsCreating(false);
-          showToast(err?.response?.data.detail, false);
+          showToast(
+            err?.response?.data.detail ??
+              "An error occurred. Please try again.",
+            false
+          );
         });
     } catch (err) {
-      showToast("Login failed. Please try again.", false);
-      return { success: false, error: "Login failed. Please try again." };
+      showToast("An error occurred. Please try again.", false);
+      return { success: false, error: "An error occurred. Please try again." };
     }
   };
 

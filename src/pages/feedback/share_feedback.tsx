@@ -28,7 +28,11 @@ function ShareFeedback({ cancel }: any) {
         })
         .catch((err) => {
           setButtonLoading(false);
-          showToast(err?.response?.data.detail[0].msg, false);
+          showToast(
+            err?.response?.data.detail[0].msg ??
+              "An error occurred. Please try again.",
+            false
+          );
         });
     } catch {
       setButtonLoading(false);

@@ -10,7 +10,10 @@ import { useParams } from "react-router-dom";
 import { useQualityIssues } from "../../core/hooks/portfolio";
 import { ApexOptions } from "apexcharts";
 import PageLoader from "../../components/page_loader/_component";
-import { currencyFormatter } from "../../core/utility";
+import {
+  currencyFormatter,
+  currencyFormatterWithoutCediSign,
+} from "../../core/utility";
 import { ApproveQualityIssue } from "../../core/services/portfolio.service";
 import { showToast } from "../../core/hooks/alert";
 import ViewDuplicate from "./view_duplicates";
@@ -86,7 +89,29 @@ any) {
       title: { text: "Stages" },
     },
     yaxis: {
-      title: { text: "Loan amount" },
+      title: {
+        text: "Loan amount",
+        style: {
+          fontSize: "14px",
+          fontWeight: 600,
+          color: "#333",
+        },
+        offsetX: 0,
+        offsetY: 0,
+        rotate: -90,
+      },
+      labels: {
+        formatter: (val: number) => currencyFormatterWithoutCediSign(val),
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: (val: number) => currencyFormatterWithoutCediSign(val),
+    },
+    tooltip: {
+      y: {
+        formatter: (val: number) => currencyFormatterWithoutCediSign(val),
+      },
     },
   };
 
@@ -107,7 +132,29 @@ any) {
       title: { text: "Stages" },
     },
     yaxis: {
-      title: { text: "Loan amount" },
+      title: {
+        text: "Loan amount",
+        style: {
+          fontSize: "14px",
+          fontWeight: 600,
+          color: "#333",
+        },
+        offsetX: 5,
+        offsetY: 0,
+        rotate: -90,
+      },
+      labels: {
+        formatter: (val: number) => currencyFormatterWithoutCediSign(val),
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: (val: number) => currencyFormatterWithoutCediSign(val),
+    },
+    tooltip: {
+      y: {
+        formatter: (val: number) => currencyFormatterWithoutCediSign(val),
+      },
     },
   };
 

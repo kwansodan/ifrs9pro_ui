@@ -40,9 +40,7 @@ function Login() {
             cacheUserSession(res?.data.access_token, expirationTime.toString());
             cacheUserRole(res?.data.user.role);
             dispatch(setUser({ roles: [], username: res?.data.user.role }));
-            // if (res?.data.user.role === "admin")
             window.location.href = "/dashboard";
-            // else navigate("/request-access");
           }
         })
         .catch((err) => {
@@ -51,7 +49,7 @@ function Login() {
             showToast("Server error: Please try again later.", false);
           } else {
             showToast(
-              err?.response?.data?.detail ||
+              err?.response?.data?.detail ??
                 "Server error: Please try again later.",
               false
             );

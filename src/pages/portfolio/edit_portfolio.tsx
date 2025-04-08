@@ -229,9 +229,14 @@ function EditPortfolio() {
         })
         .catch((err) => {
           setIsSubmittingFirstStep(false);
-          showToast(err?.response?.data.detail, false);
+          showToast(
+            err?.response?.data.detail ??
+              "An error occurred. Please try again.",
+            false
+          );
         });
     } catch (err) {
+      showToast("An error occurred. Please try again.", false);
       setIsSubmittingFirstStep(false);
       return;
     }

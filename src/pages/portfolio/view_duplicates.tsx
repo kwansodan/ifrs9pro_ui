@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import Button from "../../components/button/_component";
-import { useQualityIssues } from "../../core/hooks/portfolio";
 import { DownloadQualityIssuesReport } from "../../core/services/portfolio.service";
 import { showToast } from "../../core/hooks/alert";
 import { useState } from "react";
@@ -8,12 +7,6 @@ import { useState } from "react";
 function ViewDuplicate({ selectedIssueId, affected_records }: any) {
   const { id } = useParams();
   const [downloading, setIsDownloading] = useState<boolean>(false);
-  const { qualityIssuesQuery } = useQualityIssues(Number(id));
-  const actualIssues =
-    qualityIssuesQuery &&
-    qualityIssuesQuery.data &&
-    qualityIssuesQuery.data.data &&
-    qualityIssuesQuery.data.data;
 
   const downloadIssueReport = () => {
     setIsDownloading(true);
@@ -45,7 +38,6 @@ function ViewDuplicate({ selectedIssueId, affected_records }: any) {
       showToast("No issue selected", false);
     }
   };
-  console.log("affected_records: ", actualIssues && actualIssues);
   return (
     <>
       <div className="mt-8 bg-white w-[32rem] border rounded-lg text-[14px] shadow-sm">

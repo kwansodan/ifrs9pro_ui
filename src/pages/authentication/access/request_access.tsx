@@ -23,18 +23,18 @@ function RequestAccess() {
     try {
       UserRequestAccess(email)
         .then((res) => {
-          console.log("res: ", res);
+          showToast(res.data.message ?? "Request access successful", true);
           navigate("/verification");
         })
         .catch((err) => {
-          console.log(err);
           setButtonLoading(false);
-          showToast(err?.response?.data.detail, false);
-          return { success: false, error: "Login failed. Please try again." };
+          showToast(
+            err?.response?.data.detail ?? "Request access failed",
+            false
+          );
         });
     } catch (err) {
-      console.error("Failed to login:", err);
-      return { success: false, error: "Login failed. Please try again." };
+      showToast("Request access failed", false);
     }
   };
   const [state, formAction] = useActionState(handleRequestAccess, null);

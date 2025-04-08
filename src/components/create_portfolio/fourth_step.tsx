@@ -76,7 +76,11 @@ function FourthStep({ close, id }: any) {
         })
         .catch((err) => {
           setIsCreating(false);
-          showToast(err?.response?.data?.detail || "Submission failed", false);
+          showToast(
+            err?.response?.data?.detail ??
+              "An error occurred. Please try again.",
+            false
+          );
         });
     }
   };

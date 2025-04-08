@@ -86,8 +86,7 @@ function CreatePorfolio({ cancel }: any) {
           setIsSubmittingFirstStep(false);
           if (res.status === 200 || res.status === 201) {
             showToast("First step of portfolio created successfully.", true);
-            console.log("res: ", res);
-            setPortfolioId(res.data.id);
+            setPortfolioId(res?.data?.id);
 
             setTimeout(() => {
               setStep(2);
@@ -96,11 +95,15 @@ function CreatePorfolio({ cancel }: any) {
         })
         .catch((err) => {
           setIsSubmittingFirstStep(false);
-          showToast(err?.response?.data.detail, false);
+          showToast(
+            err?.response?.data.detail ??
+              "An error occurred. Please try again.",
+            false
+          );
         });
     } catch (err) {
       setIsSubmittingFirstStep(false);
-      showToast("Login failed. Please try again.", false);
+      showToast("An error occurred. Please try again.", false);
       return;
     }
   };

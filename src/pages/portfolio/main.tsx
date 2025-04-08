@@ -71,18 +71,14 @@ function PortfolioMain() {
 
   const filteredData =
     portfoliosQuery?.data?.data?.items?.filter((e: any) => {
-      // Apply search filter
       const matchesSearch =
         query === "" || e?.name?.toLowerCase().includes(query.toLowerCase());
 
-      // Apply asset type filter
       const matchesAssetType =
         filters.asset_type.length === 0 ||
         filters.asset_type.some(
           (type: string) => type.toLowerCase() === e.asset_type.toLowerCase()
         );
-
-      // Apply funding source filter
       const matchesFundingSource =
         filters.funding_source.length === 0 ||
         filters.funding_source.some(
@@ -90,7 +86,6 @@ function PortfolioMain() {
             source.toLowerCase() === e.funding_source.toLowerCase()
         );
 
-      // Only return items that match ALL criteria
       return matchesSearch && matchesAssetType && matchesFundingSource;
     }) || [];
 
@@ -99,8 +94,8 @@ function PortfolioMain() {
   };
 
   const columns = [
-    { key: "name", name: "Name", resizable: true },
-    { key: "description", name: "Description", resizable: true },
+    { key: "name", name: "Name", width: 180 },
+    { key: "description", name: "Description", width: 180 },
     { key: "asset_type", name: "Asset type", resizable: true },
     { key: "customer_type", name: "Customer type", resizable: true },
     { key: "funding_source", name: "Funding source", resizable: true },

@@ -2,7 +2,6 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./pages/authentication/login/_page";
-import SignUp from "./pages/authentication/signup/_page";
 import Verification from "./pages/authentication/verification/_page";
 import Home from "./pages/dashboard/home/_page";
 import DashboardLayout from "./pages/layout/_dashboard_layout";
@@ -85,7 +84,6 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/request-access" element={<RequestAccess />} />
               <Route path="/admin-request" element={<AdminRequest />} />
-              <Route path="/signup" element={<SignUp />} />
               <Route path="/verification" element={<Verification />} />
               <Route
                 path="/admin-verification"

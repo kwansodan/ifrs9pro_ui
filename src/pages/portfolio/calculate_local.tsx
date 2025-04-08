@@ -33,7 +33,7 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
         })
         .catch((err) => {
           setCalculating(false);
-          showToast(err?.response?.data?.detail || "Submission failed", false);
+          showToast(err?.response?.data?.detail ?? "Submission failed", false);
         });
     }
   };

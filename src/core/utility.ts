@@ -155,3 +155,11 @@ export const currencyFormatter = (amount: number): string => {
     maximumFractionDigits: 0,
   })}`;
 };
+
+export const currencyFormatterWithoutCediSign = (amount: number): string => {
+  const safeAmount = isNaN(amount) ? 0 : amount;
+  return `${safeAmount.toLocaleString("en-GH", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })}`;
+};

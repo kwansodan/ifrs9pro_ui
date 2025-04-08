@@ -35,9 +35,6 @@ function SecondStep({ close, id, setStep }: any) {
           if (res.status === 200 || res.status === 201) {
             showToast("Second step of portfolio created successfully.", true);
             setStep(3);
-            // setTimeout(() => {
-            //   navigate("/dashboard/portfolio");
-            // }, 1000);
           }
         })
         .catch((err) => {
@@ -50,8 +47,7 @@ function SecondStep({ close, id, setStep }: any) {
           );
         });
     } catch (err) {
-      showToast("Login failed. Please try again.", false);
-      return { success: false, error: "Login failed. Please try again." };
+      showToast("An error occured. Please try again", false);
     }
   };
 
