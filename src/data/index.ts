@@ -41,22 +41,28 @@ export const assetsOptions = [
 ];
 
 export const reportTypeOptions = [
-  { value: "collateral_summary", label: "Summary of Collateral data" },
-  { value: "guarantee_summary", label: "Summary of Guarantee data" },
-  { value: "interest_rate_summary", label: "Summary of Interest rates" },
-  { value: "repayment_summary", label: "Summary of repayments" },
-  { value: "assumptions_summary", label: "Summary of assumptions" },
+  { value: "ecl_detailed_report", label: "ECL detailed report" },
+  { value: "ecl_report_summarised", label: "ECL report summarised by stages" },
   {
-    value: "amortised_loan_balances",
-    label:
-      "Amortised loan balances report (caveat that the BOG non-accrual rule has not been considered)",
+    value: "local_impairment_details_report",
+    label: "Local impairment detailed report",
   },
   {
-    value: "probability_default",
-    label: "Probability of default report",
+    value: "local_impairment_report_summarised",
+    label: "Local impairment report summarised by stages",
   },
-  { value: "exposure_default", label: "Exposure at default report" },
-  { value: "loss_given_default", label: "Loss given default report" },
+  { value: "journals_report", label: "Journals report" },
+  // {
+  //   value: "amortised_loan_balances",
+  //   label:
+  //     "Amortised loan balances report (caveat that the BOG non-accrual rule has not been considered)",
+  // },
+  // {
+  //   value: "probability_default",
+  //   label: "Probability of default report",
+  // },
+  // { value: "exposure_default", label: "Exposure at default report" },
+  // { value: "loss_given_default", label: "Loss given default report" },
 ];
 
 export const roles = [
