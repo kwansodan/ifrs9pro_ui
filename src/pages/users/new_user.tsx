@@ -61,6 +61,7 @@ function NewUser({ close }: UploadDataProps) {
       !portfolio_id
     ) {
       showToast("Please fill in all fields.", false);
+      setIsSubmitting(false);
       return;
     }
 

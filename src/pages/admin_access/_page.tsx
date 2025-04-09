@@ -203,12 +203,12 @@ function AdminAccess() {
               src={Images.search}
               alt=""
             />
-            <img
+            {/* <img
               onClick={() => setShowFilter(!showFilter)}
               className="w-[20px] h-[20px] absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
               src={Images.filter}
               alt=""
-            />
+            /> */}
           </div>
           <Button
             text="New portfolio"

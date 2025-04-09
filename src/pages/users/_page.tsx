@@ -84,8 +84,8 @@ function Users() {
   };
 
   const columns = [
-    { key: "name", name: "Name", resizable: true, renderCell: renderFullName },
-    { key: "email", name: "Email", resizable: true },
+    { key: "name", name: "Name", width: 180, renderCell: renderFullName },
+    { key: "email", name: "Email", width: 180 },
     { key: "role", name: "Role", resizable: true },
     {
       key: "created_at",
