@@ -50,6 +50,36 @@ function FilteredResults() {
       setOpenUploadModal(true);
     }
   };
+  const handleOpenCalculateEclModal = () => {
+    if (dataSummary && dataSummary?.has_calculated_ecl) {
+      if (
+        window.confirm(
+          "ECL calculation already done. This calculation will overwrite the previous one. Do you want to continue?"
+        )
+      ) {
+        setOpenEclModal(true);
+      } else {
+        setOpenEclModal(false);
+      }
+    } else {
+      setOpenEclModal(true);
+    }
+  };
+  const handleOpenCalculateBoGImpairmentModal = () => {
+    if (dataSummary && dataSummary?.has_calculated_local_impairment) {
+      if (
+        window.confirm(
+          "BoG impairment calculation already done. This calculation will overwrite the previous one. Do you want to continue?"
+        )
+      ) {
+        setOpenLocalImpairmentModal(true);
+      } else {
+        setOpenLocalImpairmentModal(false);
+      }
+    } else {
+      setOpenLocalImpairmentModal(true);
+    }
+  };
   return (
     <>
       <Modal
@@ -146,7 +176,7 @@ function FilteredResults() {
                 className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[190px]  bg-[#D9EFF9]"
               />
               <Button
-                onClick={() => setOpenEclModal(true)}
+                onClick={handleOpenCalculateEclModal}
                 text={
                   <>
                     <img
@@ -160,7 +190,7 @@ function FilteredResults() {
                 className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[190px]  bg-[#D9EFF9]"
               />
               <Button
-                onClick={() => setOpenLocalImpairmentModal(true)}
+                onClick={handleOpenCalculateBoGImpairmentModal}
                 text={
                   <>
                     <img
