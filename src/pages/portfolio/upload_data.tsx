@@ -4,10 +4,12 @@ import Upload from "../../components/upload/_component";
 import { UploadDataProps } from "../../core/interfaces";
 import { CreatePortfolioIngestion } from "../../core/services/portfolio.service";
 import { showToast } from "../../core/hooks/alert";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 function UploadData({ close }: UploadDataProps) {
   const { id } = useParams();
+  const toastId = useRef<string | number | null>(null);
   const [isDone, setIsDone] = useState<boolean>(false);
   const [customer_details, setCustomerDetails] = useState<File | null>(null);
   const [loan_details, setLoanDetails] = useState<File | null>(null);
@@ -33,6 +35,61 @@ function UploadData({ close }: UploadDataProps) {
     setLoanCollateral(() => file);
   };
 
+  const listenToWebSocket = (wsUrl: string) => {
+    const token = localStorage.getItem("u_token");
+    const socketUrl = `${wsUrl}?token=${token}`;
+    console.log("tok:", socketUrl);
+    const socket = new WebSocket(socketUrl);
+
+    socket.onopen = () => {
+      console.log("WebSocket connection opened");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("WebSocket Message:", data);
+      if (data && data?.error) {
+        showToast(`An error occurred: ` + " " + data?.error, false);
+      }
+      if (data && !data?.error) {
+        showToast(
+          `${data && data?.status + ":" + " "} ${data && data?.status_message}`,
+          true,
+          true
+        );
+      }
+
+      if (data.status === "completed") {
+        setIsDone(false);
+        if (toastId.current) toast.dismiss(toastId.current);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2200);
+        socket.close();
+      } else if (data.status === "failed") {
+        showToast("Ingestion failed", false);
+        setIsDone(false);
+        socket.close();
+      } else {
+        // maybe show progress updates
+        // setIsDone(false);
+        console.log("Ingestion in progress:", data.progress);
+      }
+    };
+
+    socket.onerror = (err) => {
+      console.error("WebSocket error:", err);
+      showToast("An error occurred. Please try again", false);
+      setIsDone(false);
+      showToast("Connection error", false);
+    };
+
+    socket.onclose = () => {
+      setIsDone(false);
+      console.log("WebSocket connection closed");
+    };
+  };
+
   const handleSubmit = () => {
     setIsDone(true);
     if (!loan_details || !customer_details) {
@@ -51,14 +108,18 @@ function UploadData({ close }: UploadDataProps) {
     if (loan_collateral_data) {
       formData.append("loan_collateral_data", loan_collateral_data);
     }
+    showToast("Ingestion set to begin", true);
     if (id) {
       CreatePortfolioIngestion(id, formData)
-        .then(() => {
-          setIsDone(false);
-          showToast("Submission successful", true);
-          setTimeout(() => {
-            window.location.reload();
-          }, 1800);
+        .then((res) => {
+          console.log("res: ", res);
+          const { websocket_url, message } = res.data;
+          console.log("websocket_url: ", websocket_url);
+          if (websocket_url) {
+            listenToWebSocket(websocket_url);
+          }
+
+          showToast(message, true);
         })
         .catch((err) => {
           setIsDone(false);

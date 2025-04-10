@@ -21,8 +21,8 @@ export const clearUserSession = () => {
 
 export const getAxios = () => {
   const instance = axios.create({
-    // baseURL: "https://ifrs9pro-backend.onrender.com",
-    baseURL: "https://ifrs9pro-api.service4gh.com",
+    baseURL: "https://ifrs9pro-backend.onrender.com",
+    // baseURL: "https://ifrs9pro-api.service4gh.com",
   });
 
   const token = localStorage.getItem("u_token");
@@ -39,20 +39,6 @@ export const getAxios = () => {
       clearUserSession();
     }
   }
-
-  // const checkExpiry = () => {
-  //   const tokenExpiry = localStorage.getItem("u_token_expiry");
-  //   let now = moment();
-  //   let dateToCheck = moment(tokenExpiry);
-  //   if (dateToCheck.isBefore(now)) {
-  //     return true;
-  //   }
-  //   return false;
-  // };
-
-  // if (token != null && token !== "") {
-  //   instance.defaults.headers.common["Authorization"] = "Bearer " + token;
-  // }
 
   instance.interceptors.response.use(
     (response) => {
