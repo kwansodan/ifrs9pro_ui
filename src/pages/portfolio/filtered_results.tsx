@@ -161,62 +161,97 @@ function FilteredResults() {
           <div className="p-4 mb-6 bg-[#FAFAFA] rounded-[11px]">
             <h3 className="text-[#1E1E1E] mb-2 font-medium">Actions</h3>
             <div className="flex mb-6 space-x-4">
-              <Button
-                onClick={handleOpenUploadData}
-                text={
-                  <>
-                    <img
-                      className="w-[18px] h-[18px]"
-                      src={Images.upload}
-                      alt=""
-                    />
-                    <p>Upload data</p>
-                  </>
-                }
-                className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[190px]  bg-[#D9EFF9]"
-              />
-              <Button
-                onClick={handleOpenCalculateEclModal}
-                text={
-                  <>
-                    <img
-                      className="w-[18px] h-[18px]"
-                      src={Images.calc_ecl}
-                      alt=""
-                    />
-                    Calculate ECL
-                  </>
-                }
-                className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[190px]  bg-[#D9EFF9]"
-              />
-              <Button
-                onClick={handleOpenCalculateBoGImpairmentModal}
-                text={
-                  <>
-                    <img
-                      className="w-[24px] h-[18px]"
-                      src={Images.calc_local}
-                      alt=""
-                    />
-                    Calculate BOG impairment
-                  </>
-                }
-                className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[260px] !h-[45px] bg-[#D9EFF9]"
-              />
-              <Button
-                onClick={() => setOpenGenerateReportModal(true)}
-                text={
-                  <>
-                    <img
-                      className="w-[18px] h-[18px]"
-                      src={Images.report}
-                      alt=""
-                    />
-                    Generate reports
-                  </>
-                }
-                className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[190px]  bg-[#D9EFF9]"
-              />
+              {portfolioQuery?.isLoading ? (
+                <>
+                  <TextLoader />
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={handleOpenUploadData}
+                    text={
+                      <>
+                        <img
+                          className="w-[18px] h-[18px]"
+                          src={Images.upload}
+                          alt=""
+                        />
+                        <p>Upload data</p>
+                      </>
+                    }
+                    className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[190px]  bg-[#D9EFF9]"
+                  />
+                </>
+              )}
+
+              {portfolioQuery?.isLoading ? (
+                <>
+                  <TextLoader />
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={handleOpenCalculateEclModal}
+                    text={
+                      <>
+                        <img
+                          className="w-[18px] h-[18px]"
+                          src={Images.calc_ecl}
+                          alt=""
+                        />
+                        Calculate ECL
+                      </>
+                    }
+                    className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[190px]  bg-[#D9EFF9]"
+                  />
+                </>
+              )}
+
+              {portfolioQuery?.isLoading ? (
+                <>
+                  <TextLoader />
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={handleOpenCalculateBoGImpairmentModal}
+                    text={
+                      <>
+                        <img
+                          className="w-[24px] h-[18px]"
+                          src={Images.calc_local}
+                          alt=""
+                        />
+                        Calculate BOG impairment
+                      </>
+                    }
+                    className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[260px] !h-[45px] bg-[#D9EFF9]"
+                  />
+                </>
+              )}
+
+              {portfolioQuery?.isLoading ? (
+                <>
+                  <TextLoader />
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={() => setOpenGenerateReportModal(true)}
+                    text={
+                      <>
+                        <img
+                          className="w-[18px] h-[18px]"
+                          src={Images.report}
+                          alt=""
+                        />
+                        Generate reports
+                      </>
+                    }
+                    className="flex items-center gap-2 px-4 py-2 text-[#166E94] !w-[190px]  bg-[#D9EFF9]"
+                  />
+                </>
+              )}
             </div>
           </div>
           {portfolioQuery?.isLoading ? (

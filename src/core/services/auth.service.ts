@@ -2,7 +2,7 @@ import axios from "axios";
 import { getAxios } from "../utility";
 
 export const UserLogin = async (email: string, password: string) =>
-  await getAxios().post("/login", { email, password });
+  await getAxios().post("/login/", { email, password });
 
 export const UserRequestAccess = async (email: string) =>
   await getAxios().post("/request-access", { email });
