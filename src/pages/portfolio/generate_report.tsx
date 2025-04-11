@@ -48,6 +48,25 @@ function GenerateReport({ close }: UploadDataProps) {
         });
     }
   };
+
+  // const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const dateStr = e.target.value;
+  //   if (!dateStr) return;
+
+  //   const selectedDate = new Date(dateStr);
+  //   const selectedDay = selectedDate.getDate();
+  //   const lastDayOfMonth = new Date(
+  //     selectedDate.getFullYear(),
+  //     selectedDate.getMonth() + 1,
+  //     0
+  //   ).getDate();
+
+  //   if (selectedDay !== lastDayOfMonth) {
+  //     alert("Please select the last day of a month.");
+  //     e.target.value = "";
+  //   }
+  // };
+
   return (
     <>
       <Modal open={triggerReportGeneration}>
@@ -68,6 +87,7 @@ function GenerateReport({ close }: UploadDataProps) {
         </label>
         <div className="w-full ">
           <input
+            // onChange={handleDateChange}
             placeholder="Select a date"
             className="w-full h-10 border rounded-[10px] border-gray-300 px-[6px] py-[5px] focus:outline-[#166E94] text-gray-400"
             type="date"

@@ -1,40 +1,104 @@
 import { UploadDataProps } from "../../core/interfaces";
 
 import Button from "../../components/button/_component";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CreatePortfolioECLCalculation } from "../../core/services/portfolio.service";
 import { useParams } from "react-router-dom";
 import { showToast } from "../../core/hooks/alert";
 import { Images } from "../../data/Assets";
+import { toast } from "react-toastify";
+import { CustomToast } from "../../components/toast/component";
 
 function CalculateEcl({ close }: UploadDataProps) {
   const { id } = useParams();
+  const toastId = useRef<string | number | null>(null);
   const [calculating, setCalculating] = useState<boolean>(false);
-  // const [categories, setCategories] = useState<CategoryProps[]>([
-  //   { category: "stage_1", range: "0-30" },
-  //   { category: "stage_2", range: "31-89" },
-  //   { category: "stage_3", range: "90-179" },
-  // ]);
+  const [customToastData, setCustomToastData] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+    show: boolean;
+  }>({ message: "", type: "info", show: false });
 
-  // const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const showCustomToast = (
+    message: string,
+    type: "success" | "error" | "info"
+  ) => {
+    setCustomToastData({ message, type, show: true });
+  };
 
-  // const handleEditClick = (index: number) => {
-  //   setEditingIndex(index);
-  // };
+  const MAX_RETRIES = 5;
+  const RECONNECT_DELAY = 2000;
 
-  // const handleToggle = () => {
-  //   setEditingIndex(null);
-  // };
+  const socketRef = useRef<WebSocket | null>(null);
+  const retryCountRef = useRef(0);
 
-  // const handleInputChange = (
-  //   index: number,
-  //   field: keyof CategoryProps,
-  //   value: string
-  // ) => {
-  //   const updatedCategories = [...categories];
-  //   updatedCategories[index][field] = value;
-  //   setCategories(updatedCategories);
-  // };
+  const listenToWebSocket = (wsUrl: string) => {
+    const token = localStorage.getItem("u_token");
+    const socketUrl = `${wsUrl}?token=${token}`;
+    console.log("Connecting to:", socketUrl);
+
+    if (socketRef.current) {
+      socketRef.current.close();
+    }
+
+    const socket = new WebSocket(socketUrl);
+    socketRef.current = socket;
+
+    socket.onopen = () => {
+      console.log("WebSocket connected");
+      retryCountRef.current = 0;
+      showCustomToast("Connected to server", "info");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("Message from WebSocket:", data);
+
+      if (data?.error) {
+        showCustomToast(`An error occurred: ${data.error}`, "error");
+      } else {
+        showCustomToast(`${data.status}: ${data.status_message}`, "success");
+      }
+
+      if (data.status === "completed") {
+        setCalculating(false);
+        if (toastId.current) toast.dismiss(toastId.current);
+        setTimeout(() => window.location.reload(), 2200);
+        socket.close();
+      } else if (data.status === "failed") {
+        showToast("Ingestion failed", false);
+        setCalculating(false);
+        socket.close();
+      } else {
+        console.log("Progress:", data.progress);
+      }
+    };
+
+    socket.onerror = (err) => {
+      console.error("WebSocket error:", err);
+      showToast("WebSocket error. Will retry...", false);
+      socket.close();
+    };
+
+    socket.onclose = (event) => {
+      setCalculating(false);
+      console.log("WebSocket closed:", event.reason);
+
+      // Retry only if task isn't completed or failed
+      if (retryCountRef.current < MAX_RETRIES) {
+        retryCountRef.current += 1;
+        const delay = RECONNECT_DELAY * retryCountRef.current;
+        console.log(
+          `Retrying connection in ${delay / 1000}s (attempt ${
+            retryCountRef.current
+          })...`
+        );
+        setTimeout(() => listenToWebSocket(wsUrl), delay);
+      } else {
+        showToast("Failed to reconnect to the server", false);
+      }
+    };
+  };
 
   const handleSubmit = () => {
     setCalculating(true);
@@ -48,37 +112,18 @@ function CalculateEcl({ close }: UploadDataProps) {
       showToast("All fields required", false);
       return;
     }
-    // for (const item of categories) {
-    //   const { category, range } = item;
-
-    //   if (!range?.trim()) {
-    //     showToast(
-    //       `Please ensure all fields are filled. Missing values in "${category}"`,
-    //       false
-    //     );
-    //     setCalculating(false);
-    //     return;
-    //   }
-    // }
-
-    // const payload = categories.reduce((acc, item) => {
-    //   const key = item.category.toLowerCase();
-
-    //   acc[key] = {
-    //     days_range: item.range ?? "",
-    //   };
-
-    //   return acc;
-    // }, {} as Record<string, { days_range: string }>);
 
     if (id && reporting_date) {
       CreatePortfolioECLCalculation(id, reporting_date)
-        .then(() => {
+        .then((res) => {
           setCalculating(false);
-          showToast("Operation successful", true);
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
+          const { websocket_url, message } = res.data;
+          console.log("websocket_url: ", websocket_url);
+          if (websocket_url) {
+            listenToWebSocket(websocket_url);
+          }
+
+          showCustomToast(message, "success");
         })
         .catch((err) => {
           setCalculating(false);
@@ -93,55 +138,16 @@ function CalculateEcl({ close }: UploadDataProps) {
   ];
   return (
     <>
+      {customToastData.show && (
+        <CustomToast
+          message={customToastData.message}
+          type={customToastData.type}
+          onClose={() =>
+            setCustomToastData({ ...customToastData, show: false })
+          }
+        />
+      )}
       <div className="py-6 bg-white rounded-lg">
-        {/* <div className="overflow-x-auto">
-          <table className="w-full border rounded-lg">
-            <thead>
-              <tr className="text-left text-gray-700 bg-gray-100">
-                <th className="p-3">Category</th>
-                <th className="p-3">Days range</th>
-                <th className="p-3"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {categories.map((item, index) => (
-                <tr key={index} className="border-t hover:bg-gray-50">
-                  <td className="p-3">{item.category}</td>
-
-                  <td className="p-3">
-                    <input
-                      type="text"
-                      className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-                      value={item.range}
-                      disabled={editingIndex !== index}
-                      onChange={(e) =>
-                        handleInputChange(index, "range", e.target.value)
-                      }
-                    />
-                  </td>
-
-                  <td className="p-3 text-gray-500 cursor-pointer hover:text-gray-700">
-                    {editingIndex === index ? (
-                      <img
-                        src={Images.edit}
-                        className="w-[14px] h-[14px]"
-                        alt=""
-                        onClick={handleToggle}
-                      />
-                    ) : (
-                      <img
-                        src={Images.edit}
-                        className="w-[14px] h-[14px]"
-                        alt=""
-                        onClick={() => handleEditClick(index)}
-                      />
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div> */}
         <small>Reporting date</small>
         <div className="w-full">
           <input

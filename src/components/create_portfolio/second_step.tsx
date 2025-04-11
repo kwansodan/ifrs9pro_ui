@@ -94,7 +94,7 @@ function SecondStep({ close, id, setStep }: any) {
             Cancel
           </div>
           <Button
-            text="Create"
+            text="Next"
             //   onClick={() => {
             //     setOpenSecondStepCreatePortfolio(true);
             //   }}

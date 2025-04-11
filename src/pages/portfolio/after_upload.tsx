@@ -90,13 +90,13 @@ any) {
     },
     yaxis: {
       title: {
-        text: "Loan amount",
+        text: "Outstanding loan amount",
         style: {
           fontSize: "14px",
           fontWeight: 600,
           color: "#333",
         },
-        offsetX: 0,
+        offsetX: 5,
         offsetY: 0,
         rotate: -90,
       },
@@ -133,7 +133,7 @@ any) {
     },
     yaxis: {
       title: {
-        text: "Loan amount",
+        text: "Outstanding loan amount",
         style: {
           fontSize: "14px",
           fontWeight: 600,

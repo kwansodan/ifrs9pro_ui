@@ -189,38 +189,51 @@ function PortfolioMain() {
           </div>
         </div>
       )}
-      <div className="flex items-center justify-between bg-[#f8f9fa] rounded-t-lg py-[10px] px-[12px] mt-6 max-w-[1160px]">
+      <div
+        className={`flex items-center justify-between bg-[#f8f9fa] rounded-t-lg py-[10px] px-[12px] mt-6 ${
+          location.pathname === "/dashboard"
+            ? "max-w-[1260px]"
+            : "max-w-[1160px]"
+        } `}
+      >
         <h1 className="text-[16px] font-semibold">Portfolios</h1>
 
         <div className="flex items-center gap-4">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search by portfolio name..."
-              onChange={(e) => setQuery(e.target.value)}
-              className="pl-10 text-sm h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-            />
-            <img
-              className="w-[13px] h-[13px] absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
-              src={Images.search}
-              alt=""
-            />
-            {location.pathname === "/dashboard" ? (
-              <></>
-            ) : (
+          {location.pathname === "/dashboard" ? (
+            <></>
+          ) : (
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search by portfolio name..."
+                onChange={(e) => setQuery(e.target.value)}
+                className="pl-10 text-sm h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+              />
+              <img
+                className="w-[13px] h-[13px] absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                src={Images.search}
+                alt=""
+              />
+
               <img
                 onClick={() => setShowFilter(!showFilter)}
                 className="w-[20px] h-[20px] absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
                 src={Images.filter}
                 alt=""
               />
-            )}
-          </div>
-          <Button
-            text="New portfolio"
-            onClick={() => setOpenCreatePortfolioModal(true)}
-            className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[144px] min-h-[35px]"
-          />
+            </div>
+          )}
+          {location.pathname === "/dashboard" ? (
+            <></>
+          ) : (
+            <>
+              <Button
+                text="New portfolio"
+                onClick={() => setOpenCreatePortfolioModal(true)}
+                className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[144px] min-h-[35px]"
+              />
+            </>
+          )}
         </div>
         {showFilter && (
           <FilterTray

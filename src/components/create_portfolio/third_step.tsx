@@ -175,8 +175,8 @@ function ThirdStep({ close, id, setStep }: any) {
           <Button
             onClick={handleSubmit}
             isLoading={isCreating}
-            text="Calculate impairment"
-            className="bg-[#166E94] !text-[14px] !w-[170px] text-white px-4 py-2 rounded-[10px]"
+            text="Next"
+            className="bg-[#166E94] !text-[14px] !w-[120px] text-white px-4 py-2 rounded-[10px]"
           />
         </div>
       </div>
