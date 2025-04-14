@@ -38,11 +38,10 @@ function SecondStep({ close, id, setStep }: any) {
           }
         })
         .catch((err) => {
-          console.log("err: ", err);
           setIsCreating(false);
           showToast(
             err?.response?.data.detail[0].msg ??
-              "An error occured. Please try again",
+              "Server error occured. Please try again",
             false
           );
         });

@@ -64,8 +64,8 @@ any) {
     qualityIssuesQuery.data.data &&
     qualityIssuesQuery.data.data;
 
-  const categories = ["stage_1", "stage_2", "stage_3"];
-  const bog_categories = ["current", "olem", "substandard", "doubtful", "loss"];
+  const categories = ["Stage 1", "Stage 2", "Stage 3"];
+  const bog_categories = ["Current", "OLEM", "Substandard", "Doubtful", "Loss"];
 
   const numLoansData = ecl_summary_data
     ? categories.map(
