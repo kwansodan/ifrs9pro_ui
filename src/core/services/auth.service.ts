@@ -14,9 +14,7 @@ export const UserSendRequestToAdmin = async (
 
 //using api directly for some reasons
 export const VerifyUserEmail = async (token: string) =>
-  await axios.get(
-    `https://ifrs9pro-backend.onrender.com/verify-email/${token}`
-  );
+  await axios.get(`https://ifrs9pro-api.service4gh.com/verify-email/${token}`);
 
 export const VerifyAdminApproval = async (
   token: string,
