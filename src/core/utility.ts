@@ -136,7 +136,12 @@ export const renderFeedbackStatusColors = (status: string) => {
 
 export const currencyFormatter = (amount: number): string => {
   const safeAmount = isNaN(amount) ? 0 : amount;
-  return `₵${safeAmount.toLocaleString("en-GH", {
+  const rounded = Math.round(safeAmount);
+
+  // Handle -0 specifically
+  const finalAmount = Object.is(rounded, -0) ? 0 : rounded;
+
+  return `₵${finalAmount.toLocaleString("en-GH", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   })}`;

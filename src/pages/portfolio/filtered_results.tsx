@@ -262,24 +262,24 @@ function FilteredResults() {
             <>
               <AfterUpload
                 ecl={
-                  dataSummary?.calculation_summary?.ecl?.stage_1
-                    ?.provision_amount +
-                  dataSummary?.calculation_summary?.ecl?.stage_2
-                    ?.provision_amount +
-                  dataSummary?.calculation_summary?.ecl?.stage_3
-                    ?.provision_amount
+                  (dataSummary?.calculation_summary?.ecl?.["Stage 1"]
+                    ?.provision_amount ?? 0) +
+                  (dataSummary?.calculation_summary?.ecl?.["Stage 2"]
+                    ?.provision_amount ?? 0) +
+                  (dataSummary?.calculation_summary?.ecl?.["Stage 3"]
+                    ?.provision_amount ?? 0)
                 }
                 bog_impairment={
-                  dataSummary?.calculation_summary?.local_impairment?.current
-                    ?.provision_amount +
-                  dataSummary?.calculation_summary?.local_impairment?.olem
-                    ?.provision_amount +
-                  dataSummary?.calculation_summary?.local_impairment
-                    ?.substandard?.provision_amount +
-                  dataSummary?.calculation_summary?.local_impairment?.doubtful
-                    ?.provision_amount +
-                  dataSummary?.calculation_summary?.local_impairment?.loss
-                    ?.provision_amount
+                  (dataSummary?.calculation_summary?.local_impairment?.Current
+                    ?.provision_amount ?? 0) +
+                  (dataSummary?.calculation_summary?.local_impairment?.OLEM
+                    ?.provision_amount ?? 0) +
+                  (dataSummary?.calculation_summary?.local_impairment
+                    ?.Substandard?.provision_amount ?? 0) +
+                  (dataSummary?.calculation_summary?.local_impairment?.Doubtful
+                    ?.provision_amount ?? 0) +
+                  (dataSummary?.calculation_summary?.local_impairment?.Loss
+                    ?.provision_amount ?? 0)
                 }
                 has_all_issues_approved={dataSummary?.has_all_issues_approved}
                 is_graph_loading={portfolioQuery?.isFetching}

@@ -1,5 +1,4 @@
 import { UploadDataProps } from "../../core/interfaces";
-
 import Button from "../../components/button/_component";
 import { useState } from "react";
 import { CreatePortfolioECLCalculation } from "../../core/services/portfolio.service";
@@ -126,6 +125,7 @@ function CalculateEcl({ close }: UploadDataProps) {
         });
     }
   };
+
   const features = [
     "Historical payment behavior",
     "Loan-to-value ratio",

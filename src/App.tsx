@@ -147,7 +147,6 @@ function App() {
             <Route path="/dashboard/*" element={<Navigate to="/" />} />
           )}
 
-          {/* 404 Page */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

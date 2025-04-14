@@ -341,7 +341,7 @@ any) {
             )}
           </>
         ) : (
-          <div className="mt-4">
+          <div className="mt-4 overflow-y-scroll h-[32rem]">
             <div className="p-3 mt-4">
               <div className="flex items-center p-3 mb-4 text-orange-700 bg-[#FEF4E8] rounded-md">
                 <img
@@ -418,7 +418,7 @@ any) {
               </div>
               {checkForQualityIssues ? (
                 <>
-                  <div className="flex justify-end mt-4 text-center">
+                  <div className="flex justify-end mt-4 text-center ">
                     {has_all_issues_approved && has_all_issues_approved ? (
                       <>
                         <Button
