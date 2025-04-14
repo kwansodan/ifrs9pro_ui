@@ -143,11 +143,10 @@ function UploadData({ close }: UploadDataProps) {
 
     if (id) {
       CreatePortfolioIngestion(id, formData)
-        .then((res) => {
-          console.log("res: ", res?.data);
+        .then(() => {
           setIsDone(false);
           showToast("Ingestion done", true);
-          setTimeout(() => window.location.reload(), 2200);
+          setTimeout(() => window.location.reload(), 1800);
           // console.log("websocket_url: ", websocket_url);
           // if (websocket_url) {
           //   listenToWebSocket(websocket_url);
