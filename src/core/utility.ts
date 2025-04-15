@@ -109,16 +109,14 @@ export const renderStatusColors = (status: string) => {
 };
 
 export const renderReportLabel = (value: string) => {
-  if (value === "collateral_summary") return "Summary of Collateral data";
-  if (value === "guarantee_summary") return "Summary of Guarantee data";
-  if (value === "interest_rate_summary") return "Summary of Interest rates";
-  if (value === "repayment_summary") return "Summary of repayments";
-  if (value === "assumptions_summary") return "Summary of assumptions";
-  if (value === "amortised_loan_balances")
-    return "Amortised loan balances report (caveat that the BOG non-accrual rule has not been considered)";
-  if (value === "probability_default") return "Probability of default report";
-  if (value === "exposure_default") return "Exposure at default report";
-  if (value === "loss_given_default") return "Loss given default report";
+  if (value === "ecl_detailed_report") return "ECL detailed report";
+  if (value === "ecl_report_summarised_by_stages")
+    return "ECL report summarised by stages";
+  if (value === "local_impairment_detailed_report")
+    return "Local impairment detailed report";
+  if (value === "local_impairment_report_summarised_by_stages")
+    return "Local impairment report summarised by stages";
+  if (value === "journals_report") return "Journals report";
 
   return "Report not found";
 };

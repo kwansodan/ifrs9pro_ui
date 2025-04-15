@@ -42,7 +42,10 @@ export const assetsOptions = [
 
 export const reportTypeOptions = [
   { value: "ecl_detailed_report", label: "ECL detailed report" },
-  { value: "ecl_report_summarised", label: "ECL report summarised by stages" },
+  {
+    value: "ecl_report_summarised_by_stages",
+    label: "ECL report summarised by stages",
+  },
   {
     value: "local_impairment_details_report",
     label: "Local impairment detailed report",
