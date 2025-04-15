@@ -115,7 +115,7 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
       CreatePortfolioLocalImpairmentCalculation(id, reporting_date)
         .then(() => {
           setCalculating(false);
-          showToast("Ingestion done", true);
+          showToast("BOG Impairment Calculation Done", true);
           setTimeout(() => window.location.reload(), 1800);
           // const { websocket_url, message } = res.data;
           // console.log("websocket_url: ", websocket_url);
