@@ -5,6 +5,7 @@ import { showToast } from "../../core/hooks/alert";
 import { useState } from "react";
 
 function ViewDuplicate({ selectedIssueId, affected_records }: any) {
+  console.log("selectedIssueId", affected_records);
   const { id } = useParams();
   const [downloading, setIsDownloading] = useState<boolean>(false);
 
@@ -48,7 +49,7 @@ function ViewDuplicate({ selectedIssueId, affected_records }: any) {
               className="flex items-center justify-between p-4 border-b last:border-0"
             >
               <span className={`text-gray-700 font-semibold`}>
-                {issue?.name ?? "N/A"}
+                {issue?.name ?? "Not found"}
               </span>
               <div className="flex items-center space-x-4">
                 <span className="font-semibold">

@@ -10,6 +10,11 @@ function Comment({ close, issue_id, portfolio_id }: any) {
     let comment = (
       document.getElementById("comment-field") as HTMLTextAreaElement
     )?.value;
+    if (!comment) {
+      showToast("All field are required.", false);
+      setIsSaving(false);
+      return;
+    }
     AddCommentToQualityIssue(portfolio_id, issue_id, { comment })
       .then((res) => {
         setIsSaving(false);
