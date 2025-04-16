@@ -5,6 +5,8 @@ import { CreatePortfolioLocalImpairmentCalculation } from "../../core/services/p
 import { useParams } from "react-router-dom";
 import { showToast } from "../../core/hooks/alert";
 import { CustomToast } from "../../components/toast/component";
+import PageLoader from "../../components/page_loader/_component";
+import { Modal } from "../../components/modal/_component";
 // import { toast } from "react-toastify";
 
 function CalculateLocalImpairment({ close }: UploadDataProps) {
@@ -142,6 +144,20 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
           }
         />
       )}
+
+      <Modal
+        showClose={true}
+        open={calculating}
+        modalHeader="Operation ongoing"
+      >
+        <div className="flex flex-col items-center justify-center p-8 bg-white ">
+          <PageLoader />
+          <small className="text-[#F7941E]">
+            BOG impairment calculation in progress. Please wait. Do not close,
+            refresh or navigate the page.
+          </small>
+        </div>
+      </Modal>
       <div className="py-6 bg-white rounded-lg">
         <small>Reporting date</small>
         <div className="w-full">

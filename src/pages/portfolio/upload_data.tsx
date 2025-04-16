@@ -5,16 +5,18 @@ import { UploadDataProps } from "../../core/interfaces";
 import { CreatePortfolioIngestion } from "../../core/services/portfolio.service";
 import { showToast } from "../../core/hooks/alert";
 import { useState } from "react";
+import { Modal } from "../../components/modal/_component";
+import PageLoader from "../../components/page_loader/_component";
 // import { toast } from "react-toastify";
-import { CustomToast } from "../../components/toast/component";
+// import { CustomToast } from "../../components/toast/component";
 
 function UploadData({ close }: UploadDataProps) {
   const { id } = useParams();
-  const [customToastData, setCustomToastData] = useState<{
-    message: string;
-    type: "success" | "error" | "info";
-    show: boolean;
-  }>({ message: "", type: "info", show: false });
+  // const [customToastData, setCustomToastData] = useState<{
+  //   message: string;
+  //   type: "success" | "error" | "info";
+  //   show: boolean;
+  // }>({ message: "", type: "info", show: false });
   // const toastId = useRef<string | number | null>(null);
   const [isDone, setIsDone] = useState<boolean>(false);
   const [customer_details, setCustomerDetails] = useState<File | null>(null);
@@ -124,6 +126,7 @@ function UploadData({ close }: UploadDataProps) {
 
   const handleSubmit = () => {
     setIsDone(true);
+
     if (!loan_details || !customer_details) {
       showToast("Please upload loan details and customer data.", false);
       setIsDone(false);
@@ -167,7 +170,7 @@ function UploadData({ close }: UploadDataProps) {
 
   return (
     <>
-      {customToastData.show && (
+      {/* {customToastData.show && (
         <CustomToast
           message={customToastData.message}
           type={customToastData.type}
@@ -175,7 +178,18 @@ function UploadData({ close }: UploadDataProps) {
             setCustomToastData({ ...customToastData, show: false })
           }
         />
-      )}
+      )} */}
+
+      <Modal showClose={true} open={isDone} modalHeader="Operation ongoing">
+        <div className="flex flex-col items-center justify-center p-8 bg-white ">
+          <PageLoader />
+          <small className="text-[#F7941E]">
+            Ingestion in progress. Please wait. Do not close, refresh or
+            navigate the page.
+          </small>
+        </div>
+      </Modal>
+
       <div className="flex flex-col w-full">
         <Upload
           templateLink={"/Customer_data.xlsx"}

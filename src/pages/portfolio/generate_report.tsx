@@ -73,6 +73,7 @@ function GenerateReport({ close }: UploadDataProps) {
         <GerneratingReport />
       </Modal>
       <Modal
+        showClose={true}
         close={() => setTriggerReportGeneration(false)}
         open={triggerReportGenerationSuccess}
       >

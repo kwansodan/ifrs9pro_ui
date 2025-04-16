@@ -21,6 +21,7 @@ export interface ModalProps {
   close?: any;
   children?: React.ReactNode;
   modalHeader?: string;
+  showClose?: boolean;
 }
 export interface FilterTrayProps {
   closeFilter?: () => void;

@@ -9,30 +9,39 @@ import { useState } from "react";
 
 function YesReport() {
   const { id } = useParams();
-  const [reportId, setReportId] = useState<number>();
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const { portfoliosReportsQuery } = usePorfolioReports(Number(id));
 
-  const downloadDocument = () => {
-    if (reportId) {
-      DownloadReportHistory(Number(id), reportId)
+  const handleDownload = (id: string) => {
+    setDownloadingId(id);
+    downloadDocument(id);
+    setDownloadingId(null);
+  };
+
+  const downloadDocument = (rid: any) => {
+    if (rid) {
+      setDownloadingId(rid);
+      DownloadReportHistory(Number(id), rid)
         .then((res) => {
           const blob = new Blob([res.data], { type: "application/pdf" });
-
           const url = window.URL.createObjectURL(blob);
           const link = document.createElement("a");
           link.href = url;
-          link.download = `report_${reportId}.pdf`;
+          link.download = `report_${rid}.pdf`;
           document.body.appendChild(link);
           link.click();
 
           document.body.removeChild(link);
           window.URL.revokeObjectURL(url);
+          setDownloadingId(null);
         })
         .catch((err) => {
-          showToast(err?.response?.data.detail, false);
+          setDownloadingId(null);
+          showToast(err?.response?.data?.detail ?? "Download failed", false);
         });
     }
   };
+
   return (
     <div className="p-4 rounded-lg bg-gray-50">
       <h2 className="mb-2 text-lg font-semibold">Report history</h2>
@@ -52,11 +61,8 @@ function YesReport() {
                 <span className="flex-1 text-gray-700">
                   {renderReportLabel(report.report_type)}
                 </span>
-                <a
-                  onClick={() => {
-                    setReportId(report.id);
-                    downloadDocument();
-                  }}
+                <div
+                  onClick={() => handleDownload(report.id)}
                   className="flex items-center cursor-pointer text-[#166E94] hover:underline"
                 >
                   <img
@@ -65,8 +71,10 @@ function YesReport() {
                     src={Images.report_download}
                     alt=""
                   />
-                  Download report
-                </a>
+                  {!downloadingId === report.id
+                    ? "Downloading"
+                    : "Download report"}
+                </div>
               </div>
             )
           )}

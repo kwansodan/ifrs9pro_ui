@@ -7,6 +7,8 @@ import { showToast } from "../../core/hooks/alert";
 import { Images } from "../../data/Assets";
 // import { toast } from "react-toastify";
 import { CustomToast } from "../../components/toast/component";
+import { Modal } from "../../components/modal/_component";
+import PageLoader from "../../components/page_loader/_component";
 
 function CalculateEcl({ close }: UploadDataProps) {
   const { id } = useParams();
@@ -142,6 +144,20 @@ function CalculateEcl({ close }: UploadDataProps) {
           }
         />
       )}
+
+      <Modal
+        showClose={true}
+        open={calculating}
+        modalHeader="Operation ongoing"
+      >
+        <div className="flex flex-col items-center justify-center p-8 bg-white ">
+          <PageLoader />
+          <small className="text-[#F7941E]">
+            ECL calculation in progress. Please wait. Do not close, refresh or
+            navigate the page.
+          </small>
+        </div>
+      </Modal>
       <div className="py-6 bg-white rounded-lg">
         <small>Reporting date</small>
         <div className="w-full">

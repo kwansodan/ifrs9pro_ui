@@ -2,7 +2,14 @@ import { memo } from "react";
 import { ModalProps } from "../../core/interfaces";
 
 export const Modal = memo(
-  ({ open, children, close, closeOnOverlay, modalHeader }: ModalProps) => {
+  ({
+    open,
+    children,
+    close,
+    closeOnOverlay,
+    modalHeader,
+    showClose,
+  }: ModalProps) => {
     const closeModal = () => {
       close(!open);
     };
@@ -38,7 +45,7 @@ export const Modal = memo(
               onClick={() => closeModal()}
               className="z-50 pr-6 close color-[#aaa] float-right text-right text-3xl text-black no-underline cursor-pointer relative top-8 right-[4%] md:right-[5px]"
             >
-              &times;
+              {!showClose && "×"}
             </span>
           </div>
 
