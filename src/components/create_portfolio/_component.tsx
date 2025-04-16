@@ -88,9 +88,10 @@ function CreatePorfolio({ cancel }: any) {
             showToast("First step of portfolio created successfully.", true);
             setPortfolioId(res?.data?.id);
 
-            setTimeout(() => {
-              setStep(2);
-            }, 1000);
+            setStep(2);
+          } else {
+            setIsSubmittingFirstStep(false);
+            showToast("An error occurred. Please try again.", false);
           }
         })
         .catch((err) => {

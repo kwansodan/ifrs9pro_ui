@@ -76,6 +76,9 @@ function ThirdStep({ close, id, setStep }: any) {
             showToast("Third step of portfolio created successfully.", true);
 
             setStep(4);
+          } else {
+            setIsCreating(false);
+            showToast("An error occurred. Please try again.", false);
           }
         })
         .catch((err) => {

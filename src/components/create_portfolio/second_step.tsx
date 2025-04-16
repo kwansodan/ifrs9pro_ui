@@ -35,6 +35,9 @@ function SecondStep({ close, id, setStep }: any) {
           if (res.status === 200 || res.status === 201) {
             showToast("Second step of portfolio created successfully.", true);
             setStep(3);
+          } else {
+            setIsCreating(false);
+            showToast("An error occurred. Please try again.", false);
           }
         })
         .catch((err) => {
