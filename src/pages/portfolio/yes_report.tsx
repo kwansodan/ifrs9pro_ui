@@ -29,7 +29,7 @@ function YesReport() {
           const url = window.URL.createObjectURL(blob);
           const link = document.createElement("a");
           link.href = url;
-          link.download = `report_${rid}.xlsx`; // Excel file extension
+          link.download = `report_${rid}.xlsx`;
           document.body.appendChild(link);
           link.click();
 
