@@ -340,6 +340,8 @@ any) {
               </>
             )}
           </>
+        ) : qualityIssuesQuery && qualityIssuesQuery?.isLoading ? (
+          <PageLoader />
         ) : (
           <div className="mt-4 overflow-y-scroll h-[32rem]">
             <div className="p-3 mt-4">

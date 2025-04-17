@@ -23,11 +23,13 @@ function YesReport() {
       setDownloadingId(rid);
       DownloadReportHistory(Number(id), rid)
         .then((res) => {
-          const blob = new Blob([res.data], { type: "application/pdf" });
+          const blob = new Blob([res.data], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Excel MIME type
+          });
           const url = window.URL.createObjectURL(blob);
           const link = document.createElement("a");
           link.href = url;
-          link.download = `report_${rid}.pdf`;
+          link.download = `report_${rid}.xlsx`; // Excel file extension
           document.body.appendChild(link);
           link.click();
 
@@ -71,7 +73,7 @@ function YesReport() {
                     src={Images.report_download}
                     alt=""
                   />
-                  {!downloadingId === report.id
+                  {downloadingId === report.id
                     ? "Downloading"
                     : "Download report"}
                 </div>
