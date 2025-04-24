@@ -9,6 +9,7 @@ import { useState } from "react";
 
 function YesReport() {
   const { id } = useParams();
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const { portfoliosReportsQuery } = usePorfolioReports(Number(id));
 
@@ -20,6 +21,7 @@ function YesReport() {
 
   const downloadDocument = (rid: any) => {
     if (rid) {
+      setIsDownloading(true);
       setDownloadingId(rid);
       DownloadReportHistory(Number(id), rid)
         .then((res) => {
@@ -36,9 +38,11 @@ function YesReport() {
           document.body.removeChild(link);
           window.URL.revokeObjectURL(url);
           setDownloadingId(null);
+          setIsDownloading(false);
         })
         .catch((err) => {
           setDownloadingId(null);
+          setIsDownloading(false);
           showToast(err?.response?.data?.detail ?? "Download failed", false);
         });
     }
@@ -63,20 +67,32 @@ function YesReport() {
                 <span className="flex-1 text-gray-700">
                   {renderReportLabel(report.report_type)}
                 </span>
-                <div
-                  onClick={() => handleDownload(report.id)}
-                  className="flex items-center cursor-pointer text-[#166E94] hover:underline"
-                >
-                  <img
-                    title="download report"
-                    className="w-[14px] h-[14px] mr-1 mt-1"
-                    src={Images.report_download}
-                    alt=""
-                  />
-                  {downloadingId === report.id
-                    ? "Downloading"
-                    : "Download report"}
-                </div>
+                {isDownloading ? (
+                  <>
+                    <div className="flex">
+                      <span className="text-[#166E94] animate-bounce">
+                        Downloading
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div
+                      onClick={() => handleDownload(report.id)}
+                      className="flex items-center cursor-pointer text-[#166E94] hover:underline"
+                    >
+                      <img
+                        title="download report"
+                        className="w-[14px] h-[14px] mr-1 mt-1"
+                        src={Images.report_download}
+                        alt=""
+                      />
+                      {downloadingId !== null
+                        ? "Downloading"
+                        : "Download report"}
+                    </div>
+                  </>
+                )}
               </div>
             )
           )}

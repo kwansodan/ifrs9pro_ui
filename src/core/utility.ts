@@ -1,6 +1,7 @@
 import moment from "moment";
 import { IConfig } from "./interfaces";
 import axios from "axios";
+import { showToast } from "./hooks/alert";
 
 let options: IConfig = {} as IConfig;
 export const setBaseApi = (v: any) => (options = { apiBaseUrl: v });
@@ -151,4 +152,51 @@ export const currencyFormatterWithoutCediSign = (amount: number): string => {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   })}`;
+};
+
+export const validateSequentialRanges = (
+  payload: Record<string, { days_range: string; rate: string }>
+): boolean => {
+  const categoriesOrder = [
+    "current",
+    "olem",
+    "substandard",
+    "doubtful",
+    "loss",
+  ];
+  let expectedStart = 0;
+
+  for (const category of categoriesOrder) {
+    const range = payload[category]?.days_range?.trim();
+    if (!range) return false;
+
+    let start: number, end: number;
+
+    if (range.includes("-")) {
+      // Handle range like "0-30"
+      const [startStr, endStr] = range.split("-").map((s) => s.trim());
+      start = parseInt(startStr);
+      end = parseInt(endStr);
+    } else if (range.includes("+")) {
+      // Handle open-ended range like "360+"
+      const [startStr] = range.split("+").map((s) => s.trim());
+      start = parseInt(startStr);
+      end = Number.MAX_SAFE_INTEGER;
+    } else {
+      showToast(`Invalid range format in "${category}": ${range}`, false);
+      return false;
+    }
+
+    if (start !== expectedStart) {
+      showToast(
+        `Invalid range in "${category}". Expected start: ${expectedStart}, but got: ${start}`,
+        false
+      );
+      return false;
+    }
+
+    expectedStart = end === Number.MAX_SAFE_INTEGER ? end : end + 1;
+  }
+
+  return true;
 };

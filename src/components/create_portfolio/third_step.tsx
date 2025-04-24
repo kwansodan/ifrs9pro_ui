@@ -5,16 +5,17 @@ import { useState } from "react";
 import { CreateSecondStepPortfolioApi } from "../../core/services/portfolio.service";
 
 import { showToast } from "../../core/hooks/alert";
+import { validateSequentialRanges } from "../../core/utility";
 
 function ThirdStep({ close, id, setStep }: any) {
   // const navigate = useNavigate();
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [categories, setCategories] = useState<CategoryProps[]>([
-    { category: "Current", range: "0-30" },
-    { category: "OLEM", range: "31-89" },
-    { category: "Substandard", range: "90-179" },
-    { category: "Doubtful", range: "180-359" },
-    { category: "Loss", range: "360+" },
+    { category: "Current", range: "0-30", rate: "1%" },
+    { category: "OLEM", range: "31-89", rate: "20%" },
+    { category: "Substandard", range: "90-179", rate: "25%" },
+    { category: "Doubtful", range: "180-359", rate: "50%" },
+    { category: "Loss", range: "360+", rate: "100%" },
   ]);
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -63,13 +64,22 @@ function ThirdStep({ close, id, setStep }: any) {
 
       acc[key] = {
         days_range: item.range ?? "",
+        rate: item.rate ?? "",
       };
 
       return acc;
-    }, {} as Record<string, { days_range: string }>);
+    }, {} as Record<string, { days_range: string; rate: string }>);
 
+    const isValidPayload = validateSequentialRanges(payload);
+    if (!isValidPayload) {
+      setIsCreating(false);
+      return;
+    }
+    const finalPayload = {
+      ecl_staging_config: payload,
+    };
     try {
-      CreateSecondStepPortfolioApi(id, payload)
+      CreateSecondStepPortfolioApi(id, finalPayload)
         .then((res) => {
           setIsCreating(false);
           if (res.status === 200 || res.status === 201) {
@@ -105,14 +115,13 @@ function ThirdStep({ close, id, setStep }: any) {
               <tr className="text-left text-gray-700 bg-gray-100">
                 <th className="p-3">Category</th>
                 <th className="p-3">Days range</th>
-                <th className="p-3"></th>
+                <th className="p-3">Rate(%)</th>
               </tr>
             </thead>
             <tbody>
               {categories.map((item, index) => (
                 <tr key={index} className="border-t hover:bg-gray-50">
                   <td className="p-3">{item.category}</td>
-
                   <td className="p-3">
                     <input
                       type="text"
@@ -124,20 +133,18 @@ function ThirdStep({ close, id, setStep }: any) {
                       }
                     />
                   </td>
-
-                  {/* Rate input field
+                  {/* Rate input field */}
                   <td className="p-3">
                     <input
                       type="text"
-                      className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                      className="w-full px-2 py-1 border rounded-md outline-0 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                       value={item.rate}
                       disabled={editingIndex !== index}
                       onChange={(e) =>
                         handleInputChange(index, "rate", e.target.value)
                       }
                     />
-                  </td> */}
-
+                  </td>
                   <td className="p-3 text-gray-500 cursor-pointer hover:text-gray-700">
                     {editingIndex === index ? (
                       <img

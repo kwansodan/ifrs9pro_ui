@@ -26,6 +26,10 @@ function AdminAccess() {
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
 
   const { adminRequestsQuery } = useAdminRequests();
+  const adminData =
+    adminRequestsQuery &&
+    adminRequestsQuery.data &&
+    adminRequestsQuery.data.data;
   const filteredData =
     adminRequestsQuery &&
     adminRequestsQuery.data &&
@@ -186,54 +190,73 @@ function AdminAccess() {
           </div>
         </div>
       )}
-      <div className="flex items-center justify-between bg-[#f8f9fa] rounded-t-lg py-[10px] px-[12px] mt-6 max-w-[1160px]">
-        <h1 className="text-[16px] font-semibold">Access requests</h1>
-
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search by status..."
-              onChange={(e) => setQuery(e.target.value)}
-              className="pl-10 text-sm h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
-            />
+      {adminData && adminData?.length < 1 ? (
+        <>
+          <div className="flex flex-col justify-center text-center w-[300px] m-auto mt-16">
             <img
-              onClick={() => setShowFilter(!showFilter)}
-              className="w-[13px] h-[13px] absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
-              src={Images.search}
+              src={Images.portfolio}
+              className="w-[31px] h-[31px] flex justify-center m-auto"
               alt=""
             />
-            {/* <img
-              onClick={() => setShowFilter(!showFilter)}
-              className="w-[20px] h-[20px] absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
-              src={Images.filter}
-              alt=""
-            /> */}
+            <h3 className="text-[#000000] font-semibold text-[18px] ">
+              No access requests yet
+            </h3>
+            <small className="text-[#6F6F6F] text-[16px] font-normal text-center">
+              You'll find all access requests here. You can approve or deny
+              them.
+            </small>
           </div>
-          <Button
-            text="New portfolio"
-            onClick={() => setOpenCreatePortfolioModal(true)}
-            className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[144px] min-h-[35px]"
-          />
-        </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <div className="flex items-center justify-between bg-[#f8f9fa] rounded-t-lg py-[10px] px-[12px] mt-6 max-w-[1160px]">
+              <h1 className="text-[16px] font-semibold">Access requests</h1>
 
-        {showFilter && <FilterTray closeFilter={() => setShowFilter(false)} />}
-      </div>
-      <div className="max-w-[1160px] h-[398px] border-[1px] border-[#F0F0F0] rounded-[11px]">
-        {adminRequestsQuery.isFetching ? (
-          <>
-            <TableLoader />
-          </>
-        ) : (
-          <>
-            <DataGrid
-              columns={columns}
-              rows={filteredData || []}
-              className="rdg-light custom-grid"
-            />
-          </>
-        )}
-      </div>
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search by status..."
+                    onChange={(e) => setQuery(e.target.value)}
+                    className="pl-10 text-sm h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                  />
+                  <img
+                    onClick={() => setShowFilter(!showFilter)}
+                    className="w-[13px] h-[13px] absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                    src={Images.search}
+                    alt=""
+                  />
+                </div>
+                <Button
+                  text="New portfolio"
+                  onClick={() => setOpenCreatePortfolioModal(true)}
+                  className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[144px] min-h-[35px]"
+                />
+              </div>
+
+              {showFilter && (
+                <FilterTray closeFilter={() => setShowFilter(false)} />
+              )}
+            </div>
+            <div className="max-w-[1160px] h-[398px] border-[1px] border-[#F0F0F0] rounded-[11px]">
+              {adminRequestsQuery.isFetching ? (
+                <>
+                  <TableLoader />
+                </>
+              ) : (
+                <>
+                  <DataGrid
+                    columns={columns}
+                    rows={filteredData || []}
+                    className="rdg-light custom-grid"
+                  />
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }
