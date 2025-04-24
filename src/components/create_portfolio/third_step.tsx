@@ -75,11 +75,11 @@ function ThirdStep({ close, id, setStep }: any) {
       setIsCreating(false);
       return;
     }
-    const finalPayload = {
-      ecl_staging_config: payload,
-    };
+    // const finalPayload = {
+    //   ecl_staging_config: payload,
+    // };
     try {
-      CreateSecondStepPortfolioApi(id, finalPayload)
+      CreateSecondStepPortfolioApi(id, payload)
         .then((res) => {
           setIsCreating(false);
           if (res.status === 200 || res.status === 201) {
