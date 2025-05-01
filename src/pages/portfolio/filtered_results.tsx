@@ -137,24 +137,59 @@ function FilteredResults() {
             )}
           </p>
           <hr />
-          <div className="mt-5 space-y-3 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-400">Asset type:</span>
-              <span className="font-medium">Debt</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-400">Customer type:</span>
-              <span className="font-medium">Individuals</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-400">Repayment source:</span>
-              <span className="font-medium">Manual transfer</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-400">Funding source:</span>
-              <span className="font-medium">Private investors</span>
-            </div>
-          </div>
+          {portfolioQuery?.isLoading ? (
+            <>
+              <TextLoader />
+              <div className="-mt-20">
+                <TextLoader />
+              </div>
+              <div className="-mt-20">
+                <TextLoader />
+              </div>
+              <div className="-mt-20">
+                <TextLoader />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="mt-5 space-y-3 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Asset type:</span>
+                  <span className="font-medium">
+                    {portfolioQuery &&
+                      portfolioQuery.data &&
+                      portfolioQuery.data.data.asset_type}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Customer type:</span>
+                  <span className="font-medium">
+                    {portfolioQuery &&
+                      portfolioQuery.data &&
+                      portfolioQuery.data.data.customer_type}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Repayment source:</span>
+                  <span className="font-medium">
+                    {portfolioQuery &&
+                    portfolioQuery.data &&
+                    portfolioQuery.data.data.repayment_source
+                      ? "Yes"
+                      : "No"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400">Funding source:</span>
+                  <span className="font-medium">
+                    {portfolioQuery &&
+                      portfolioQuery.data &&
+                      portfolioQuery.data.data.funding_source}
+                  </span>
+                </div>
+              </div>
+            </>
+          )}
         </aside>
 
         <main className="flex-1 p-6">
@@ -292,13 +327,13 @@ function FilteredResults() {
                   dataSummary?.customer_summary.individual_customers
                 }
                 ecl_summary_data={
-                  (dataSummary?.staging_summary &&
-                    dataSummary?.staging_summary?.ecl) ||
+                  (dataSummary?.calculation_summary &&
+                    dataSummary?.calculation_summary?.ecl) ||
                   {}
                 }
                 bog_summary_data={
-                  (dataSummary?.staging_summary &&
-                    dataSummary?.staging_summary?.local_impairment) ||
+                  (dataSummary?.calculation_summary &&
+                    dataSummary?.calculation_summary?.local_impairment) ||
                   {}
                 }
                 institutions={dataSummary?.customer_summary.institutions}

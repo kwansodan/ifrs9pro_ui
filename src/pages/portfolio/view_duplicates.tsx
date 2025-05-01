@@ -5,7 +5,6 @@ import { showToast } from "../../core/hooks/alert";
 import { useState } from "react";
 
 function ViewDuplicate({ selectedIssueId, affected_records }: any) {
-  console.log("selectedIssueId", affected_records);
   const { id } = useParams();
   const [downloading, setIsDownloading] = useState<boolean>(false);
 

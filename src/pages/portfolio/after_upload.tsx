@@ -69,13 +69,13 @@ any) {
 
   const numLoansData = ecl_summary_data
     ? categories.map(
-        (stage) => ecl_summary_data?.[stage]?.outstanding_loan_balance ?? 0
+        (stage) => ecl_summary_data?.[stage]?.total_loan_value ?? 0
       )
     : [];
 
   const bog_numLoansData = bog_summary_data
     ? bog_categories.map(
-        (stage) => bog_summary_data?.[stage]?.outstanding_loan_balance ?? 0
+        (stage) => bog_summary_data?.[stage]?.total_loan_value ?? 0
       )
     : [];
 
@@ -157,6 +157,7 @@ any) {
       },
     },
   };
+  console.log("bog_numLoansData", bog_numLoansData);
 
   const bog_series = [
     {
