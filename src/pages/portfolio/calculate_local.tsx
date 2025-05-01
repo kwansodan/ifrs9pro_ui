@@ -150,11 +150,12 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
         open={calculating}
         modalHeader="Operation ongoing"
       >
-        <div className="flex flex-col items-center justify-center p-8 bg-white ">
+        <div className="flex flex-col items-center justify-center p-8 bg-white ju ">
           <PageLoader />
+          <small className="text-[#F7941E]"> This may take a while. </small>
           <small className="text-[#F7941E]">
-            BOG impairment calculation in progress. Please wait. Do not close,
-            refresh or navigate the page.
+            BoG calculation in progress. Please wait. Do not close, refresh or
+            navigate the page.
           </small>
         </div>
       </Modal>

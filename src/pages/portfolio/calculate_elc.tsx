@@ -158,6 +158,20 @@ function CalculateEcl({ close }: UploadDataProps) {
           </small>
         </div>
       </Modal>
+      <Modal
+        showClose={true}
+        open={calculating}
+        modalHeader="Operation ongoing"
+      >
+        <div className="flex flex-col items-center justify-center p-8 bg-white ju ">
+          <PageLoader />
+          <small className="text-[#F7941E]"> This may take a while. </small>
+          <small className="text-[#F7941E]">
+            Calculating ECL in progress. Please wait. Do not close, refresh or
+            navigate the page.
+          </small>
+        </div>
+      </Modal>
       <div className="py-6 bg-white rounded-lg">
         <small>Reporting date</small>
         <div className="w-full">

@@ -181,11 +181,11 @@ function UploadData({ close }: UploadDataProps) {
       )} */}
 
       <Modal showClose={true} open={isDone} modalHeader="Operation ongoing">
-        <div className="flex flex-col items-center justify-center p-8 bg-white ">
+        <div className="flex flex-col items-center justify-center p-8 bg-white ju ">
           <PageLoader />
+          <small className="text-[#F7941E]"> This may take a while. </small>
           <small className="text-[#F7941E]">
-            This may take a while.
-            <br /> Ingestion in progress. Please wait. Do not close, refresh or
+            Ingestion in progress. Please wait. Do not close, refresh or
             navigate the page.
           </small>
         </div>

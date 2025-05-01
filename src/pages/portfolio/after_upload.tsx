@@ -157,7 +157,6 @@ any) {
       },
     },
   };
-  console.log("bog_numLoansData", bog_numLoansData);
 
   const bog_series = [
     {
