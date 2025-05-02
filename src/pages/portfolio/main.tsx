@@ -9,12 +9,10 @@ import TableLoader from "../../components/table_loader/component";
 import { Modal } from "../../components/modal/_component";
 import CreatePorfolio from "../../components/create_portfolio/_component";
 import DeletePortfolio from "./delete_portfolio";
-// import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FilterValues } from "../../core/interfaces";
 
 function PortfolioMain() {
-  // const navigate = useNavigate();
   const { portfoliosQuery } = usePortfolios();
   const menuRef = useRef<HTMLDivElement>(null);
   const [openCreatePortfolioModal, setOpenCreatePortfolioModal] =
@@ -99,8 +97,6 @@ function PortfolioMain() {
     { key: "asset_type", name: "Asset type", resizable: true },
     { key: "customer_type", name: "Customer type", resizable: true },
     { key: "funding_source", name: "Funding source", resizable: true },
-    // { key: "data_source", name: "Data source", width: 180 },
-    // { key: "repayment_source", name: "Repayment source", width: 180 },
     {
       key: "updated_at",
       name: "Updated at",

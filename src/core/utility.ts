@@ -173,12 +173,10 @@ export const validateSequentialRanges = (
     let start: number, end: number;
 
     if (range.includes("-")) {
-      // Handle range like "0-30"
       const [startStr, endStr] = range.split("-").map((s) => s.trim());
       start = parseInt(startStr);
       end = parseInt(endStr);
     } else if (range.includes("+")) {
-      // Handle open-ended range like "360+"
       const [startStr] = range.split("+").map((s) => s.trim());
       start = parseInt(startStr);
       end = Number.MAX_SAFE_INTEGER;
@@ -199,4 +197,11 @@ export const validateSequentialRanges = (
   }
 
   return true;
+};
+
+export const isEmptyRate = (value: any): boolean => {
+  return value === null || value === undefined || value === "";
+};
+export const isEmptyRange = (value: any): boolean => {
+  return value === null || value === undefined || value === "";
 };

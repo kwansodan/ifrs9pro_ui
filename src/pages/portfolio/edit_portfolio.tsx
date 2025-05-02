@@ -14,6 +14,7 @@ import { Images } from "../../data/Assets";
 import { usePortfolio } from "../../core/hooks/portfolio";
 import { useNavigate, useParams } from "react-router-dom";
 import PageLoader from "../../components/page_loader/_component";
+import { isEmptyRate, validateSequentialRanges } from "../../core/utility";
 
 function EditPortfolio() {
   const { id } = useParams();
@@ -55,30 +56,39 @@ function EditPortfolio() {
         range:
           data?.staging_summary?.local_impairment?.config?.current
             ?.days_range || "",
+        rate:
+          data?.staging_summary?.local_impairment?.config?.current?.rate || "",
       },
       {
         category: "OLEM",
         range:
           data?.staging_summary?.local_impairment?.config?.olem?.days_range ||
           "",
+        rate: data?.staging_summary?.local_impairment?.config?.olem?.rate || "",
       },
       {
         category: "Substandard",
         range:
           data?.staging_summary?.local_impairment?.config?.substandard
             ?.days_range || "",
+        rate:
+          data?.staging_summary?.local_impairment?.config?.substandard?.rate ||
+          "",
       },
       {
         category: "Doubtful",
         range:
           data?.staging_summary?.local_impairment?.config?.doubtful
             ?.days_range || "",
+        rate:
+          data?.staging_summary?.local_impairment?.config?.doubtful?.rate || "",
       },
       {
         category: "Loss",
         range:
           data?.staging_summary?.local_impairment?.config?.loss?.days_range ||
           "",
+        rate: data?.staging_summary?.local_impairment?.config?.loss?.rate || "",
       },
     ]);
   }, [data, id]);
@@ -183,10 +193,11 @@ function EditPortfolio() {
 
       acc[key] = {
         days_range: item.range ?? "",
+        rate: item.rate ?? "",
       };
 
       return acc;
-    }, {} as Record<string, { days_range: string }>);
+    }, {} as Record<string, { days_range: string; rate: string }>);
 
     const staging_summary = fourthCategories.reduce((acc, item) => {
       const key = item.category.toLowerCase();
@@ -197,6 +208,33 @@ function EditPortfolio() {
 
       return acc;
     }, {} as Record<string, { days_range: string }>);
+
+    const allRatesEmpty = categories.every((category) =>
+      isEmptyRate(category.rate)
+    );
+    const allRatesRange = categories.every((category) =>
+      isEmptyRate(category.range)
+    );
+
+    if (allRatesRange) {
+      showToast("Please ensure all range fields are filled.", false);
+      setIsSubmittingFirstStep(false);
+      return;
+    }
+
+    if (allRatesEmpty) {
+      showToast("Please ensure all rate fields are filled.", false);
+      setIsSubmittingFirstStep(false);
+      return;
+    }
+
+    const isValidCategoriesSummary =
+      validateSequentialRanges(categories_summary);
+    if (!isValidCategoriesSummary) {
+      setIsSubmittingFirstStep(false);
+      return;
+    }
+
     const payload = {
       name,
       description,
@@ -371,7 +409,7 @@ function EditPortfolio() {
                 <tr className="text-left text-gray-700 bg-gray-100">
                   <th className="p-3">Category</th>
                   <th className="p-3">Days range</th>
-                  <th className="p-3"></th>
+                  <th className="p-3">Rates</th>
                 </tr>
               </thead>
               <tbody>
@@ -387,6 +425,19 @@ function EditPortfolio() {
                         disabled={editingIndex !== index}
                         onChange={(e) =>
                           handleInputChange(index, "range", e.target.value)
+                        }
+                      />
+                    </td>
+
+                    {/* Rate input field */}
+                    <td className="p-3">
+                      <input
+                        type="text"
+                        className="w-full px-2 py-1 border rounded-md outline-0 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                        value={item.rate}
+                        disabled={editingIndex !== index}
+                        onChange={(e) =>
+                          handleInputChange(index, "rate", e.target.value)
                         }
                       />
                     </td>
