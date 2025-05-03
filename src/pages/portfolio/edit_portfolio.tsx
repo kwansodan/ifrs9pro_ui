@@ -12,13 +12,12 @@ import Button from "../../components/button/_component";
 import { CategoryProps } from "../../core/interfaces";
 import { Images } from "../../data/Assets";
 import { usePortfolio } from "../../core/hooks/portfolio";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import PageLoader from "../../components/page_loader/_component";
 import { isEmptyRate, validateSequentialRanges } from "../../core/utility";
 
 function EditPortfolio() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { portfolioQuery } = usePortfolio(Number(id));
   const [selectedAsset, setSelectedAsset] = useState<string>("");
   const [repaymentValue, setRepaymentValue] = useState<boolean>(false);
