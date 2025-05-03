@@ -30,9 +30,9 @@ function GenerateReportSuccess({ report_date, report_type }: any) {
         .then(() => {
           setSave(false);
           showToast("Save successful", true);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 1500);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1200);
         })
         .catch(() => {
           setSave(false);

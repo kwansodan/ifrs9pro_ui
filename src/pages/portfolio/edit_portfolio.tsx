@@ -261,9 +261,9 @@ function EditPortfolio() {
           if (res.status === 200 || res.status === 201) {
             showToast("Edit made successfully.", true);
           }
-          setTimeout(() => {
-            navigate("/dashboard/portfolio");
-          }, 1800);
+          // setTimeout(() => {
+          //   navigate("/dashboard/portfolio");
+          // }, 1800);
         })
         .catch((err) => {
           setIsSubmittingFirstStep(false);
