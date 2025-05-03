@@ -47,11 +47,11 @@ export const reportTypeOptions = [
     label: "ECL report summarised by stages",
   },
   {
-    value: "local_impairment_details_report",
+    value: "local_impairment_detailed_report",
     label: "Local impairment detailed report",
   },
   {
-    value: "local_impairment_report_summarised",
+    value: "local_impairment_report_summarised_by_stages",
     label: "Local impairment report summarised by stages",
   },
   { value: "journals_report", label: "Journals report" },
