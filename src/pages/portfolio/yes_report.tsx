@@ -12,7 +12,6 @@ function YesReport() {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const { portfoliosReportsQuery } = usePorfolioReports(Number(id));
 
-  const isDownloading = (id: string) => downloadingId === id;
   const handleDownload = (id: string) => {
     setDownloadingId(id);
     downloadDocument(id);
