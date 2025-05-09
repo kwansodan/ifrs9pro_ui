@@ -70,9 +70,9 @@ function FourthStep({ close, id }: any) {
         .then(() => {
           setIsCreating(false);
           showToast("Portfolio creation done successfully", true);
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 1500);
         })
         .catch((err) => {
           setIsCreating(false);
