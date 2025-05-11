@@ -11,11 +11,11 @@ function ThirdStep({ close, id, setStep }: any) {
   // const navigate = useNavigate();
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [categories, setCategories] = useState<CategoryProps[]>([
-    { category: "Current", range: "0-30", rate: "1%" },
-    { category: "OLEM", range: "31-89", rate: "20%" },
-    { category: "Substandard", range: "90-179", rate: "25%" },
-    { category: "Doubtful", range: "180-359", rate: "50%" },
-    { category: "Loss", range: "360+", rate: "100%" },
+    { category: "Current", range: "0-30", rate: "0.1" },
+    { category: "OLEM", range: "31-89", rate: "0.2" },
+    { category: "Substandard", range: "90-179", rate: "0.25" },
+    { category: "Doubtful", range: "180-359", rate: "0.50" },
+    { category: "Loss", range: "360+", rate: "1.00" },
   ]);
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);

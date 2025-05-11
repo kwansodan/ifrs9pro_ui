@@ -168,7 +168,20 @@ export const validateSequentialRanges = (
 
   for (const category of categoriesOrder) {
     const range = payload[category]?.days_range?.trim();
-    if (!range) return false;
+    const rate = payload[category]?.rate?.trim();
+
+    if (!range || !rate) {
+      showToast(`Missing range or rate in "${category}"`, false);
+      return false;
+    }
+
+    if (rate.includes("%") || isNaN(Number(rate))) {
+      showToast(
+        `Invalid rate format in "${category}": "${rate}". Use decimal or whole numbers only.`,
+        false
+      );
+      return false;
+    }
 
     let start: number, end: number;
 

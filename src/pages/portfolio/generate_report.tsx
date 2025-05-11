@@ -8,14 +8,11 @@ import { GenerateReports } from "../../core/services/portfolio.service";
 import { useState } from "react";
 import { Modal } from "../../components/modal/_component";
 import GerneratingReport from "./generating_report";
-import GenerateReportSuccess from "./generate_report_success";
 function GenerateReport({ close }: UploadDataProps) {
   const { id } = useParams();
   const [report_type, setReportType] = useState<string>("");
-  const [report_date, setReportDate] = useState<string>("");
+
   const [triggerReportGeneration, setTriggerReportGeneration] =
-    useState<boolean>(false);
-  const [triggerReportGenerationSuccess, setTriggerReportGenerationSuccess] =
     useState<boolean>(false);
 
   const handleReportType = (selectedOption: any) => {
@@ -32,15 +29,18 @@ function GenerateReport({ close }: UploadDataProps) {
       showToast("All fields required", false);
       return;
     }
-    setReportDate(report_date);
+
     const payload = { report_date, report_type };
     setTriggerReportGeneration(true);
     if (id) {
       GenerateReports(id, payload)
         .then((res) => {
           setTriggerReportGeneration(false);
-          setTriggerReportGenerationSuccess(true);
           showToast(res.data.message, true);
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1600);
         })
         .catch(() => {
           setTriggerReportGeneration(false);
@@ -69,11 +69,11 @@ function GenerateReport({ close }: UploadDataProps) {
 
   return (
     <>
-      <Modal open={triggerReportGeneration}>
+      <Modal showClose={true} open={triggerReportGeneration}>
         <GerneratingReport />
       </Modal>
-      <Modal
-        showClose={true}
+      {/* <Modal
+        showClose={false}
         close={() => setTriggerReportGeneration(false)}
         open={triggerReportGenerationSuccess}
       >
@@ -81,7 +81,7 @@ function GenerateReport({ close }: UploadDataProps) {
           report_type={report_type}
           report_date={report_date}
         />
-      </Modal>
+      </Modal> */}
       <div className="mt-3 leading-9">
         <label className="text-[#1E1E1E] text-[14px] font-medium">
           Report date

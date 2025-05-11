@@ -47,7 +47,7 @@ function YesReport() {
   return (
     <div className="p-4 rounded-lg bg-gray-50">
       <h2 className="mb-2 text-lg font-semibold">Report history</h2>
-      <div className="p-4 bg-white rounded-lg shadow">
+      <div className="p-4 overflow-y-scroll bg-white rounded-lg shadow max-h-80">
         {portfoliosReportsQuery &&
           portfoliosReportsQuery.data &&
           portfoliosReportsQuery.data.data &&
