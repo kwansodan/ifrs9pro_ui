@@ -64,15 +64,17 @@ function FourthStep({ close, id }: any) {
 
       return acc;
     }, {} as Record<string, { days_range: string }>);
-
+    const finalPayload = {
+      ecl_staging_config: payload,
+    };
     if (id) {
-      CreateSecondStepPortfolioApi(id, payload)
+      CreateSecondStepPortfolioApi(id, finalPayload)
         .then(() => {
           setIsCreating(false);
           showToast("Portfolio creation done successfully", true);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 1500);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         })
         .catch((err) => {
           setIsCreating(false);
