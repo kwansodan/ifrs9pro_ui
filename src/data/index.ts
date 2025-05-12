@@ -92,7 +92,7 @@ export const status = [
 ];
 
 export const customerTypeOptions = [
-  { value: "consumers", label: "Consumers" },
+  { value: "individuals", label: "Individuals" },
   { value: "institution", label: "Institution" },
   { value: "mixed", label: "Mixed" },
 ];

@@ -89,8 +89,7 @@ function FourthStep({ close, id }: any) {
   return (
     <>
       <div className="px-6 py-8 bg-white rounded-lg">
-        <div className="overflow-x-auto">
-          <h3 className="text-[14px] font-bold mt-2">ECL Staging</h3>
+        <div className="mt-4 overflow-x-auto">
           <table className="w-full border rounded-lg">
             <thead>
               <tr className="text-left text-gray-700 bg-gray-100">
@@ -148,8 +147,8 @@ function FourthStep({ close, id }: any) {
           <Button
             onClick={handleSubmit}
             isLoading={isCreating}
-            text="Create portfolio"
-            className="bg-[#166E94] !text-[14px] !w-[170px] text-white px-4 py-2 rounded-[10px]"
+            text="Complete portfolio creation"
+            className="bg-[#166E94] !text-[14px] !w-[210px] text-white px-4 py-2 rounded-[10px]"
           />
         </div>
       </div>

@@ -63,7 +63,6 @@ function YesReport() {
                 <span className="flex-1 text-gray-700">
                   {renderReportLabel(report.report_type)}
                 </span>
-
                 <div key={report.id}>
                   <div
                     onClick={() => {

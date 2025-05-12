@@ -107,9 +107,9 @@ function ThirdStep({ close, id, setStep }: any) {
 
   return (
     <>
-      <div className="px-8 py-6 bg-white rounded-lg">
-        <h3 className="text-[14px] font-bold mt-2">BOG staging</h3>
-        <div className="overflow-x-auto">
+      <div className="px-8 py-6 mt-1 bg-white rounded-lg">
+        {/* <h3 className="text-[14px] font-bold mt-2">BOG staging</h3> */}
+        <div className="mt-4 overflow-x-auto">
           <table className="w-full border rounded-lg">
             <thead>
               <tr className="text-left text-gray-700 bg-gray-100">

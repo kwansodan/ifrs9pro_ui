@@ -14,7 +14,7 @@ import ThirdStep from "./third_step";
 import FourthStep from "./fourth_step";
 
 function CreatePorfolio({ cancel }: any) {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(4);
   const [portfolioId, setPortfolioId] = useState<string>("");
   const [selectedAsset, setSelectedAsset] = useState<string>("");
   const [repaymentValue, setRepaymentValue] = useState<boolean>(false);
@@ -90,6 +90,7 @@ function CreatePorfolio({ cancel }: any) {
 
             setStep(2);
           } else {
+            console.log(res);
             setIsSubmittingFirstStep(false);
             showToast("An error occurred. Please try again.", false);
           }
