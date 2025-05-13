@@ -89,6 +89,7 @@ function FourthStep({ close, id }: any) {
   return (
     <>
       <div className="px-6 py-8 bg-white rounded-lg">
+        <h3 className="text-[14px] text-center font-bol">ECL staging</h3>
         <div className="mt-4 overflow-x-auto">
           <table className="w-full border rounded-lg">
             <thead>
