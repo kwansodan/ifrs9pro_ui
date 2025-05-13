@@ -152,10 +152,10 @@ function FilteredResults() {
             </>
           ) : (
             <>
-              <div className="mt-5 space-y-3 text-sm">
+              <div className="mt-5 space-y-3 text-sm ">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400">Asset type:</span>
-                  <span className="font-medium">
+                  <span className="font-medium capitalize">
                     {portfolioQuery &&
                       portfolioQuery.data &&
                       portfolioQuery.data.data.asset_type}
@@ -163,7 +163,7 @@ function FilteredResults() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400">Customer type:</span>
-                  <span className="font-medium">
+                  <span className="font-medium capitalize">
                     {portfolioQuery &&
                       portfolioQuery.data &&
                       portfolioQuery.data.data.customer_type}
@@ -171,7 +171,7 @@ function FilteredResults() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400">Repayment source:</span>
-                  <span className="font-medium">
+                  <span className="font-medium capitalize">
                     {portfolioQuery &&
                     portfolioQuery.data &&
                     portfolioQuery.data.data.repayment_source
@@ -181,7 +181,7 @@ function FilteredResults() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400">Funding source:</span>
-                  <span className="font-medium">
+                  <span className="font-medium capitalize">
                     {portfolioQuery &&
                       portfolioQuery.data &&
                       portfolioQuery.data.data.funding_source}
