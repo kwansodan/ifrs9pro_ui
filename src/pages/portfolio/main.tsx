@@ -127,7 +127,7 @@ function PortfolioMain() {
       <Modal
         close={() => setOpenCreatePortfolioModal(false)}
         open={openCreatePortfolioModal}
-        modalHeader="Create Portfolio"
+        modalHeader="Create New Portfolio"
       >
         <CreatePorfolio cancel={() => setOpenCreatePortfolioModal(false)} />
       </Modal>
