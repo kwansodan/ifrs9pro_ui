@@ -37,7 +37,7 @@ function DeletePortfolio({ id, close, name, setIsDeleteDone }: any) {
     }
   };
   return (
-    <div className="p-10 bg-white">
+    <div className="p-10 bg-white rounded-[8px]">
       <div className="w-16 m-auto"></div>
       <div className="text-sm">
         <h3 className="mt-3 text-black">
@@ -45,16 +45,16 @@ function DeletePortfolio({ id, close, name, setIsDeleteDone }: any) {
           sure you want to delete <br />
           <b className="font-bold">{name}'s </b>portfolio?
         </h3>
-        <div className="flex justify-end mt-6">
+        <div className="!flex !justify-end mt-6">
           <button
             onClick={close}
-            className="bg-white text-black border-[2px] px-4 py-2 rounded-lg min-w-[110px] mr-8 min-h-[35px]"
+            className="!bg-white !text-black !border-[2px] px-4 py-2 !rounded-lg min-w-[110px] mr-8 min-h-[35px]"
           >
             Cancel
           </button>
           <Button
             isLoading={isDeleting}
-            className="bg-red-500 !w-10 text-white px-4 py-2 rounded-lg min-w-[110px] min-h-[35px]"
+            className="!bg-red-500 !w-10 text-white px-4 py-2 !rounded-lg min-w-[110px] min-h-[35px]"
             text="Delete"
             onClick={confirmDelete}
           />
