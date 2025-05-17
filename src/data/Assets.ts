@@ -34,8 +34,12 @@ import g_calc from "../assets/images/svgs/g_calc.svg";
 import like from "../assets/images/svgs/like.svg";
 import unlike from "../assets/images/svgs/unLinke.svg";
 import check from "../assets/images/svgs/checkm.svg";
+import delete1 from "../assets/images/svgs/delete1.svg";
+import delete2 from "../assets/images/svgs/delete2.svg";
 
 export const Images = {
+  delete1,
+  delete2,
   check,
   openEye,
   closedEye,
