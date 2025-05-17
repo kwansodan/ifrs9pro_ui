@@ -86,17 +86,17 @@ function YesReport() {
             Are you sure you want to delete this report? This action cannot be
             undone.
           </p>
-          <div className="flex justify-end">
+          <div className="!flex !justify-end">
             <Button
               onClick={() => handleDelete()}
               text="Yes"
               isLoading={isDeleting}
-              className="w-24 bg-red-500"
+              className="!w-24 bg-red-500"
             />
             <Button
               onClick={() => setConfirmDelete(false)}
               text="No"
-              className="w-24 ml-4"
+              className="!w-24 !ml-4"
             />
           </div>
         </div>
