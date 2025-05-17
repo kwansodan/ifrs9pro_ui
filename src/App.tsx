@@ -34,40 +34,6 @@ function App() {
 
   const appState = useSelector<RootState, IAppState>((state) => state.system);
 
-  // const onSessionSuccess = (res: any) => {
-  //   if (res.success) {
-  //     const data = res.data;
-  //     // setToken(data.token, data.user.tokenExpiry);
-  //     // dispatch(
-  //     //   setUser({ roles: data.user.role, username: data.user.username })
-  //     // );
-  //   } else {
-  //     clearUserData();
-  //   }
-  // };
-
-  // const initQuery = useQuery<IConfig>({
-  //   retry: (count: any) => count < 1,
-  //   staleTime: Infinity,
-  //   queryKey: ["initQuery"],
-  //   queryFn: async () => {
-  //     const res = await GetFrontendConfig();
-  //     const data = res.data;
-  //     onInitSuccess(data);
-  //     return data;
-  //   },
-  // });
-
-  // useEffect(() => {
-  //   dispatch(setAppLoading(initQuery?.isLoading));
-
-  //   return () => {};
-  // }, [initQuery.isLoading]);
-
-  // useEffect(() => {
-  //   document.body.style.overflow = appState.loading ? "hidden" : "auto";
-  // }, [appState.loading]);
-
   useEffect(() => {}, [configLoaded]);
   return (
     <>

@@ -134,7 +134,7 @@ function PortfolioMain() {
       <Modal
         close={() => setConfirmDelete(false)}
         open={confirmDelete}
-        modalHeader="Please confirm"
+        modalHeader="Delete Portfolio"
       >
         <DeletePortfolio
           name={portfolioName}

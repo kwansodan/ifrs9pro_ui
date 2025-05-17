@@ -4,9 +4,11 @@ import Button from "../../components/button/_component";
 import { useState } from "react";
 import { CreateSecondStepPortfolioApi } from "../../core/services/portfolio.service";
 import { showToast } from "../../core/hooks/alert";
+import { usePortfolios } from "../../core/hooks/portfolio";
 
 function FourthStep({ close, id }: any) {
   const [isCreating, setIsCreating] = useState<boolean>(false);
+  const { portfoliosQuery } = usePortfolios();
   const [categories, setCategories] = useState<CategoryProps[]>([
     { category: "stage_1", range: "0-30" },
     { category: "stage_2", range: "31-89" },
@@ -72,9 +74,8 @@ function FourthStep({ close, id }: any) {
         .then(() => {
           setIsCreating(false);
           showToast("Portfolio creation done successfully", true);
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
+          close?.();
+          portfoliosQuery.refetch();
         })
         .catch((err) => {
           setIsCreating(false);

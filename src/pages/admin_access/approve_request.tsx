@@ -5,12 +5,14 @@ import { UploadDataProps } from "../../core/interfaces";
 import { useActionState, useState } from "react";
 import { showToast } from "../../core/hooks/alert";
 import { ApproveUserRequest } from "../../core/services/dashboard.service";
+import { useAdminRequests } from "../../core/hooks/admin";
 
 function ApproveRequest({
   close,
   actionToBeTaken,
   requestId,
 }: UploadDataProps) {
+  const { adminRequestsQuery } = useAdminRequests();
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<string>("");
 
@@ -41,12 +43,10 @@ function ApproveRequest({
           : "admin"
       )
         .then((res) => {
-          console.log(res);
           showToast(res.data.message, true);
           setButtonLoading(false);
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
+          close?.();
+          adminRequestsQuery.refetch();
         })
         .catch((err) => {
           setButtonLoading(false);

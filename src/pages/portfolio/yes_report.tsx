@@ -88,15 +88,15 @@ function YesReport() {
           </p>
           <div className="!flex !justify-end">
             <Button
-              onClick={() => handleDelete()}
-              text="Yes"
-              isLoading={isDeleting}
-              className="!w-24 bg-red-500"
+              onClick={() => setConfirmDelete(false)}
+              text="Cancel"
+              className="!w-24 !bg-white !border-2"
             />
             <Button
-              onClick={() => setConfirmDelete(false)}
-              text="No"
-              className="!w-24 !ml-4"
+              onClick={() => handleDelete()}
+              text="Delete"
+              isLoading={isDeleting}
+              className="!w-24 !text-white bg-red-500 !ml-4"
             />
           </div>
         </div>

@@ -4,38 +4,19 @@ import Button from "../../components/button/_component";
 import { UploadDataProps } from "../../core/interfaces";
 import { useActionState, useEffect, useState } from "react";
 import { UpdateAUser } from "../../core/services/users.service";
-import { useAdminUser } from "../../core/hooks/users";
+import { useAdminUser, useAdminUsers } from "../../core/hooks/users";
 import { showToast } from "../../core/hooks/alert";
-// import { usePortfolios } from "../../core/hooks/portfolio";
 import { roles } from "../../data";
 function EditUser({ close, rowId }: UploadDataProps) {
-  // const [selectedPortfolio, setSelectedPortfolio] = useState<string>("");
-  // const { portfoliosQuery } = usePortfolios();
+  const { adminUsersQuery } = useAdminUsers();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<string>("");
   const [hasRoleChanged, setHasRoleChanged] = useState<boolean>(false);
-
   const { adminUserQuery } = useAdminUser(Number(rowId));
 
   useEffect(() => {
     adminUserQuery.refetch();
   }, [rowId]);
-
-  // const portfolioDropdowns =
-  //   portfoliosQuery &&
-  //   portfoliosQuery.data &&
-  //   portfoliosQuery.data.data &&
-  //   portfoliosQuery.data.data.items;
-  // const portfolioOptions =
-  //   portfolioDropdowns &&
-  //   portfolioDropdowns.map((po: any, _: any) => ({
-  //     value: po.id,
-  //     label: po.name,
-  //   }));
-
-  // const handlePortofioOptions = (selectedOptions: any) => {
-  //   setSelectedPortfolio(selectedOptions.value);
-  // };
 
   const handleRoleChange = (selectedOption: any) => {
     setSelectedRole(selectedOption.value);
@@ -76,9 +57,8 @@ function EditUser({ close, rowId }: UploadDataProps) {
         .then(() => {
           setIsSubmitting(false);
           showToast("Edit successful", true);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          close?.();
+          adminUsersQuery.refetch();
         })
         .catch((err) => {
           setIsSubmitting(false);

@@ -80,19 +80,9 @@ function AdminAccess() {
     );
   };
 
-  // const renderDate = (data: any) => {
-  //   return moment(data.row.created_at).format("lll");
-  // };
-
   const columns = [
     { key: "email", name: "Email", resizable: true },
     { key: "admin_email", name: "Admin Email", resizable: true },
-    // {
-    //   key: "created_at",
-    //   name: "Created At",
-    //   width: 340,
-    //   renderCell: renderDate,
-    // },
     {
       key: "status",
       name: "Status",

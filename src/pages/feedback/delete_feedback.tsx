@@ -3,17 +3,18 @@ import Button from "../../components/button/_component";
 import { showToast } from "../../core/hooks/alert";
 import { UploadDataProps } from "../../core/interfaces";
 import { DeleteAFeedback } from "../../core/services/feedback.service";
+import { useFeedback } from "../../core/hooks/feedback";
 function DeleteFeedback({ close, rowId }: UploadDataProps) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const { feedbackQuery } = useFeedback();
   const confirmDelete = () => {
     setIsDeleting(true);
     DeleteAFeedback(Number(rowId))
       .then(() => {
         setIsDeleting(false);
         showToast("Operation successful", true);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        close?.();
+        feedbackQuery.refetch();
       })
       .catch((err) => {
         setIsDeleting(false);

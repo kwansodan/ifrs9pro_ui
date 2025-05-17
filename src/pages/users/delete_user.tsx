@@ -3,7 +3,9 @@ import Button from "../../components/button/_component";
 import { showToast } from "../../core/hooks/alert";
 import { UploadDataProps } from "../../core/interfaces";
 import { DeleteAdminUser } from "../../core/services/users.service";
+import { useAdminUsers } from "../../core/hooks/users";
 function DeleteUser({ close, rowId, userName }: UploadDataProps) {
+  const { adminUsersQuery } = useAdminUsers();
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const confirmDelete = () => {
     setIsDeleting(true);
@@ -11,9 +13,8 @@ function DeleteUser({ close, rowId, userName }: UploadDataProps) {
       .then(() => {
         setIsDeleting(false);
         showToast("Operation successful", true);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        close?.();
+        adminUsersQuery.refetch();
       })
       .catch((err) => {
         setIsDeleting(false);

@@ -2,8 +2,10 @@ import { useState } from "react";
 import Button from "../../components/button/_component";
 import { showToast } from "../../core/hooks/alert";
 import { DeleteAPortfolio } from "../../core/services/portfolio.service";
+import { usePortfolios } from "../../core/hooks/portfolio";
 
-function DeletePortfolio({ id, close, name }: any) {
+function DeletePortfolio({ id, close, name, setIsDeleteDone }: any) {
+  const { portfoliosQuery } = usePortfolios();
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const confirmDelete = () => {
     setIsDeleting(true);
@@ -11,10 +13,10 @@ function DeletePortfolio({ id, close, name }: any) {
       DeleteAPortfolio(id)
         .then(() => {
           setIsDeleting(false);
+          setIsDeleteDone(true);
           showToast("Operation successful", true);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          close?.();
+          portfoliosQuery.refetch();
         })
         .catch((err) => {
           setIsDeleting(false);
@@ -43,17 +45,17 @@ function DeletePortfolio({ id, close, name }: any) {
           sure you want to delete <br />
           <b className="font-bold">{name}'s </b>portfolio?
         </h3>
-        <div className="flex mt-6">
+        <div className="flex justify-end mt-6">
           <button
             onClick={close}
-            className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[110px] mr-8 min-h-[35px]"
+            className="bg-white text-black border-[2px] px-4 py-2 rounded-lg min-w-[110px] mr-8 min-h-[35px]"
           >
-            No
+            Cancel
           </button>
           <Button
             isLoading={isDeleting}
             className="bg-red-500 !w-10 text-white px-4 py-2 rounded-lg min-w-[110px] min-h-[35px]"
-            text="Yes"
+            text="Delete"
             onClick={confirmDelete}
           />
         </div>

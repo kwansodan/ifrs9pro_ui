@@ -6,8 +6,10 @@ import { usePortfolios } from "../../core/hooks/portfolio";
 import { useActionState, useState } from "react";
 import { showToast } from "../../core/hooks/alert";
 import { CreateAdminUser } from "../../core/services/users.service";
+import { useAdminUsers } from "../../core/hooks/users";
 function NewUser({ close }: UploadDataProps) {
   const { portfoliosQuery } = usePortfolios();
+  const { adminUsersQuery } = useAdminUsers();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedPortfolio, setSelectedPortfolio] = useState<string>("");
   const [selectedRole, setSelectedRole] = useState<string>("");
@@ -72,7 +74,8 @@ function NewUser({ close }: UploadDataProps) {
           setTimeout(() => {
             showToast(res.data.message, true);
           }, 2000);
-          window.location.reload();
+          close?.();
+          adminUsersQuery.refetch();
         })
         .catch((err) => {
           setIsSubmitting(false);

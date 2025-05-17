@@ -2,14 +2,14 @@ import Button from "../../components/button/_component";
 import { UploadDataProps } from "../../core/interfaces";
 import { useActionState, useEffect, useState } from "react";
 import { showToast } from "../../core/hooks/alert";
-import { useGetAFeedback } from "../../core/hooks/feedback";
+import { useFeedback, useGetAFeedback } from "../../core/hooks/feedback";
 import { UpdateFeedback } from "../../core/services/feedback.service";
 import Select from "react-select";
 import { feedbackStatuses } from "../../data";
 function EditFeedback({ close, rowId }: UploadDataProps) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedFeedback, setSelectedFeedback] = useState<string>("");
-
+  const { feedbackQuery } = useFeedback();
   useEffect(() => {
     aFeedBackQuery.refetch();
   }, [rowId && rowId]);
@@ -29,13 +29,11 @@ function EditFeedback({ close, rowId }: UploadDataProps) {
 
     try {
       UpdateFeedback(Number(rowId), payload)
-        .then((res) => {
-          console.log("res: ", res);
+        .then(() => {
           setIsSubmitting(false);
           showToast("Edit done successfully", true);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          close?.();
+          feedbackQuery.refetch();
         })
         .catch((err) => {
           setIsSubmitting(false);

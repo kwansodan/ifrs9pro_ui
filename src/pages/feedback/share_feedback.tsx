@@ -2,10 +2,11 @@ import { useActionState, useState } from "react";
 import Button from "../../components/button/_component";
 import { SendFeedback } from "../../core/services/feedback.service";
 import { showToast } from "../../core/hooks/alert";
+import { useFeedback } from "../../core/hooks/feedback";
 
 function ShareFeedback({ cancel }: any) {
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
-
+  const { feedbackQuery } = useFeedback();
   const submit = async (prevState: any, formData: FormData) => {
     setButtonLoading(true);
     console.log("prev: ", prevState);
@@ -22,9 +23,8 @@ function ShareFeedback({ cancel }: any) {
         .then((res) => {
           showToast(res.data.message ?? "Operation successful", true);
           setButtonLoading(false);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          cancel?.();
+          feedbackQuery.refetch();
         })
         .catch((err) => {
           setButtonLoading(false);
