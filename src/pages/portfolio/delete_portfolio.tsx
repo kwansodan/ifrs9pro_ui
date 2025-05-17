@@ -37,7 +37,7 @@ function DeletePortfolio({ id, close, name, setIsDeleteDone }: any) {
     }
   };
   return (
-    <div className="p-10 bg-white rounded-[8px]">
+    <div className="p-10 bg-white !rounded-[8px]">
       <div className="w-16 m-auto"></div>
       <div className="text-sm">
         <h3 className="mt-3 text-black">
