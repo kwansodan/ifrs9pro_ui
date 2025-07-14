@@ -12,7 +12,6 @@ function DeletePortfolio({ id, close, name }: any) {
     try {
       DeleteAPortfolio(id)
         .then(() => {
-          alert("res");
           setIsDeleting(false);
           showToast("Operation successful", true);
           close?.();
@@ -20,7 +19,6 @@ function DeletePortfolio({ id, close, name }: any) {
           return;
         })
         .catch((err) => {
-          alert("err");
           setIsDeleting(false);
 
           showToast(
