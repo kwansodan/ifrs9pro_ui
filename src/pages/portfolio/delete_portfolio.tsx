@@ -4,32 +4,31 @@ import { showToast } from "../../core/hooks/alert";
 import { DeleteAPortfolio } from "../../core/services/portfolio.service";
 import { usePortfolios } from "../../core/hooks/portfolio";
 
-function DeletePortfolio({ id, close, name, setIsDeleteDone }: any) {
+function DeletePortfolio({ id, close, name }: any) {
   const { portfoliosQuery } = usePortfolios();
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const confirmDelete = () => {
     setIsDeleting(true);
     try {
       DeleteAPortfolio(id)
-        .then(() => {
+        .then((res) => {
+          alert("res");
           setIsDeleting(false);
-          setIsDeleteDone(true);
           showToast("Operation successful", true);
           close?.();
           portfoliosQuery.refetch();
+          return;
         })
         .catch((err) => {
+          alert("err");
           setIsDeleting(false);
 
-          if (err?.response?.status === 500) {
-            showToast("Server error: Please try again later.", false);
-          } else {
-            showToast(
-              err?.response?.data?.detail ||
-                "Server error: Please try again later.",
-              false
-            );
-          }
+          showToast(
+            err?.response?.data?.detail ||
+              "Server error: Please try again later.",
+            false
+          );
+          return;
         });
     } catch (error) {
       setIsDeleting(false);
