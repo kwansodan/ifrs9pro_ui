@@ -113,11 +113,17 @@ export const renderReportLabel = (value: string) => {
   if (value === "ecl_detailed_report") return "ECL detailed report";
   if (value === "ecl_report_summarised_by_stages")
     return "ECL report summarised by stages";
-  if (value === "local_impairment_detailed_report")
-    return "Local impairment detailed report";
-  if (value === "local_impairment_report_summarised_by_stages")
-    return "Local impairment report summarised by stages";
-  if (value === "journals_report") return "Journals report";
+  if (value === "BOG_impairment_detailed_report")
+    return "BOG impairment detailed report";
+  if (value === "BOG_IMPAIRMENT_REPORT_SUMMARISED")
+    return "BOG impairment summary by stages";
+  if (value === "JOURNALS_REPORT") return "Journals report";
+  // if (value === "local_impairment_detailed_report")
+  // if (value === "local_impairment_detailed_report")
+  //   return "Local impairment detailed report";
+  // if (value === "local_impairment_report_summarised_by_stages")
+  //   return "Local impairment report summarised by stages";
+  // if (value === "journals_report") return "Journals report";
 
   return "Report not found";
 };
