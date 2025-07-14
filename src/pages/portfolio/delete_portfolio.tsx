@@ -11,7 +11,7 @@ function DeletePortfolio({ id, close, name }: any) {
     setIsDeleting(true);
     try {
       DeleteAPortfolio(id)
-        .then((res) => {
+        .then(() => {
           alert("res");
           setIsDeleting(false);
           showToast("Operation successful", true);
