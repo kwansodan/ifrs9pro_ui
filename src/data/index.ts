@@ -47,14 +47,26 @@ export const reportTypeOptions = [
     label: "ECL report summarised by stages",
   },
   {
-    value: "local_impairment_detailed_report",
-    label: "Local impairment detailed report",
+    value: "BOG_impairment_detailed_report",
+    label: "BOG impairment detailed report",
   },
   {
-    value: "local_impairment_report_summarised_by_stages",
-    label: "Local impairment report summarised by stages",
+    value: "BOG_IMPAIRMENT_REPORT_SUMMARISED",
+    label: "BOG impairment summary by stages",
   },
-  { value: "journals_report", label: "Journals report" },
+  {
+    value: "JOURNALS_REPORT",
+    label: "Journals report",
+  },
+  // {
+  //   value: "local_impairment_detailed_report",
+  //   label: "Local impairment detailed report",
+  // },
+  // {
+  //   value: "local_impairment_report_summarised_by_stages",
+  //   label: "Local impairment report summarised by stages",
+  // },
+  // { value: "journals_report", label: "Journals report" },
   // {
   //   value: "amortised_loan_balances",
   //   label:
