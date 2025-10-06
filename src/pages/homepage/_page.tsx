@@ -19,7 +19,7 @@ const Homepage = () => {
 
                 <p className="max-w-2xl mx-auto mt-6 text-[14px] text-[#6F6F6F]">
                   IFRS9Pro simplifies PD, LGD, EAD, and ECL calculations <br />{" "}
-                  with audit-ready reports and zero spreadsheet errors.
+                  with audit-ready reports and zero spreadsheet errors
                 </p>
               </div>
 
