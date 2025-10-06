@@ -81,7 +81,6 @@ function FilterTray({
         </div>
       </div>
 
-      {/* Buttons */}
       <div className="flex justify-end gap-2 mt-3">
         <Button
           text="Cancel"
