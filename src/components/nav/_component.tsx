@@ -1,22 +1,13 @@
-import { useState } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Images } from "../../data/Assets";
-import { dashboardNavItems } from "../../data";
 import Button from "../button/_component";
 
-type Props = {};
-
-const Navbar = (props: Props) => {
-  const [showLogout, setShowLogout] = useState<boolean>(false);
-
+const Navbar = () => {
   const navigate = useNavigate();
-  const pathname = useLocation();
   const gotoHome = () => {
     navigate("/dashboard");
   };
-  const triggerLogout = () => {
-    setShowLogout(!showLogout);
-  };
+
   4;
   return (
     <>

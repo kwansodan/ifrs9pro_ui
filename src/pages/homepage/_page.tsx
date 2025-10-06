@@ -3,12 +3,10 @@ import FooterSection from "../../components/footer/_component";
 import Navbar from "../../components/nav/_component";
 import { Images } from "../../data/Assets";
 
-type Props = {};
-
-const Homepage = (props: Props) => {
+const Homepage = () => {
   return (
     <>
-      <div className="bg-gradient-to-b from-[#eff9ff] to-[#fff]">
+      <div className="bg-gradient-to-b from-[#F7FCFF] to-[#fff]">
         <Navbar />
         <div className="w-full px-6 py-4 md:px-12">
           <section>
