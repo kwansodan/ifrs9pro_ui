@@ -23,7 +23,7 @@ export const clearUserSession = () => {
 export const getAxios = () => {
   const instance = axios.create({
     // baseURL: "https://ifrs9pro-backend.onrender.com",
-    baseURL: "https://ifrs9pro-api.service4gh.com",
+    baseURL: "http://139.59.165.167:8000",
   });
 
   const token = localStorage.getItem("u_token");
@@ -43,6 +43,7 @@ export const getAxios = () => {
 
   instance.interceptors.response.use(
     (response) => {
+      console.log("rrr: ", response);
       if (response.status === 200 && response.data.data == 401) {
         clearUserSession();
       }
@@ -52,6 +53,7 @@ export const getAxios = () => {
       return response;
     },
     (error) => {
+      console.log("eee: ", error);
       // if (error?.response?.status.toLocaleLowerCase() === 401) {
       //   clearUserSession();
       // }

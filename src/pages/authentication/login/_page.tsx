@@ -116,7 +116,7 @@ function Login() {
             </div>
             <Button
               type="submit"
-              className="mt-8"
+              className="mt-8 bg-[#166E94]"
               text="Login"
               disabled={!isFormValid}
               isLoading={buttonLoading}

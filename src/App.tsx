@@ -28,6 +28,8 @@ import PageLoader from "./components/page_loader/_component";
 import PortfolioDetails from "./pages/portfolio/portfolio_details";
 import EditPortfolio from "./pages/portfolio/edit_portfolio";
 import Homepage from "./pages/homepage/_page";
+import Billing from "./pages/billing/billing";
+import SubscriptionPayment from "./pages/billing/subscription_billing";
 
 function App() {
   const [userSession] = useState(getUserSession());
@@ -110,6 +112,11 @@ function App() {
               <Route path="users" element={<Users />} />
               <Route path="admin-access" element={<AdminAccess />} />
               <Route path="password-change" element={<PasswordChange />} />
+              <Route path="billing" element={<Billing />} />
+              <Route
+                path="susbscription-payment"
+                element={<SubscriptionPayment />}
+              />
             </Route>
           ) : (
             <Route path="/dashboard/*" element={<Navigate to="/" />} />

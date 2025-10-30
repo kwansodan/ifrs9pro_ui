@@ -99,3 +99,9 @@ export type IUser = {
 export type IUserState = {
   user?: IUser;
 };
+
+export type TabsProps = {
+  tabs: string[];
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+};
