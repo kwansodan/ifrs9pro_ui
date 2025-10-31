@@ -27,8 +27,6 @@ import { RootState } from "./core/stores";
 import PageLoader from "./components/page_loader/_component";
 import PortfolioDetails from "./pages/portfolio/portfolio_details";
 import EditPortfolio from "./pages/portfolio/edit_portfolio";
-import Homepage from "./pages/homepage/_page";
-import Billing from "./pages/billing/billing";
 import SubscriptionPayment from "./pages/billing/subscription_billing";
 
 function App() {
