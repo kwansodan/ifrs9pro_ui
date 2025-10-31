@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function ActionsMenu({ row }: any) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   return (
     <>
       <div className="relative">

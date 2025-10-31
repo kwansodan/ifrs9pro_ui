@@ -36,8 +36,18 @@ import unlike from "../assets/images/svgs/unLinke.svg";
 import check from "../assets/images/svgs/checkm.svg";
 import delete1 from "../assets/images/svgs/delete1.svg";
 import delete2 from "../assets/images/svgs/delete2.svg";
+import homepageImg from "../assets/images/svgs/Dashboard.svg";
+import profileLoan from "../assets/images/svgs/portfolio-loan.svg";
+import seamless from "../assets/images/svgs/seamless.svg";
+import automated from "../assets/images/svgs/automated.svg";
+import footerImg from "../assets/images/svgs/footerImg.svg";
 
 export const Images = {
+  footerImg,
+  automated,
+  seamless,
+  profileLoan,
+  homepageImg,
   delete1,
   delete2,
   check,
