@@ -142,7 +142,7 @@ const Invoices = () => {
                     "All",
                     "Name on profile",
                     "Profile name 1",
-                    "Profile name 2",
+                    "Profile name 2.",
                   ].map((profile) => (
                     <div
                       key={profile}
