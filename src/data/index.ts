@@ -7,7 +7,7 @@ export const dashboardNavItems = [
   { name: "Users", href: "/dashboard/users" },
   { name: "Feedback", href: "/dashboard/feedback" },
   { name: "Access requests", href: "/dashboard/admin-access" },
-  { name: "Billing", href: "/dashboard/billing" },
+  // { name: "Billing", href: "/dashboard/billing" },
 ];
 
 export const portfolioOverview = [
