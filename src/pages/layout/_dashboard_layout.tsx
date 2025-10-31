@@ -119,7 +119,7 @@ const DashboardLayout = () => {
               <NavLink
                 key={item.name}
                 to={item.href}
-                className={`text-[16px] cursor-pointer ${
+                className={`text-[14px] cursor-pointer ${
                   pathname.pathname === item.href
                     ? "text-[#166E94] font-medium"
                     : "text-[#6F6F6F]"

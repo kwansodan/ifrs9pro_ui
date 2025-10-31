@@ -1,3 +1,12 @@
+@import "@fontsource/manrope/400.css";
+@import "@fontsource/manrope/500.css";
+@import "@fontsource/manrope/600.css";
+@import "@fontsource/manrope/700.css";
+
+body {
+  font-family: "Manrope", sans-serif;
+}
+
 .rdg {
   border: none !important;
   background: transparent !important;
@@ -84,6 +93,65 @@
   }
   to {
     transform: translateY(0);
+  }
+}
+/* --- Base tone & spacing --- */
+.custom-grid {
+  --rdg-border-color: #e5e7eb; /* gray-200 */
+  --rdg-row-border-color: #f3f4f6; /* gray-100/200 */
+  --rdg-header-background-color: #f7f7f8; /* soft gray header like figma */
+  font-size: 0.875rem;
+  border: none;
+}
+
+/* Header */
+.custom-grid .rdg-header-row {
+  background-color: var(--rdg-header-background-color);
+  color: #6b7280; /* gray-500 */
+  font-weight: 500;
+  border-bottom: 1px solid var(--rdg-border-color);
+}
+.custom-grid .rdg-header-row .rdg-cell {
+  padding: 0.65rem 0.9rem;
+}
+.custom-grid .rdg-header-row .rdg-cell:first-child {
+  border-top-left-radius: 12px;
+}
+.custom-grid .rdg-header-row .rdg-cell:last-child {
+  border-top-right-radius: 12px;
+}
+
+/* Cells (row spacing + horizontal separators) */
+.custom-grid .rdg-cell {
+  padding: 0.9rem; /* more breathing room */
+  border-bottom: 1px solid var(--rdg-row-border-color);
+  background-color: #ffffff;
+}
+
+/* Row hover: subtle, not heavy */
+.custom-grid .rdg-row:hover .rdg-cell {
+  background-color: #fafafa;
+}
+
+/* Remove the blue focus outline and any selection tint */
+.custom-grid .rdg-cell:focus,
+.custom-grid .rdg-cell:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.custom-grid .rdg {
+  --rdg-selection-color: transparent;
+}
+
+/* Remove extra borders */
+.custom-grid .rdg {
+  border: none !important;
+}
+
+/* Action column content aligns nicely on small screens too */
+@media (max-width: 640px) {
+  .custom-grid .rdg-cell {
+    padding: 0.75rem;
   }
 }
 
