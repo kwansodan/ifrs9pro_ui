@@ -41,8 +41,10 @@ import profileLoan from "../assets/images/svgs/portfolio-loan.svg";
 import seamless from "../assets/images/svgs/seamless.svg";
 import automated from "../assets/images/svgs/automated.svg";
 import footerImg from "../assets/images/svgs/footerImg.svg";
+import refresh from "../assets/images/svgs/refresh.svg";
 
 export const Images = {
+  refresh,
   footerImg,
   automated,
   seamless,
