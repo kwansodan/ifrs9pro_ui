@@ -45,7 +45,6 @@ export const getAxios = () => {
 
   instance.interceptors.response.use(
     (response) => {
-      console.log("rrr: ", response);
       if (response.status === 200 && response.data.data == 401) {
         clearUserSession();
       }
@@ -177,8 +176,8 @@ export const validateSequentialRanges = (
   let expectedStart = 0;
 
   for (const category of categoriesOrder) {
-    const range = payload[category]?.days_range?.trim();
-    const rate = payload[category]?.rate?.trim();
+    const range = String(payload[category]?.days_range ?? "").trim();
+    const rate = String(payload[category]?.rate ?? "").trim();
 
     if (!range || !rate) {
       showToast(`Missing range or rate in "${category}"`, false);
