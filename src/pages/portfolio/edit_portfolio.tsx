@@ -12,7 +12,7 @@ import Button from "../../components/button/_component";
 import { CategoryProps } from "../../core/interfaces";
 import { Images } from "../../data/Assets";
 import { usePortfolio } from "../../core/hooks/portfolio";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PageLoader from "../../components/page_loader/_component";
 import { isEmptyRate, validateSequentialRanges } from "../../core/utility";
 
@@ -47,7 +47,7 @@ function EditPortfolio() {
   const data =
     portfolioQuery && portfolioQuery.data && portfolioQuery.data.data;
   const [categories, setCategories] = useState<CategoryProps[]>([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     setCategories([
       {
@@ -273,9 +273,9 @@ function EditPortfolio() {
           if (res.status === 200 || res.status === 201) {
             showToast("Edit made successfully.", true);
           }
-          // setTimeout(() => {
-          //   navigate("/dashboard/portfolio");
-          // }, 1800);
+          setTimeout(() => {
+            navigate("/dashboard/portfolio");
+          }, 1800);
         })
         .catch((err) => {
           setIsSubmittingFirstStep(false);
@@ -531,9 +531,9 @@ function EditPortfolio() {
             <div className="flex justify-end p-2">
               <Button
                 isLoading={isSubmittingFirstStep}
-                text="Edit"
+                text="Save changes"
                 type="submit"
-                className="bg-[#166E94] font-normal mt-3 text-white text-[12px] !rounded-[10px] !w-[90px] "
+                className="bg-[#166E94] font-normal mt-3 text-white text-[12px] !rounded-[10px] !w-[90px]"
               />
             </div>
           </form>
