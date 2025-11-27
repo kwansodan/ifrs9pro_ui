@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   DndContext,
   DragOverlay,
@@ -11,34 +11,39 @@ import {
 } from "@dnd-kit/core";
 import { createPortal } from "react-dom";
 import Button from "../../components/button/_component";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../core/stores";
+import { useNavigate } from "react-router-dom";
+import { CreatePortfolioIngestion } from "../../core/services/portfolio.service";
+import { showToast } from "../../core/hooks/alert";
+import { clearIngestionData } from "../../core/stores/slices/ingestion_slice";
+import { normalize } from "../../data";
 
 type Col = { id: string; label: string; mappedTo?: string | null };
 type Slot = { id: string; label: string; mapped?: string | null };
 
-const files = [
-  { id: "loan_details", name: "loan_details.xls" },
-  { id: "loan_guarantee", name: "loan_guarantee_data.xls" },
-  { id: "loan_collateral", name: "loan_collateral_data.xls" },
-  { id: "historical_payments", name: "Historical_payments.xls" },
-];
+const slotIdFromModel = (model: string) => `slot_${model}`;
 
 const FileTabs = ({
+  files,
   activeId,
   mappedCount,
-  total,
+  onChange,
 }: {
-  activeId: string;
+  files: { key: string; name: string }[];
+  activeId: string | null;
   mappedCount: number;
-  total: number;
+  onChange: (id: string) => void;
 }) => {
   return (
     <div className="flex flex-wrap gap-16 text-sm text-gray-700">
       {files.map((f) => {
-        const active = f.id === activeId;
+        const active = f.key === activeId;
         return (
-          <div key={f.id} className="min-w-[180px]">
+          <div key={f.key} className="min-w-[180px]">
             <div
-              className={`pb-1 ${
+              onClick={() => onChange(f.key)}
+              className={`pb-1 cursor-pointer ${
                 active ? "text-[#166E94] font-medium" : "text-gray-600"
               }`}
             >
@@ -50,7 +55,9 @@ const FileTabs = ({
               }`}
             />
             <div className="text-[11px] text-gray-400 mt-1">
-              {active ? `${mappedCount}/${total} mapped` : `0/${total} mapped`}
+              {active
+                ? `${mappedCount}/${f ? f?.name?.length ?? 0 : 0} mapped`
+                : `0/${f ? f?.name?.length ?? 0 : 0} mapped`}
             </div>
           </div>
         );
@@ -141,28 +148,81 @@ const SlotRow = ({
 };
 
 const ColumnMappingPage: React.FC = () => {
-  const [activeFileId] = useState("loan_details");
+  const [activeFileId, setActiveFileId] = useState<string | null>(null);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
 
-  const [left, setLeft] = useState<Col[]>([
-    { id: "customer_id", label: "Customer ID", mappedTo: null },
-    { id: "birth_date", label: "Birth Date", mappedTo: null },
-    { id: "loan_amount", label: "Loan Amount", mappedTo: null },
-    { id: "interest_rate", label: "Interest rate", mappedTo: null },
-    { id: "duration", label: "Duration", mappedTo: null },
-  ]);
+  const ingestion = useSelector((state: RootState) => state.ingestion);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [slots, setSlots] = useState<Slot[]>([
-    { id: "slot_customer_id", label: "Customer ID", mapped: null },
-    { id: "slot_dob", label: "Date of birth", mapped: null },
-    { id: "slot_amt", label: "Loan Amount", mapped: null },
-    { id: "slot_rate", label: "Interest Rate", mapped: null },
-    { id: "slot_duration", label: "Loan Duration", mapped: null },
-  ]);
+  const [perFileState, setPerFileState] = useState<
+    Record<string, { left: Col[]; slots: Slot[] }>
+  >({});
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } })
   );
+
+  useEffect(() => {
+    const uploaded = ingestion?.files ?? {};
+    const keys = Object.keys(uploaded);
+    if (keys.length === 0) return;
+
+    setPerFileState((prev) => {
+      const next = { ...prev };
+      keys.forEach((key) => {
+        const file = (uploaded as any)[key];
+        if (!file) return;
+
+        if (!next[key]) {
+          next[key] = {
+            left: (file.excel_columns || []).map((col: string) => ({
+              id: col,
+              label: col,
+              mappedTo: null,
+            })),
+            slots: (file.model_columns || []).map((modelCol: string) => ({
+              id: slotIdFromModel(modelCol),
+              label: modelCol,
+              mapped: null,
+            })),
+          };
+        } else {
+          next[key] = {
+            left:
+              next[key].left.length > 0
+                ? next[key].left
+                : (file.excel_columns || []).map((col: string) => ({
+                    id: col,
+                    label: col,
+                    mappedTo: null,
+                  })),
+            slots:
+              next[key].slots.length > 0
+                ? next[key].slots
+                : (file.model_columns || []).map((modelCol: string) => ({
+                    id: slotIdFromModel(modelCol),
+                    label: modelCol,
+                    mapped: null,
+                  })),
+          };
+        }
+      });
+
+      return next;
+    });
+
+    if (!activeFileId) {
+      const firstKey = keys.find((k) => !!(uploaded as any)[k]);
+      if (firstKey) setActiveFileId(firstKey);
+    }
+  }, [ingestion]);
+
+  const currentFileState = activeFileId
+    ? perFileState[activeFileId]
+    : undefined;
+  const left = currentFileState?.left ?? [];
+  const slots = currentFileState?.slots ?? [];
 
   const mappedCount = useMemo(
     () => slots.filter((s) => !!s.mapped).length,
@@ -174,18 +234,159 @@ const ColumnMappingPage: React.FC = () => {
   }
 
   function clearSlot(slotId: string) {
-    const mappedLabel = slots.find((s) => s.id === slotId)?.mapped;
-    setSlots((prev) =>
-      prev.map((s) => (s.id === slotId ? { ...s, mapped: null } : s))
-    );
-    if (mappedLabel) {
-      setLeft((prev) =>
-        prev.map((c) =>
-          c.label === mappedLabel ? { ...c, mappedTo: null } : c
-        )
+    if (!activeFileId) return;
+    setPerFileState((prev) => {
+      const fileState = prev[activeFileId];
+      if (!fileState) return prev;
+
+      const mappedLabel = fileState.slots.find((s) => s.id === slotId)?.mapped;
+
+      const newSlots = fileState.slots.map((s) =>
+        s.id === slotId ? { ...s, mapped: null } : s
       );
-    }
+
+      const newLeft = mappedLabel
+        ? fileState.left.map((c) =>
+            c.label === mappedLabel ? { ...c, mappedTo: null } : c
+          )
+        : fileState.left;
+
+      return { ...prev, [activeFileId]: { left: newLeft, slots: newSlots } };
+    });
   }
+
+  function onDragEnd(event: any) {
+    if (!activeFileId) {
+      setActiveDragId(null);
+      return;
+    }
+
+    const { active, over } = event;
+    setActiveDragId(null);
+
+    if (!active || !over) return;
+
+    const draggedId = active.id as string;
+    const dropTargetId = over.id as string;
+
+    if (!dropTargetId.startsWith("slot_")) return;
+
+    const fileState = perFileState[activeFileId];
+    if (!fileState) return;
+
+    const draggedLabel =
+      fileState.left.find((c) => c.id === draggedId)?.label ?? "";
+    const targetSlot = fileState.slots.find((s) => s.id === dropTargetId);
+    const expectedLabel = targetSlot?.label ?? "";
+
+    if (!draggedLabel || !expectedLabel) return;
+
+    if (normalize(draggedLabel) !== normalize(expectedLabel)) {
+      showToast(
+        `Invalid mapping: "${draggedLabel}" cannot map to "${expectedLabel}"`,
+        false
+      );
+      return;
+    }
+
+    setPerFileState((prev) => {
+      const fs = prev[activeFileId];
+      if (!fs) return prev;
+
+      const newSlots = fs.slots.map((slot) => {
+        if (slot.id === dropTargetId) {
+          const previouslyMapped = slot.mapped;
+
+          if (previouslyMapped) {
+            fs.left = fs.left.map((c) =>
+              c.label === previouslyMapped ? { ...c, mappedTo: null } : c
+            );
+          }
+
+          return { ...slot, mapped: draggedLabel };
+        }
+        return slot;
+      });
+
+      const rebuiltLeft = fs.left.map((col) => {
+        const mappedSlot = newSlots.find((s) => s.mapped === col.label);
+        if (mappedSlot) return { ...col, mappedTo: mappedSlot.id };
+        if (col.id === draggedId) return { ...col, mappedTo: dropTargetId };
+        return { ...col, mappedTo: null };
+      });
+
+      return {
+        ...prev,
+        [activeFileId]: { left: rebuiltLeft, slots: newSlots },
+      };
+    });
+  }
+
+  const ingestionFilesList = useMemo(() => {
+    const uploaded = ingestion?.files ?? {};
+
+    return Object.keys(uploaded)
+      .filter((k) => !!(uploaded as any)[k])
+      .map((key) => {
+        const obj = (uploaded as any)[key];
+        const objectName: string = obj?.object_name ?? "";
+
+        let fileName = objectName ? objectName.split("/").pop() ?? "" : key;
+
+        if (fileName.includes("_")) {
+          const parts = fileName.split("_");
+          if (parts[0].length >= 8 && parts[0].includes("-")) {
+            parts.shift();
+            fileName = parts.join("_");
+          }
+        }
+
+        return {
+          key,
+          name: fileName,
+        };
+      });
+  }, [ingestion]);
+
+  const handleFinalSubmit = () => {
+    if (!ingestion.portfolioId) return;
+
+    const fileEntries = Object.entries(perFileState)
+      .map(([fileKey, state]) => {
+        const fileMeta = (ingestion.files as any)[fileKey];
+        if (!fileMeta) return null;
+
+        const mapping: Record<string, string> = {};
+        state.slots.forEach((slot) => {
+          if (slot.mapped) {
+            mapping[slot.mapped] = slot.label;
+          }
+        });
+
+        return {
+          type: fileKey,
+          object_name: fileMeta.object_name,
+          mapping,
+        };
+      })
+      .filter(Boolean);
+
+    const payload = { files: fileEntries };
+
+    CreatePortfolioIngestion(ingestion.portfolioId, payload)
+      .then(() => {
+        dispatch(clearIngestionData());
+        navigate(`/dashboard/portfolio-details/${ingestion.portfolioId}`);
+        showToast("Ingestion started successfully", true);
+      })
+      .catch((err) => {
+        showToast(err?.response?.data?.detail || "Ingestion failed", false);
+      });
+  };
+
+  const handleTabChange = (key: string) => {
+    setActiveFileId(key);
+  };
 
   return (
     <div className="min-h-screen px-4 py-8 bg-white sm:px-6">
@@ -199,69 +400,25 @@ const ColumnMappingPage: React.FC = () => {
               Drag columns from the left to match them with the right fields.
             </div>
           </div>
+
           <div className="px-6 mt-4">
             <FileTabs
+              files={ingestionFilesList}
               activeId={activeFileId}
               mappedCount={mappedCount}
-              total={slots.length}
+              onChange={handleTabChange}
             />
           </div>
+
           <DndContext
             sensors={sensors}
             onDragStart={onDragStart}
             onDragOver={() => {}}
-            onDragEnd={(event) => {
-              const { active, over } = event;
-              setActiveDragId(null);
-
-              if (!active || !over) return;
-
-              const draggedId = active.id as string;
-              const dropTargetId = over.id as string;
-
-              if (!dropTargetId.startsWith("slot_")) return;
-
-              const draggedLabel =
-                left.find((c) => c.id === draggedId)?.label ?? "";
-              if (!draggedLabel) return;
-
-              setSlots((prev) =>
-                prev.map((slot) => {
-                  if (slot.id === dropTargetId) {
-                    // Find if this slot already had a mapped column
-                    const previouslyMapped = slot.mapped;
-
-                    // If previously mapped, clear its mappedTo flag from left list
-                    if (previouslyMapped) {
-                      setLeft((prevLeft) =>
-                        prevLeft.map((c) =>
-                          c.label === previouslyMapped
-                            ? { ...c, mappedTo: null }
-                            : c
-                        )
-                      );
-                    }
-
-                    // Update the slot with the new mapped label
-                    return { ...slot, mapped: draggedLabel };
-                  }
-                  return slot;
-                })
-              );
-
-              // Mark dragged column as mapped
-              setLeft((prev) =>
-                prev.map((col) =>
-                  col.id === draggedId
-                    ? { ...col, mappedTo: dropTargetId }
-                    : col
-                )
-              );
-            }}
+            onDragEnd={onDragEnd}
             collisionDetection={rectIntersection}
           >
             <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
-              <div className="p-4 border-[2px] border-[#AFAFAF] rounded-xl h-[320px]">
+              <div className="p-4 border-[2px] border-[#AFAFAF] rounded-xl h-[520px] overflow-y-auto">
                 <div className="mb-3 text-sm font-medium text-gray-700">
                   Your columns
                 </div>
@@ -277,7 +434,7 @@ const ColumnMappingPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-4 border-[2px] border-[#AFAFAF] rounded-xl">
+              <div className="p-4 border-[2px] border-[#AFAFAF] rounded-xl h-[520px] overflow-y-auto">
                 <div className="mb-3 text-sm font-medium text-gray-700">
                   Expected columns
                 </div>
@@ -307,14 +464,20 @@ const ColumnMappingPage: React.FC = () => {
               document.body
             )}
           </DndContext>
+
           <div className="flex items-center justify-end gap-2 px-6 py-4 border-t">
             <Button
               text="Cancel"
               className="w-1/12 text-gray-700 bg-white border border-gray-300"
+              onClick={() => {
+                dispatch(clearIngestionData());
+                navigate(-1);
+              }}
             />
             <Button
               text="Confirm mapping"
               className="bg-[#166E94] w-2/12 text-white"
+              onClick={handleFinalSubmit}
             />
           </div>
         </div>

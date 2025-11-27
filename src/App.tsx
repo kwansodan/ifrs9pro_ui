@@ -114,7 +114,11 @@ function App() {
               <Route path="admin-access" element={<AdminAccess />} />
               <Route path="password-change" element={<PasswordChange />} />
               <Route path="billing" element={<Billing />} />
-              <Route path="mapping" element={<ColumnMappingPage />} />
+              <Route
+                path="portfolio/:id/mapping"
+                element={<ColumnMappingPage />}
+              />
+
               <Route
                 path="susbscription-payment"
                 element={<SubscriptionPayment />}

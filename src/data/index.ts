@@ -211,3 +211,9 @@ export const series = [
     ],
   },
 ];
+
+export const normalize = (str: string) =>
+  str
+    .toLowerCase()
+    .replace(/[\s_\-.]/g, "")
+    .replace(/[^a-z0-9]/g, "");
