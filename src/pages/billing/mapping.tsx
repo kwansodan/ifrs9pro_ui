@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { CreatePortfolioIngestion } from "../../core/services/portfolio.service";
 import { showToast } from "../../core/hooks/alert";
 import { clearIngestionData } from "../../core/stores/slices/ingestion_slice";
-import { inferType, normalize } from "../../data";
+import { inferType } from "../../data";
 
 type Col = { id: string; label: string; mappedTo?: string | null };
 type Slot = { id: string; label: string; mapped?: string | null };
