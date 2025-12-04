@@ -217,3 +217,29 @@ export const normalize = (str: string) =>
     .toLowerCase()
     .replace(/[\s_\-.]/g, "")
     .replace(/[^a-z0-9]/g, "");
+
+export function inferType(label: string): "id" | "date" | "number" | "string" {
+  const l = label.toLowerCase();
+
+  if (l.includes("date") || l.includes("period") || l.includes("dob")) {
+    return "date";
+  }
+
+  if (
+    l.includes("amount") ||
+    l.includes("total") ||
+    l.includes("balance") ||
+    l.includes("rate") ||
+    l.includes("fee") ||
+    l.includes("value") ||
+    l.includes("term")
+  ) {
+    return "number";
+  }
+
+  if (l.includes("id") || l.includes("no") || l.includes("code")) {
+    return "id";
+  }
+
+  return "string";
+}

@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { CreatePortfolioIngestion } from "../../core/services/portfolio.service";
 import { showToast } from "../../core/hooks/alert";
 import { clearIngestionData } from "../../core/stores/slices/ingestion_slice";
-import { normalize } from "../../data";
+import { inferType, normalize } from "../../data";
 
 type Col = { id: string; label: string; mappedTo?: string | null };
 type Slot = { id: string; label: string; mapped?: string | null };
@@ -235,23 +235,33 @@ const ColumnMappingPage: React.FC = () => {
 
   function clearSlot(slotId: string) {
     if (!activeFileId) return;
+
     setPerFileState((prev) => {
       const fileState = prev[activeFileId];
       if (!fileState) return prev;
 
-      const mappedLabel = fileState.slots.find((s) => s.id === slotId)?.mapped;
+      const slot = fileState.slots.find((s) => s.id === slotId);
+      if (!slot || !slot.mapped) return prev;
+
+      const mappedLabel = slot.mapped;
 
       const newSlots = fileState.slots.map((s) =>
         s.id === slotId ? { ...s, mapped: null } : s
       );
 
-      const newLeft = mappedLabel
-        ? fileState.left.map((c) =>
-            c.label === mappedLabel ? { ...c, mappedTo: null } : c
-          )
-        : fileState.left;
+      const newLeft = [
+        ...fileState.left,
+        {
+          id: mappedLabel,
+          label: mappedLabel,
+          mappedTo: null,
+        },
+      ];
 
-      return { ...prev, [activeFileId]: { left: newLeft, slots: newSlots } };
+      return {
+        ...prev,
+        [activeFileId]: { left: newLeft, slots: newSlots },
+      };
     });
   }
 
@@ -276,14 +286,18 @@ const ColumnMappingPage: React.FC = () => {
 
     const draggedLabel =
       fileState.left.find((c) => c.id === draggedId)?.label ?? "";
+
     const targetSlot = fileState.slots.find((s) => s.id === dropTargetId);
     const expectedLabel = targetSlot?.label ?? "";
 
     if (!draggedLabel || !expectedLabel) return;
 
-    if (normalize(draggedLabel) !== normalize(expectedLabel)) {
+    const draggedType = inferType(draggedLabel);
+    const expectedType = inferType(expectedLabel);
+
+    if (draggedType !== expectedType) {
       showToast(
-        `Invalid mapping: "${draggedLabel}" cannot map to "${expectedLabel}"`,
+        `Invalid mapping: "${draggedLabel}" (type ${draggedType}) cannot map to "${expectedLabel}" (type ${expectedType})`,
         false
       );
       return;
@@ -293,14 +307,18 @@ const ColumnMappingPage: React.FC = () => {
       const fs = prev[activeFileId];
       if (!fs) return prev;
 
+      const newLeft = fs.left.filter((col) => col.id !== draggedId);
+
       const newSlots = fs.slots.map((slot) => {
         if (slot.id === dropTargetId) {
-          const previouslyMapped = slot.mapped;
+          const prevMapped = slot.mapped;
 
-          if (previouslyMapped) {
-            fs.left = fs.left.map((c) =>
-              c.label === previouslyMapped ? { ...c, mappedTo: null } : c
-            );
+          if (prevMapped) {
+            newLeft.push({
+              id: prevMapped,
+              label: prevMapped,
+              mappedTo: null,
+            });
           }
 
           return { ...slot, mapped: draggedLabel };
@@ -308,16 +326,9 @@ const ColumnMappingPage: React.FC = () => {
         return slot;
       });
 
-      const rebuiltLeft = fs.left.map((col) => {
-        const mappedSlot = newSlots.find((s) => s.mapped === col.label);
-        if (mappedSlot) return { ...col, mappedTo: mappedSlot.id };
-        if (col.id === draggedId) return { ...col, mappedTo: dropTargetId };
-        return { ...col, mappedTo: null };
-      });
-
       return {
         ...prev,
-        [activeFileId]: { left: rebuiltLeft, slots: newSlots },
+        [activeFileId]: { left: newLeft, slots: newSlots },
       };
     });
   }
