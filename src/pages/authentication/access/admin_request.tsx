@@ -101,7 +101,9 @@ function AdminRequest() {
                 </div>
 
                 <Button
-                  className="mt-8 text-white"
+                  className={`mt-8 bg-[#166E94] ${
+                    isFormValid ? "bg-[#166E94]" : "bg-[#D9EFF9]"
+                  }`}
                   type="submit"
                   text="Submit"
                   disabled={!isFormValid}
