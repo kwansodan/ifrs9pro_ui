@@ -68,7 +68,9 @@ function RequestAccess() {
 
             <Button
               type="submit"
-              className="mt-8 text-white"
+              className={`mt-8 bg-[#166E94] ${
+                isFormValid ? "bg-[#166E94]" : "bg-[#D9EFF9]"
+              }`}
               text="Request access"
               onClick={() => handleRequestAccess}
               disabled={!isFormValid}
