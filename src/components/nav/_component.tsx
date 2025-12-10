@@ -8,7 +8,6 @@ const Navbar = () => {
     navigate("/dashboard");
   };
 
-  4;
   return (
     <>
       <nav className="md:px-12 flex items-center justify-between mx-auto max-w-[1189px] w-full px-6 py-4">
@@ -21,11 +20,13 @@ const Navbar = () => {
 
         <div className="flex items-center">
           <Button
-            text="Request a proposal"
+            text="Login"
+            onClick={() => navigate("/login")}
             className="!border-[1px] !border-[#166E94] !text-[#166E94] text-xs !w-full h-[30px] !rounded-[100px] bg-white mx-3"
           />
           <Button
-            text="Book a demo"
+            onClick={() => navigate("/request-access")}
+            text="Signup"
             className="!border-[1px] text-xs !w-full h-[30px] text-white !rounded-[100px] bg-[#166E94] mx-3"
           />
         </div>
