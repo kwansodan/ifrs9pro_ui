@@ -22,10 +22,8 @@ export const clearUserSession = () => {
 
 export const getAxios = () => {
   const instance = axios.create({
-    // baseURL: "https://ifrs9pro-backend.onrender.com",
-    //baseURL: "http://139.59.165.167:8000",
-    //baseURL: "https://do-site.service4gh.com",
-    baseURL: "https://do-site-staging.service4gh.com",
+    // baseURL: "https://do-site-staging.service4gh.com",
+    baseURL: "https://do-site.service4gh.com",
   });
 
   const token = localStorage.getItem("u_token");

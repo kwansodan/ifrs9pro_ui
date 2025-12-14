@@ -14,9 +14,7 @@ export const UserSendRequestToAdmin = async (
 
 //using api directly for some reasons
 export const VerifyUserEmail = async (token: string) =>
-  await axios.get(
-    `https://do-site-staging.service4gh.com/verify-email/${token}`
-  );
+  await axios.get(`https://do-site.service4gh.com/verify-email/${token}`);
 
 export const VerifyAdminApproval = async (
   token: string,
