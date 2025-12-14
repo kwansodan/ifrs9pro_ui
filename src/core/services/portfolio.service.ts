@@ -17,8 +17,11 @@ export const DeleteAPortfolio = async (id: number) =>
 
 export const CreatePortfolioIngestion = async (
   id: number | string,
-  payload: FormData
-) => await getAxios().post(`/portfolios/${id}/ingest`, payload);
+  payload: any
+) =>
+  await getAxios().post(`/portfolios/${id}/ingest`, payload, {
+    headers: { "Content-Type": "application/json" },
+  });
 
 export const CreatePortfolioECLCalculation = async (
   id: number | string,
@@ -78,3 +81,8 @@ export const DownloadQualityIssuesReport = async (
   issue_id: number | string
 ) =>
   await getAxios().get(`/portfolios/${id}/quality-issues/${issue_id}/download`);
+
+export const CreatePortfolioIngestionSave = async (
+  id: number | string,
+  payload: FormData
+) => await getAxios().post(`/portfolios/${id}/ingest/save`, payload);

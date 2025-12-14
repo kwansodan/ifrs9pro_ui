@@ -28,6 +28,9 @@ import PageLoader from "./components/page_loader/_component";
 import PortfolioDetails from "./pages/portfolio/portfolio_details";
 import EditPortfolio from "./pages/portfolio/edit_portfolio";
 import SubscriptionPayment from "./pages/billing/subscription_billing";
+import Billing from "./pages/billing/billing";
+import ColumnMappingPage from "./pages/billing/mapping";
+import Homepage from "./pages/homepage/_page";
 
 function App() {
   const [userSession] = useState(getUserSession());
@@ -48,8 +51,8 @@ function App() {
         <Routes>
           {!userSession ? (
             <>
-              {/* <Route path="/" element={<Homepage />} /> */}
-              <Route path="/" element={<Login />} />
+              <Route path="/" element={<Homepage />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/request-access" element={<RequestAccess />} />
               <Route path="/admin-request" element={<AdminRequest />} />
               <Route path="/verification" element={<Verification />} />
@@ -110,7 +113,12 @@ function App() {
               <Route path="users" element={<Users />} />
               <Route path="admin-access" element={<AdminAccess />} />
               <Route path="password-change" element={<PasswordChange />} />
-              {/* <Route path="billing" element={<Billing />} /> */}
+              <Route path="billing" element={<Billing />} />
+              <Route
+                path="portfolio/:id/mapping"
+                element={<ColumnMappingPage />}
+              />
+
               <Route
                 path="susbscription-payment"
                 element={<SubscriptionPayment />}

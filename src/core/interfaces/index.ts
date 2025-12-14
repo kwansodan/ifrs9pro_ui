@@ -105,3 +105,15 @@ export type TabsProps = {
   activeTab: string;
   onTabChange: (tab: string) => void;
 };
+
+export interface IngestionFile {
+  type: string;
+  object_name: string;
+  excel_columns: string[];
+  model_columns: string[];
+}
+
+export interface IngestionState {
+  portfolioId: number | null;
+  files: Record<string, IngestionFile>;
+}

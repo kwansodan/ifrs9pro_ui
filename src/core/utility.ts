@@ -24,7 +24,8 @@ export const getAxios = () => {
   const instance = axios.create({
     // baseURL: "https://ifrs9pro-backend.onrender.com",
     //baseURL: "http://139.59.165.167:8000",
-    baseURL: "https://do-site.service4gh.com",
+    //baseURL: "https://do-site.service4gh.com",
+    baseURL: "https://do-site-staging.service4gh.com",
   });
 
   const token = localStorage.getItem("u_token");
@@ -44,7 +45,6 @@ export const getAxios = () => {
 
   instance.interceptors.response.use(
     (response) => {
-      console.log("rrr: ", response);
       if (response.status === 200 && response.data.data == 401) {
         clearUserSession();
       }
@@ -176,8 +176,8 @@ export const validateSequentialRanges = (
   let expectedStart = 0;
 
   for (const category of categoriesOrder) {
-    const range = payload[category]?.days_range?.trim();
-    const rate = payload[category]?.rate?.trim();
+    const range = String(payload[category]?.days_range ?? "").trim();
+    const rate = String(payload[category]?.rate ?? "").trim();
 
     if (!range || !rate) {
       showToast(`Missing range or rate in "${category}"`, false);

@@ -19,17 +19,17 @@ const Billing = () => {
         <div className="mt-6">
           {activeTab === "Overview" && <Overview />}
           {activeTab === "Pricing" && (
-            <div className="text-sm text-gray-600 border rounded-xl">
+            <div className="text-xs text-gray-600 border rounded-xl">
               <Pricing />
             </div>
           )}
           {activeTab === "Invoices" && (
-            <div className="p-4 text-sm text-gray-600 border rounded-xl bg-gray-50">
+            <div className="p-4 text-xs text-gray-600 border rounded-xl bg-gray-50">
               <Invoices />
             </div>
           )}
           {activeTab === "History" && (
-            <div className="text-sm text-gray-600 border rounded-xl ">
+            <div className="text-xs text-gray-600 border rounded-xl ">
               <History />
             </div>
           )}

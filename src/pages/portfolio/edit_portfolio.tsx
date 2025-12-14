@@ -12,7 +12,7 @@ import Button from "../../components/button/_component";
 import { CategoryProps } from "../../core/interfaces";
 import { Images } from "../../data/Assets";
 import { usePortfolio } from "../../core/hooks/portfolio";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PageLoader from "../../components/page_loader/_component";
 import { isEmptyRate, validateSequentialRanges } from "../../core/utility";
 
@@ -47,47 +47,33 @@ function EditPortfolio() {
   const data =
     portfolioQuery && portfolioQuery.data && portfolioQuery.data.data;
   const [categories, setCategories] = useState<CategoryProps[]>([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     setCategories([
       {
         category: "Current",
-        range:
-          data?.staging_summary?.local_impairment?.config?.current
-            ?.days_range || "",
-        rate:
-          data?.staging_summary?.local_impairment?.config?.current?.rate || "",
+        range: data?.bog_staging_config?.current?.days_range || "",
+        rate: data?.bog_staging_config?.current?.rate || "",
       },
       {
         category: "OLEM",
-        range:
-          data?.staging_summary?.local_impairment?.config?.olem?.days_range ||
-          "",
-        rate: data?.staging_summary?.local_impairment?.config?.olem?.rate || "",
+        range: data?.bog_staging_config?.olem?.days_range || "",
+        rate: data?.bog_staging_config?.olem?.rate || "",
       },
       {
         category: "Substandard",
-        range:
-          data?.staging_summary?.local_impairment?.config?.substandard
-            ?.days_range || "",
-        rate:
-          data?.staging_summary?.local_impairment?.config?.substandard?.rate ||
-          "",
+        range: data?.bog_staging_config?.substandard?.days_range || "",
+        rate: data?.bog_staging_config?.substandard?.rate || "",
       },
       {
         category: "Doubtful",
-        range:
-          data?.staging_summary?.local_impairment?.config?.doubtful
-            ?.days_range || "",
-        rate:
-          data?.staging_summary?.local_impairment?.config?.doubtful?.rate || "",
+        range: data?.bog_staging_config?.doubtful?.days_range || "",
+        rate: data?.bog_staging_config?.doubtful?.rate || "",
       },
       {
         category: "Loss",
-        range:
-          data?.staging_summary?.local_impairment?.config?.loss?.days_range ||
-          "",
-        rate: data?.staging_summary?.local_impairment?.config?.loss?.rate || "",
+        range: data?.bog_staging_config?.loss?.days_range || "",
+        rate: data?.bog_staging_config?.loss?.rate || "",
       },
     ]);
   }, [data, id]);
@@ -97,15 +83,15 @@ function EditPortfolio() {
     setFourthCategories([
       {
         category: "stage_1",
-        range: data?.staging_summary?.ecl?.config?.stage_1?.days_range || "",
+        range: data?.ecl_staging_config.stage_1?.days_range || "",
       },
       {
         category: "stage_2",
-        range: data?.staging_summary?.ecl?.config?.stage_2?.days_range || "",
+        range: data?.ecl_staging_config.stage_2?.days_range || "",
       },
       {
         category: "stage_3",
-        range: data?.staging_summary?.ecl?.config?.stage_3?.days_range || "",
+        range: data?.ecl_staging_config.stage_3?.days_range || "",
       },
     ]);
   }, [data, id]);
@@ -249,8 +235,35 @@ function EditPortfolio() {
         : data?.funding_source,
       data_source: dataSourceHasChanged ? dataSource : data?.data_source,
       repayment_source: repaymentSource,
-      categories_summary,
-      staging_summary,
+
+      bog_staging_config: {
+        current: {
+          days_range: categories_summary.current.days_range,
+          rate: Number(categories_summary.current.rate),
+        },
+        olem: {
+          days_range: categories_summary.olem.days_range,
+          rate: Number(categories_summary.olem.rate),
+        },
+        substandard: {
+          days_range: categories_summary.substandard.days_range,
+          rate: Number(categories_summary.substandard.rate),
+        },
+        doubtful: {
+          days_range: categories_summary.doubtful.days_range,
+          rate: Number(categories_summary.doubtful.rate),
+        },
+        loss: {
+          days_range: categories_summary.loss.days_range,
+          rate: Number(categories_summary.loss.rate),
+        },
+      },
+
+      ecl_staging_config: {
+        stage_1: { days_range: staging_summary.stage_1.days_range },
+        stage_2: { days_range: staging_summary.stage_2.days_range },
+        stage_3: { days_range: staging_summary.stage_3.days_range },
+      },
     };
 
     try {
@@ -260,9 +273,9 @@ function EditPortfolio() {
           if (res.status === 200 || res.status === 201) {
             showToast("Edit made successfully.", true);
           }
-          // setTimeout(() => {
-          //   navigate("/dashboard/portfolio");
-          // }, 1800);
+          setTimeout(() => {
+            navigate("/dashboard/portfolio");
+          }, 1800);
         })
         .catch((err) => {
           setIsSubmittingFirstStep(false);
@@ -518,9 +531,9 @@ function EditPortfolio() {
             <div className="flex justify-end p-2">
               <Button
                 isLoading={isSubmittingFirstStep}
-                text="Edit"
+                text="Save changes"
                 type="submit"
-                className="bg-[#166E94] font-normal mt-3 text-white text-[12px] !rounded-[10px] !w-[90px] "
+                className="bg-[#166E94] font-normal mt-3 text-white text-[12px] !rounded-[10px] !w-[90px]"
               />
             </div>
           </form>

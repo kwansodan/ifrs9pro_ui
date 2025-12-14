@@ -83,15 +83,15 @@ function Login() {
           <form action={formAction}>
             <div className="absolute top-0 left-0 right-0 h-8 bg-gray-100 rounded-t-xl"></div>
 
-            <h3 className="text-center text-[18px] font-medium text-gray-800">
-              Log into your account.
+            <h3 className="text-center text-[14px] font-medium text-gray-800">
+              Log into your account
             </h3>
             <div className="mt-4">
               <input
                 type="email"
                 name="email"
                 placeholder="Enter your email address"
-                className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                className="w-full h-[4%] text-[12px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 onChange={(e) => setEmailValue(e.target.value)}
               />
             </div>
@@ -100,7 +100,7 @@ function Login() {
                 type={password ? "text" : "password"}
                 name="password"
                 placeholder="Enter your password"
-                className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
+                className="w-full h-[4%] text-[12px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 onChange={(e) => setPasswordValue(e.target.value)}
               />
               <span
@@ -124,7 +124,7 @@ function Login() {
               isLoading={buttonLoading}
             />
           </form>
-          <small className="flex justify-center text-center">
+          <small className="flex justify-center text-xs text-center">
             Don't have access?
             <span
               className="ml-2 text-blue-500 underline cursor-pointer"
