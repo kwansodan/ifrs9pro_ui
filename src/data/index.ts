@@ -1,5 +1,6 @@
 import { ApexOptions } from "apexcharts";
 import { addCommasToNumber } from "../core/utility";
+import { Option } from "../core/interfaces";
 
 export const dashboardNavItems = [
   { name: "Dashboard", href: "/dashboard", active: true },
@@ -243,3 +244,20 @@ export function inferType(label: string): "id" | "date" | "number" | "string" {
 
   return "string";
 }
+
+export const INDUSTRY_OPTIONS: Option[] = [
+  { label: "Bank", value: "BANK" },
+  { label: "Microfinance", value: "MICROFINANCE" },
+  { label: "SACCO", value: "SACCO" },
+  { label: "Credit Union", value: "CREDIT_UNION" },
+];
+
+export const COUNTRY_CURRENCY_OPTIONS: Option[] = [
+  { label: "Ghana / Cedis (GHS)", value: "GHA_GHS" },
+  { label: "United States / Dollar (USD)", value: "USD_USD" },
+];
+
+export const ACCOUNTING_STANDARD_OPTIONS: Option[] = [
+  { label: "IFRS 9", value: "IFRS9" },
+  { label: "IFRS 9 + BoG Model", value: "IFRS9_BOG" },
+];

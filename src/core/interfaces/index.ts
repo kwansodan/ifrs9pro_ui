@@ -117,3 +117,8 @@ export interface IngestionState {
   portfolioId: number | null;
   files: Record<string, IngestionFile>;
 }
+
+export interface Option {
+  label: string;
+  value: string;
+}
