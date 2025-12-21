@@ -149,6 +149,8 @@ function CreatePorfolio({ cancel }: any) {
                 <div className="mt-3">
                   <label>Asset type</label>
                   <Select
+                    inputId="asset-type"
+                    aria-labelledby="asset-type-label"
                     className="min-w-[280px] mr-2"
                     onChange={handleAssetChange}
                     options={assetsOptions}
@@ -158,6 +160,8 @@ function CreatePorfolio({ cancel }: any) {
                 <div className="mt-3">
                   <label>Customer type</label>
                   <Select
+                    inputId="customer-type"
+                    aria-labelledby="customer-type-label"
                     className="min-w-[280px] mr-2"
                     onChange={handleCustomerTypeChange}
                     options={customerTypeOptions}
@@ -170,6 +174,8 @@ function CreatePorfolio({ cancel }: any) {
                 <div className="mt-3">
                   <label>Funding source</label>
                   <Select
+                    inputId="funding-source"
+                    aria-labelledby="funding-source-label"
                     className="min-w-[280px] mr-2"
                     onChange={handleFundingSourceChange}
                     options={fundingSourceOptions}
@@ -179,6 +185,8 @@ function CreatePorfolio({ cancel }: any) {
                 <div className="mt-3">
                   <label>Data source</label>
                   <Select
+                    inputId="data-source"
+                    aria-labelledby="data-source-label"
                     className="min-w-[280px] mr-2"
                     onChange={handleDataSourceChange}
                     options={dataSourceOptions}

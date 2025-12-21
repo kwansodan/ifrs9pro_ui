@@ -1,30 +1,44 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Request Access page", () => {
-  test("request access form loads", async ({ page }) => {
+test.describe("Request Access flow", () => {
+  test("user can request access successfully", async ({ page }) => {
+    // Navigate to request access page
     await page.goto("/request-access");
 
+    // Assert page title / heading
     await expect(
       page.getByRole("heading", { name: /request access/i })
     ).toBeVisible();
 
-    await expect(page.getByPlaceholder(/email/i)).toBeVisible();
-  });
+    // Locate email input
+    const emailInput = page.locator('input[name="email"]');
 
-  test("button enables when email is entered", async ({ page }) => {
-    await page.goto("/request-access");
+    // Locate submit button
+    const submitButton = page.getByRole("button", {
+      name: /request access/i,
+    });
 
-    const button = page.getByRole("button", { name: /request access/i });
-    await expect(button).toBeDisabled();
+    // Button should be disabled initially
+    await expect(submitButton).toBeDisabled();
 
-    await page.getByPlaceholder(/email/i).fill("user@example.com");
-    await expect(button).toBeEnabled();
-  });
+    // Fill email
+    const testEmail = "test.user@ifrs9pro.com";
+    await emailInput.fill(testEmail);
 
-  test("login link navigates to login page", async ({ page }) => {
-    await page.goto("/request-access");
+    // Button should now be enabled
+    await expect(submitButton).toBeEnabled();
 
-    await page.getByText(/login/i).click();
-    await expect(page).toHaveURL(/login/);
+    // Submit form
+    await submitButton.click();
+
+    // Expect navigation to verification page
+    await expect(page).toHaveURL(/\/verification/);
+
+    // Verify email stored in localStorage
+    const storedEmail = await page.evaluate(() =>
+      localStorage.getItem("u_email")
+    );
+
+    expect(storedEmail).toBe(testEmail);
   });
 });
