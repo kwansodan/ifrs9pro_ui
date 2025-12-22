@@ -17,7 +17,7 @@ export default defineConfig({
 
   use: {
     baseURL: STAGING_URL,
-    headless: false,
+    headless: true,
     launchOptions: {
       slowMo: 800,
     },
