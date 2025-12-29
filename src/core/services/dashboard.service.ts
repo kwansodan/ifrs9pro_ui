@@ -10,3 +10,12 @@ export const ApproveUserRequest = async (
   status: string,
   role: string
 ) => await getAxios().put("/admin/requests/" + request_id, { status, role });
+
+export const GetPricingPlans = async (page = 1, perPage = 50) => {
+  return getAxios().get("/billing/plans", {
+    params: {
+      page,
+      per_page: perPage,
+    },
+  });
+};

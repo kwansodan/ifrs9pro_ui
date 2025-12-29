@@ -31,6 +31,11 @@ import SubscriptionPayment from "./pages/billing/subscription_billing";
 import Billing from "./pages/billing/billing";
 import ColumnMappingPage from "./pages/billing/mapping";
 import Homepage from "./pages/homepage/_page";
+import CreateCompanyAccount from "./pages/signup/signup";
+import BillingSetup from "./pages/billing/billing_setup";
+import DPA from "./pages/authentication/access/dpa";
+import TNCS from "./pages/authentication/access/tncs";
+import BillingCallback from "./pages/billing/billing_callback";
 
 function App() {
   const [userSession] = useState(getUserSession());
@@ -54,6 +59,14 @@ function App() {
               <Route path="/" element={<Homepage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/request-access" element={<RequestAccess />} />
+              <Route path="/terms-and-conditions" element={<TNCS />} />
+              <Route path="/data-processing-agreement" element={<DPA />} />
+              <Route
+                path="/create-company-account"
+                element={<CreateCompanyAccount />}
+              />
+              <Route path="/billing-setup" element={<BillingSetup />} />
+              <Route path="/billing/callback" element={<BillingCallback />} />
               <Route path="/admin-request" element={<AdminRequest />} />
               <Route path="/verification" element={<Verification />} />
               <Route

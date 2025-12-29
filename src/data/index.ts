@@ -253,8 +253,8 @@ export const INDUSTRY_OPTIONS: Option[] = [
 ];
 
 export const COUNTRY_CURRENCY_OPTIONS: Option[] = [
-  { label: "Ghana / Cedis (GHS)", value: "GHA_GHS" },
-  { label: "United States / Dollar (USD)", value: "USD_USD" },
+  { label: "Ghana / Cedis (GHS)", value: "GH" },
+  { label: "United States / Dollar (USD)", value: "US" },
 ];
 
 export const ACCOUNTING_STANDARD_OPTIONS: Option[] = [
