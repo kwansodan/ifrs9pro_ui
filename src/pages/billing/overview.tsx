@@ -57,10 +57,10 @@ const Overview = () => {
               <span className="text-sm text-gray-800">
                 {overview?.current_plan?.name ?? "No active plan"}
               </span>
-              <Button
+              {/* <Button
                 text="Change current plan"
                 className="bg-[#F1F1F1] w-full sm:w-auto"
-              />
+              /> */}
             </div>
           </div>
 
@@ -70,7 +70,7 @@ const Overview = () => {
               <span className="text-sm text-gray-800 capitalize">
                 {overview?.billing_cycle ?? "Not set"}
               </span>
-              <Button text="Update" className="bg-[#F1F1F1] w-full sm:w-auto" />
+              {/* <Button text="Update" className="bg-[#F1F1F1] w-full sm:w-auto" /> */}
             </div>
           </div>
 
@@ -80,7 +80,7 @@ const Overview = () => {
               <span className="text-sm text-gray-800 break-all">
                 {overview?.billing_email ?? "Not provided"}
               </span>
-              <Button text="Update" className="bg-[#F1F1F1] w-full sm:w-auto" />
+              {/* <Button text="Update" className="bg-[#F1F1F1] w-full sm:w-auto" /> */}
             </div>
           </div>
         </div>
