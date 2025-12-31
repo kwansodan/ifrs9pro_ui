@@ -1,3 +1,4 @@
+import { InitializeTransactionPayload } from "../interfaces";
 import { getAxios } from "../utility";
 
 export const GetDashboardStats = async () => await getAxios().get("/dashboard");
@@ -18,4 +19,18 @@ export const GetPricingPlans = async (page = 1, perPage = 50) => {
       per_page: perPage,
     },
   });
+};
+
+export const GetBillingOverview = async () =>
+  await getAxios().get("/billing/overview");
+
+export const GetPricing = async () => await getAxios().get("/billing/pricing");
+
+export const GetBillingSubscription = async () =>
+  await getAxios().get("/billing/subscriptions");
+
+export const ChangePlanPrice = async (
+  payload: InitializeTransactionPayload
+) => {
+  return getAxios().post("/billing/transactions/initialize", payload, {});
 };

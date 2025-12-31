@@ -1,19 +1,12 @@
 import axios from "axios";
 import { getAxios } from "../utility";
 import { getBillingToken } from "../storage/billing";
+import { InitializeTransactionPayload } from "../interfaces";
 
 const STAGING_API_BASE_URL = "https://do-site-staging.service4gh.com";
 const PRODUCTION_API_BASE_URL = "https://do-site.service4gh.com";
 
 const URL = STAGING_API_BASE_URL;
-
-interface InitializeTransactionPayload {
-  amount: number;
-  reference: string;
-  callback_url: string;
-  plan: string;
-  metadata?: Record<string, any>;
-}
 
 export const UserLogin = async (email: string, password: string) =>
   await getAxios().post("/login", { email, password });

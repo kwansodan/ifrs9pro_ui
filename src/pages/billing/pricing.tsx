@@ -1,11 +1,14 @@
 import "react-data-grid/lib/styles.css";
-import { useEffect, useState } from "react";
 import { DataGrid } from "react-data-grid";
 import { useNavigate } from "react-router-dom";
 
 import Button from "../../components/button/_component";
+import {
+  useBillingPricing,
+  useInitializeTransaction,
+} from "../../core/hooks/dashboard";
 import { showToast } from "../../core/hooks/alert";
-import { GetPricingPlans } from "../../core/services/dashboard.service";
+import { useState } from "react";
 
 interface BillingPlan {
   name: string;
@@ -13,6 +16,7 @@ interface BillingPlan {
   currency: string;
   interval: string;
   code: string;
+  status: "active" | "inactive";
 }
 
 interface PricingRow {
@@ -21,52 +25,98 @@ interface PricingRow {
   volume: string;
   annual_fee: string;
   planCode: string;
-  active?: boolean;
+  isActive: boolean;
+  rawPlan: {
+    amount: number;
+    code: string;
+    name: string;
+  };
 }
 
 const Pricing = () => {
-  const navigate = useNavigate();
-  const [rows, setRows] = useState<PricingRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [processingPlanCode, setProcessingPlanCode] = useState<string | null>(
+    null
+  );
 
-  useEffect(() => {
-    const fetchPlans = async () => {
-      try {
-        const res = await GetPricingPlans();
-        const plans: BillingPlan[] = res?.data ?? [];
+  const { data, isLoading, isError } = useBillingPricing();
+  const { mutateAsync, isPending } = useInitializeTransaction();
 
-        const mappedRows: PricingRow[] = plans.map((plan) => ({
-          id: plan.code,
-          tier: plan.name,
-          volume:
-            plan.interval === "annually"
-              ? "Annual subscription"
-              : plan.interval,
-          annual_fee: `${plan.currency} ${(
-            plan.amount / 100
-          ).toLocaleString()}`,
-          planCode: plan.code,
-          active: false, // replace when backend sends active subscription
-        }));
+  if (isLoading) {
+    return (
+      <div className="p-6 text-sm text-gray-500">Loading pricing plans…</div>
+    );
+  }
 
-        setRows(mappedRows);
-      } catch (err: any) {
-        showToast(
-          err?.response?.data?.detail ?? "Failed to load pricing plans",
-          false
-        );
-      } finally {
-        setLoading(false);
+  if (isError) {
+    return (
+      <div className="p-6 text-sm text-red-500">
+        Failed to load pricing plans
+      </div>
+    );
+  }
+
+  const plans: BillingPlan[] = data?.data.plans ?? [];
+  const activePlanCode = data?.data.active_plan_code ?? null;
+
+  const handleSubscribe = async (plan: {
+    amount: number;
+    code: string;
+    name: string;
+  }) => {
+    try {
+      setProcessingPlanCode(plan.code);
+      const payload = {
+        amount: plan.amount,
+        reference: `sub_${Date.now()}`,
+        callback_url: `${window.location.origin}/dashboard/billing`,
+        plan: plan.code,
+        metadata: {
+          plan_name: plan.name,
+        },
+      };
+
+      const res = await mutateAsync(payload);
+
+      const authUrl =
+        res?.data?.data?.authorization_url ?? res?.data?.authorization_url;
+
+      if (!authUrl) {
+        throw new Error("Authorization URL not returned");
       }
-    };
 
-    fetchPlans();
-  }, []);
+      window.location.href = authUrl;
+    } catch (error: any) {
+      setProcessingPlanCode(null);
+      showToast(
+        error?.response?.data?.detail ?? "Failed to initialize payment",
+        false
+      );
+    }
+  };
+
+  const rows: PricingRow[] = plans.map((plan) => {
+    const isActive = plan.status === "active" || plan.code === activePlanCode;
+
+    return {
+      id: plan.code,
+      tier: plan.name,
+      volume:
+        plan.interval === "annually" ? "Annual subscription" : plan.interval,
+      annual_fee: `${plan.currency} ${(plan.amount / 100).toLocaleString()}`,
+      planCode: plan.code,
+      isActive,
+      rawPlan: {
+        amount: plan.amount,
+        code: plan.code,
+        name: plan.name,
+      },
+    };
+  });
 
   const renderTierCell = ({ row }: any) => (
     <div className="flex items-center gap-2">
       <span>{row.tier}</span>
-      {row.active && (
+      {row.isActive && (
         <span className="text-[11px] text-[#0E9F6E] bg-[#E6FAEF] px-2 py-[2px] rounded-md border border-[#B5E8CB]">
           Active subscription
         </span>
@@ -76,34 +126,27 @@ const Pricing = () => {
 
   const renderActionCell = ({ row }: any) => (
     <div className="flex justify-end pr-2">
-      <Button
-        text="Subscribe"
-        className="w-auto bg-[#F1F1F1]"
-        onClick={() =>
-          navigate("/dashboard/susbscription-payment", {
-            state: {
-              planCode: row.planCode,
-              planName: row.tier,
-              amount: row.annual_fee,
-            },
-          })
-        }
-      />
+      {!row.isActive && (
+        <Button
+          text={
+            processingPlanCode === row.rawPlan.code
+              ? "Processing..."
+              : "Subscribe"
+          }
+          disabled={processingPlanCode !== null}
+          className="w-auto bg-[#F1F1F1]"
+          onClick={() => handleSubscribe(row.rawPlan)}
+        />
+      )}
     </div>
   );
 
   const columns = [
-    { key: "tier", name: "Tier", width: 240, renderCell: renderTierCell },
+    { key: "tier", name: "Tier", width: 320, renderCell: renderTierCell },
     { key: "volume", name: "Plan type", resizable: true },
     { key: "annual_fee", name: "Annual fee", width: 180 },
     { key: "action", name: "", width: 160, renderCell: renderActionCell },
   ];
-
-  if (loading) {
-    return (
-      <div className="p-6 text-sm text-gray-500">Loading pricing plans…</div>
-    );
-  }
 
   return (
     <div className="rounded-2xl">
