@@ -5,13 +5,7 @@ import {
 } from "../../core/services/auth.service";
 import { showToast } from "../../core/hooks/alert";
 import Button from "../../components/button/_component";
-
-interface BillingPlan {
-  id: string;
-  code: string;
-  name: string;
-  description?: string;
-}
+import { BillingPlan } from "../../core/interfaces";
 
 function BillingSetup() {
   const [plans, setPlans] = useState<BillingPlan[]>([]);

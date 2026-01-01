@@ -2,14 +2,7 @@ import "react-data-grid/lib/styles.css";
 import { DataGrid } from "react-data-grid";
 import { useMemo } from "react";
 import { useBillingSubscription } from "../../core/hooks/dashboard";
-
-interface HistoryRow {
-  id: number;
-  plan_title: string;
-  plan_amount: string;
-  date: string;
-  status: "Current" | "Expired";
-}
+import { HistoryRow } from "../../core/interfaces";
 
 const History = () => {
   const { data, isLoading, isError } = useBillingSubscription();

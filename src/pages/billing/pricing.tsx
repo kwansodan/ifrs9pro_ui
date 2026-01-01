@@ -1,7 +1,5 @@
 import "react-data-grid/lib/styles.css";
 import { DataGrid } from "react-data-grid";
-import { useNavigate } from "react-router-dom";
-
 import Button from "../../components/button/_component";
 import {
   useBillingPricing,
@@ -39,7 +37,7 @@ const Pricing = () => {
   );
 
   const { data, isLoading, isError } = useBillingPricing();
-  const { mutateAsync, isPending } = useInitializeTransaction();
+  const { mutateAsync } = useInitializeTransaction();
 
   if (isLoading) {
     return (

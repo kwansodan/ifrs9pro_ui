@@ -171,3 +171,18 @@ export interface PricingRow {
   planCode: string;
   active: boolean;
 }
+
+export interface BillingPlan {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+}
+
+export interface HistoryRow {
+  id: number;
+  plan_title: string;
+  plan_amount: string;
+  date: string;
+  status: "Current" | "Expired";
+}
