@@ -140,10 +140,10 @@ const Pricing = () => {
   );
 
   const columns = [
-    { key: "tier", name: "Tier", width: 320, renderCell: renderTierCell },
-    { key: "volume", name: "Plan type", resizable: true },
+    { key: "tier", name: "Tier", width: 350, renderCell: renderTierCell },
+    { key: "volume", name: "Plan type", width: 270 },
     { key: "annual_fee", name: "Annual fee", width: 180 },
-    { key: "action", name: "", width: 160, renderCell: renderActionCell },
+    { key: "action", name: "", width: 150, renderCell: renderActionCell },
   ];
 
   return (

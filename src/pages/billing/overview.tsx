@@ -84,7 +84,7 @@ const Overview = () => {
         </div>
       </div>
 
-      <div className="w-full p-4 border sm:w-1/2 sm:p-5 bg-gray-50 rounded-xl">
+      {/* <div className="w-full p-4 border sm:w-1/2 sm:p-5 bg-gray-50 rounded-xl">
         <p className="mb-3 text-sm text-gray-600">
           For help and support with your billing questions, contact our support
           team and they'll be happy to help.
@@ -97,7 +97,7 @@ const Overview = () => {
             <Button text="Contact support" className="w-full sm:w-auto" />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
