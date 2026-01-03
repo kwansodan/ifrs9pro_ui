@@ -23,6 +23,22 @@ export const UserSendRequestToAdmin = async (
 export const VerifyUserEmail = async (token: string) =>
   await axios.get(`${URL}/verify-email/${token}`);
 
+export const ForgotPasswordRequest = async (email: string) => {
+  return getAxios().post("/forgot-password", { email });
+};
+
+export const ResetPasswordRequest = async (
+  token: string,
+  password: string,
+  confirm_password: string
+) => {
+  return getAxios().post("/reset-password", {
+    token,
+    password,
+    confirm_password,
+  });
+};
+
 export const VerifyAdminApproval = async (
   token: string,
   password: string,
