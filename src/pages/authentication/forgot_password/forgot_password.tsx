@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../components/button/_component";
-import { ForgotPasswordRequest } from "../../../core/services/auth.service";
 import { showToast } from "../../../core/hooks/alert";
+import { ForgotPasswordRequest } from "../../../core/services/auth.service";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");

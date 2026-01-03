@@ -33,6 +33,24 @@ export const VerifyAdminApproval = async (
     confirm_password,
   });
 
+export const ForgotPasswordRequest = async (email: string) => {
+  return getAxios().post("/forgot-password", {
+    email,
+  });
+};
+
+export const ResetPasswordRequest = async (
+  token: string,
+  password: string,
+  confirm_password: string
+) => {
+  return getAxios().post("/reset-password", {
+    token,
+    password,
+    confirm_password,
+  });
+};
+
 export const RegisterTenant = async (payload: {
   company_name: string;
   industry: string;
