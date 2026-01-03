@@ -21,23 +21,7 @@ export const UserSendRequestToAdmin = async (
 
 //using api directly for some reasons
 export const VerifyUserEmail = async (token: string) =>
-  await axios.get(`${URL}/verify-email/${token}`);
-
-export const ForgotPasswordRequest = async (email: string) => {
-  return getAxios().post("/forgot-password", { email });
-};
-
-export const ResetPasswordRequest = async (
-  token: string,
-  password: string,
-  confirm_password: string
-) => {
-  return getAxios().post("/reset-password", {
-    token,
-    password,
-    confirm_password,
-  });
-};
+  await axios.get(`https://do-site.service4gh.com/verify-email/${token}`);
 
 export const VerifyAdminApproval = async (
   token: string,
