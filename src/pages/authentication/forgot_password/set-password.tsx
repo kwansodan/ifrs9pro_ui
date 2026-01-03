@@ -62,14 +62,14 @@ function ResetPassword() {
       <div className="flex items-center justify-center">
         <div className="px-8 py-12 bg-white border rounded-xl w-96">
           <form onSubmit={handleSubmit}>
-            <h3 className="text-center text-[18px] font-medium text-gray-800">
+            <h3 className="text-center text-[14px] font-medium text-gray-800">
               Reset Password
             </h3>
 
             <input
               type="password"
               placeholder="New password"
-              className="w-full px-4 py-2 mt-4 border rounded-lg"
+              className="w-full px-4 py-2 mt-4 border rounded-lg text-[14px]"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -77,7 +77,7 @@ function ResetPassword() {
             <input
               type="password"
               placeholder="Confirm password"
-              className="w-full px-4 py-2 mt-4 border rounded-lg"
+              className="w-full px-4 py-2 mt-4 text-[14px] border rounded-lg"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
