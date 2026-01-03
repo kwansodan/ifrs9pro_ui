@@ -1,6 +1,9 @@
 /// <reference types="node" />
 
+import "dotenv/config";
 import { defineConfig, devices } from "@playwright/test";
+
+const STAGING_URL = "https://ifrs9pro-ui-staging.vercel.app";
 
 export default defineConfig({
   testDir: "./tests",
@@ -13,10 +16,11 @@ export default defineConfig({
   ],
 
   use: {
+    baseURL: STAGING_URL,
     headless: true,
-    screenshot: "only-on-failure",
-    trace: "retain-on-failure",
-    video: "retain-on-failure",
+    launchOptions: {
+      slowMo: 800,
+    },
   },
 
   projects: [
@@ -25,10 +29,4 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
-
-  webServer: {
-    command: "npm run preview",
-    port: 4173,
-    reuseExistingServer: !process.env.CI,
-  },
 });

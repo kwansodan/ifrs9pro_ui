@@ -117,3 +117,72 @@ export interface IngestionState {
   portfolioId: number | null;
   files: Record<string, IngestionFile>;
 }
+
+export interface Option {
+  label: string;
+  value: string;
+}
+
+export interface BillingOverviewData {
+  active_subscriptions: number;
+  expired_subscriptions: number;
+  current_plan: string | null;
+  billing_cycle: string | null;
+  billing_email: string | null;
+}
+
+export interface BillingOverviewState {
+  active_subscriptions: number;
+  expired_subscriptions: number;
+  current_plan: CurrentPlan;
+  billing_cycle: string | null;
+  billing_email: string | null;
+}
+
+export interface InitializeTransactionPayload {
+  amount: number;
+  reference: string;
+  callback_url: string;
+  plan: string;
+  metadata?: Record<string, any>;
+}
+
+interface CurrentPlan {
+  name: string;
+  plan_code: string;
+  amount: number;
+  currency: string;
+}
+
+export interface BillingPlan {
+  name: string;
+  amount: number;
+  currency: string;
+  interval: string;
+  code: string;
+  status: "active" | "inactive";
+}
+
+export interface PricingRow {
+  id: string;
+  tier: string;
+  volume: string;
+  annual_fee: string;
+  planCode: string;
+  active: boolean;
+}
+
+export interface BillingPlan {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+}
+
+export interface HistoryRow {
+  id: number;
+  plan_title: string;
+  plan_amount: string;
+  date: string;
+  status: "Current" | "Expired";
+}

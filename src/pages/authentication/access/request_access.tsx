@@ -23,7 +23,7 @@ function RequestAccess() {
     try {
       UserRequestAccess(email)
         .then((res) => {
-          showToast(res.data.message ?? "Request access successful", true);
+          showToast(res?.data?.message ?? "Request access successful", true);
           navigate("/verification");
         })
         .catch((err) => {

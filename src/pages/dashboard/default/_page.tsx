@@ -10,6 +10,7 @@ import DashboardLoader from "../../../components/dashboard_loader/component";
 import TextLoader from "../../../components/text_loader/component";
 import { currencyFormatter } from "../../../core/utility";
 import ApiErrorPage from "../../errors/api";
+import { AxiosError } from "axios";
 
 function Default() {
   const { portfoliosQuery } = usePortfolios();
@@ -46,10 +47,16 @@ function Default() {
   };
 
   if (dashboardStatsQuery.isError || portfoliosQuery.isError) {
-    const errorMessage =
-      (dashboardStatsQuery.error as any)?.message ||
-      (portfoliosQuery.error as any)?.message ||
-      "Unable to fetch data from server.";
+    const error = dashboardStatsQuery.error || portfoliosQuery.error;
+
+    let errorMessage = "Unable to fetch data from server.";
+
+    if (error instanceof AxiosError) {
+      errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        error.message;
+    }
 
     return <ApiErrorPage message={errorMessage} onRetry={handleRetry} />;
   }

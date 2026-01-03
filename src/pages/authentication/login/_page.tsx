@@ -133,6 +133,15 @@ function Login() {
               Request access
             </span>
           </small>
+          <small className="flex justify-center mt-4 text-xs text-center">
+            Forgot your password?
+            <span
+              className="ml-2 text-blue-500 underline cursor-pointer"
+              onClick={() => navigate("/forgot-password")}
+            >
+              Reset
+            </span>
+          </small>
         </div>
       </div>
     </>

@@ -5,6 +5,8 @@ import Button from "../../components/button/_component";
 import ShareFeedback from "./share_feedback";
 import { useFeedback } from "../../core/hooks/feedback";
 import Feedback from "./_page";
+import { AxiosError } from "axios";
+import { ApiErrorPage } from "../errors/api";
 
 function NoFeedback() {
   const { feedbackQuery } = useFeedback();
@@ -12,8 +14,28 @@ function NoFeedback() {
   const [openCreateFeedbackModal, setOpenCreateFeedbackModal] =
     useState<boolean>(false);
 
+  const handleRetry = () => {
+    feedbackQuery.refetch();
+  };
+
+  if (feedbackQuery.isError) {
+    const error = feedbackQuery.error;
+
+    let errorMessage = "Unable to fetch data from server.";
+
+    if (error instanceof AxiosError) {
+      errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        error.message;
+    }
+
+    return <ApiErrorPage message={errorMessage} onRetry={handleRetry} />;
+  }
+
   const feedbackData =
     feedbackQuery && feedbackQuery.data && feedbackQuery.data.data;
+
   return (
     <>
       <Modal

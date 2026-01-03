@@ -25,8 +25,13 @@ const Navbar = () => {
             className="!border-[1px] !border-[#166E94] !text-[#166E94] text-xs !w-full h-[30px] !rounded-[100px] bg-white mx-3"
           />
           <Button
-            onClick={() => navigate("/request-access")}
+            onClick={() => navigate("/create-company-account")}
             text="Signup"
+            className="!border-[1px] text-xs !w-full h-[30px] text-white !rounded-[100px] bg-[#166E94] mx-3"
+          />
+          <Button
+            onClick={() => navigate("/request-access")}
+            text="Request Access"
             className="!border-[1px] text-xs !w-full h-[30px] text-white !rounded-[100px] bg-[#166E94] mx-3"
           />
         </div>

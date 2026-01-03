@@ -13,6 +13,8 @@ import { motion } from "framer-motion";
 import TableLoader from "../../components/table_loader/component";
 import { showToast } from "../../core/hooks/alert";
 import { ExportUsers } from "../../core/services/users.service";
+import { AxiosError } from "axios";
+import ApiErrorPage from "../errors/api";
 
 function Users() {
   const [showFilter, setShowFilter] = useState<boolean>(false);
@@ -43,6 +45,7 @@ function Users() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showActionsMenu]);
+
   const filteredData =
     adminUsersQuery &&
     adminUsersQuery.data &&
@@ -51,6 +54,26 @@ function Users() {
       else if (e?.role?.toLowerCase().includes(query.toLocaleLowerCase()))
         return e;
     });
+
+  const handleRetry = () => {
+    adminUsersQuery.refetch();
+  };
+
+  if (adminUsersQuery.isError) {
+    const error = adminUsersQuery.error;
+
+    let errorMessage = "Unable to fetch data from server.";
+
+    if (error instanceof AxiosError) {
+      errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        error.message;
+    }
+
+    return <ApiErrorPage message={errorMessage} onRetry={handleRetry} />;
+  }
+
   const renderActionsRow = (data: any) => {
     const { id, first_name, last_name } = data.row;
 

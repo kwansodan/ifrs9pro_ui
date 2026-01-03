@@ -127,7 +127,9 @@ function PasswordChange() {
               </div>
               <Button
                 type="submit"
-                className="mt-8 text-white"
+                className={`mt-8 bg-[#166E94] ${
+                  isFormValid ? "bg-[#166E94]" : "bg-[#D9EFF9]"
+                }`}
                 text="Set password"
                 disabled={!isFormValid}
                 isLoading={buttonLoading}

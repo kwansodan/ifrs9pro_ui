@@ -36,6 +36,9 @@ jobs:
       - name: Generate API Types
         run: npm run generate:api
 
+      - name: TypeScript type check (contract enforcement)
+        run: npm run typecheck
+
       - name: Build app
         run: npm run build
 

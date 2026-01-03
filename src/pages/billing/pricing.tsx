@@ -1,86 +1,149 @@
 import "react-data-grid/lib/styles.css";
-import Button from "../../components/button/_component";
 import { DataGrid } from "react-data-grid";
-import { useNavigate } from "react-router-dom";
+import Button from "../../components/button/_component";
+import {
+  useBillingPricing,
+  useInitializeTransaction,
+} from "../../core/hooks/dashboard";
+import { showToast } from "../../core/hooks/alert";
+import { useState } from "react";
 
-const plans = [
-  {
-    id: 1,
-    tier: "Starter",
-    volume: "Up to 5,000 loans",
-    annual_fee: "$3,000",
-    active: true,
-  },
-  {
-    id: 2,
-    tier: "Growth",
-    volume: "5,001 - 20,000 loans",
-    annual_fee: "$6,000",
-  },
-  {
-    id: 3,
-    tier: "Scale",
-    volume: "20,001 - 50,000 loans",
-    annual_fee: "$10,000",
-  },
-  {
-    id: 4,
-    tier: "Enterprise",
-    volume: "50,001 - 100,000 loans",
-    annual_fee: "$15,000",
-  },
-  {
-    id: 5,
-    tier: "Custom",
-    volume: "100,000+ loans",
-    annual_fee: "Custom price",
-  },
-];
+interface BillingPlan {
+  name: string;
+  amount: number;
+  currency: string;
+  interval: string;
+  code: string;
+  status: "active" | "inactive";
+}
 
-const renderTierCell = ({ row }: any) => (
-  <div className="flex items-center gap-2">
-    <span>{row.tier}</span>
-    {row.active && (
-      <span className="text-[11px] text-[#0E9F6E] bg-[#E6FAEF] px-2 py-[2px] rounded-md border border-[#B5E8CB]">
-        Active subscription
-      </span>
-    )}
-  </div>
-);
+interface PricingRow {
+  id: string;
+  tier: string;
+  volume: string;
+  annual_fee: string;
+  planCode: string;
+  isActive: boolean;
+  rawPlan: {
+    amount: number;
+    code: string;
+    name: string;
+  };
+}
 
 const Pricing = () => {
-  const navigate = useNavigate();
+  const [processingPlanCode, setProcessingPlanCode] = useState<string | null>(
+    null
+  );
+
+  const { data, isLoading, isError } = useBillingPricing();
+  const { mutateAsync } = useInitializeTransaction();
+
+  if (isLoading) {
+    return (
+      <div className="p-6 text-sm text-gray-500">Loading pricing plans…</div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="p-6 text-sm text-red-500">
+        Failed to load pricing plans
+      </div>
+    );
+  }
+
+  const plans: BillingPlan[] = data?.data.plans ?? [];
+  const activePlanCode = data?.data.active_plan_code ?? null;
+
+  const handleSubscribe = async (plan: {
+    amount: number;
+    code: string;
+    name: string;
+  }) => {
+    try {
+      setProcessingPlanCode(plan.code);
+      const payload = {
+        amount: plan.amount,
+        reference: `sub_${Date.now()}`,
+        callback_url: `${window.location.origin}/dashboard/billing`,
+        plan: plan.code,
+        metadata: {
+          plan_name: plan.name,
+        },
+      };
+
+      const res = await mutateAsync(payload);
+
+      const authUrl =
+        res?.data?.data?.authorization_url ?? res?.data?.authorization_url;
+
+      if (!authUrl) {
+        throw new Error("Authorization URL not returned");
+      }
+
+      window.location.href = authUrl;
+    } catch (error: any) {
+      setProcessingPlanCode(null);
+      showToast(
+        error?.response?.data?.detail ?? "Failed to initialize payment",
+        false
+      );
+    }
+  };
+
+  const rows: PricingRow[] = plans.map((plan) => {
+    const isActive = plan.status === "active" || plan.code === activePlanCode;
+
+    return {
+      id: plan.code,
+      tier: plan.name,
+      volume:
+        plan.interval === "annually" ? "Annual subscription" : plan.interval,
+      annual_fee: `${plan.currency} ${(plan.amount / 100).toLocaleString()}`,
+      planCode: plan.code,
+      isActive,
+      rawPlan: {
+        amount: plan.amount,
+        code: plan.code,
+        name: plan.name,
+      },
+    };
+  });
+
+  const renderTierCell = ({ row }: any) => (
+    <div className="flex items-center gap-2">
+      <span>{row.tier}</span>
+      {row.isActive && (
+        <span className="text-[11px] text-[#0E9F6E] bg-[#E6FAEF] px-2 py-[2px] rounded-md border border-[#B5E8CB]">
+          Active subscription
+        </span>
+      )}
+    </div>
+  );
 
   const renderActionCell = ({ row }: any) => (
     <div className="flex justify-end pr-2">
-      {row.tier === "Custom" ? (
+      {!row.isActive && (
         <Button
-          text="Contact us"
-          className="w-auto bg-[#F1F1F1]"
-          onClick={() =>
-            navigate("/dashboard/susbscription-payment", {
-              state: { plan: row },
-            })
+          text={
+            processingPlanCode === row.rawPlan.code
+              ? "Processing..."
+              : "Subscribe"
           }
-        />
-      ) : (
-        <Button
-          text="Subscribe"
+          disabled={processingPlanCode !== null}
           className="w-auto bg-[#F1F1F1]"
-          onClick={() =>
-            navigate("/dashboard/susbscription-payment", {
-              state: { plan: row },
-            })
-          }
+          onClick={() => handleSubscribe(row.rawPlan)}
         />
       )}
     </div>
   );
+
   const columns = [
-    { key: "tier", name: "Tier", width: 180, renderCell: renderTierCell },
-    { key: "volume", name: "Loan volume", resizable: true }, // flex column
-    { key: "annual_fee", name: "Annual fee (USD)", width: 180 },
-    { key: "action", name: "", width: 160, renderCell: renderActionCell },
+    { key: "tier", name: "Tier", width: 350, renderCell: renderTierCell },
+    { key: "volume", name: "Plan type", width: 270 },
+    { key: "annual_fee", name: "Annual fee", width: 180 },
+    { key: "action", name: "", width: 150, renderCell: renderActionCell },
   ];
 
   return (
@@ -93,7 +156,7 @@ const Pricing = () => {
         <div className="min-w-[720px]">
           <DataGrid
             columns={columns}
-            rows={plans}
+            rows={rows}
             rowHeight={56}
             headerRowHeight={44}
             className="rdg-light custom-grid"
