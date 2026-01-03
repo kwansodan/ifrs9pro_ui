@@ -11,6 +11,8 @@ import CreatePorfolio from "../../components/create_portfolio/_component";
 import DeletePortfolio from "./delete_portfolio";
 import { motion } from "framer-motion";
 import { FilterValues } from "../../core/interfaces";
+import { AxiosError } from "axios";
+import ApiErrorPage from "../errors/api";
 
 function PortfolioMain() {
   const { portfoliosQuery } = usePortfolios();
@@ -26,6 +28,25 @@ function PortfolioMain() {
     asset_type: [],
     funding_source: [],
   });
+
+  const handleRetry = () => {
+    portfoliosQuery.refetch();
+  };
+
+  if (portfoliosQuery.isError) {
+    const error = portfoliosQuery.error;
+
+    let errorMessage = "Unable to fetch data from server.";
+
+    if (error instanceof AxiosError) {
+      errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        error.message;
+    }
+
+    return <ApiErrorPage message={errorMessage} onRetry={handleRetry} />;
+  }
 
   const handleApplyFilter = (newFilters: any) => {
     setFilters(newFilters);

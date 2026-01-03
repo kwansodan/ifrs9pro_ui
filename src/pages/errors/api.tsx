@@ -21,11 +21,11 @@ export const ApiErrorPage: React.FC<ApiErrorPageProps> = ({
           />
         </div>
 
-        <h1 className="text-2xl font-semibold text-gray-800">
+        <h1 className="text-xl font-semibold text-gray-400">
           Oops! Something went wrong
         </h1>
 
-        <p className="max-w-md text-sm text-gray-600 md:text-base">{message}</p>
+        <p className=" text-2xl font-semibold text-red-600">{message}</p>
 
         {onRetry && (
           <div

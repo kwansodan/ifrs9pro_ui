@@ -54,7 +54,6 @@ export const getAxios = () => {
       return response;
     },
     (error) => {
-      console.log("eee: ", error);
       // if (error?.response?.status.toLocaleLowerCase() === 401) {
       //   clearUserSession();
       // }
