@@ -53,11 +53,11 @@ export const reportTypeOptions = [
     label: "BOG impairment detailed report",
   },
   {
-    value: "BOG_IMPAIRMENT_REPORT_SUMMARISED",
+    value: "BOG_impairmnt_summary_by_stages",
     label: "BOG impairment summary by stages",
   },
   {
-    value: "JOURNALS_REPORT",
+    value: "journals_report",
     label: "Journals report",
   },
   // {
