@@ -22,8 +22,8 @@ export const clearUserSession = () => {
 
 export const getAxios = () => {
   const instance = axios.create({
-    // baseURL: "https://do-site-staging.service4gh.com",
-    baseURL: "https://do-site.service4gh.com",
+    baseURL: "https://do-site-staging.service4gh.com",
+    ///baseURL: "https://do-site.service4gh.com",
   });
 
   const token = localStorage.getItem("u_token");
@@ -111,19 +111,17 @@ export const renderStatusColors = (status: string) => {
 
 export const renderReportLabel = (value: string) => {
   if (value === "ecl_detailed_report") return "ECL detailed report";
+
   if (value === "ecl_report_summarised_by_stages")
     return "ECL report summarised by stages";
+
   if (value === "BOG_impairment_detailed_report")
     return "BOG impairment detailed report";
-  if (value === "BOG_IMPAIRMENT_REPORT_SUMMARISED")
+  // asdfasdf
+  if (value === "BOG_impairmnt_summary_by_stages")
     return "BOG impairment summary by stages";
-  if (value === "JOURNALS_REPORT") return "Journals report";
-  // if (value === "local_impairment_detailed_report")
-  // if (value === "local_impairment_detailed_report")
-  //   return "Local impairment detailed report";
-  // if (value === "local_impairment_report_summarised_by_stages")
-  //   return "Local impairment report summarised by stages";
-  // if (value === "journals_report") return "Journals report";
+
+  if (value === "journals_report") return "Journals report";
 
   return "Report not found";
 };

@@ -116,7 +116,7 @@ function App() {
           {userSession ? (
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<Home />} />
-              <Route path="main" element={<Main />} />
+
               <Route path="portfolio" element={<Porfolio />} />
               {/* <Route path="portfolio-main" element={<PortfolioMain />} /> */}
               <Route

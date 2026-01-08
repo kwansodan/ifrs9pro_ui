@@ -90,6 +90,7 @@ function Login() {
               <input
                 type="email"
                 name="email"
+                value={emailValue}
                 placeholder="Enter your email address"
                 className="w-full h-[4%] text-[12px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 onChange={(e) => setEmailValue(e.target.value)}
@@ -99,6 +100,7 @@ function Login() {
               <input
                 type={password ? "text" : "password"}
                 name="password"
+                value={passwordValue}
                 placeholder="Enter your password"
                 className="w-full h-[4%] text-[12px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 onChange={(e) => setPasswordValue(e.target.value)}

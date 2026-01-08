@@ -6,7 +6,7 @@ import { InitializeTransactionPayload } from "../interfaces";
 const STAGING_API_BASE_URL = "https://do-site-staging.service4gh.com";
 const PRODUCTION_API_BASE_URL = "https://do-site.service4gh.com";
 
-const URL = PRODUCTION_API_BASE_URL;
+const URL = STAGING_API_BASE_URL;
 
 export const UserLogin = async (email: string, password: string) =>
   await getAxios().post("/login", { email, password });
@@ -21,7 +21,7 @@ export const UserSendRequestToAdmin = async (
 
 //using api directly for some reasons
 export const VerifyUserEmail = async (token: string) =>
-  await axios.get(`https://do-site.service4gh.com/verify-email/${token}`);
+  await axios.get(`${URL}/verify-email/${token}`);
 
 export const VerifyAdminApproval = async (
   token: string,

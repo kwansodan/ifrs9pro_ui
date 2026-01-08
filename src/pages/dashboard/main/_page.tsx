@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Images } from "../../../data/Assets";
-import { customerMainOverview, portfolioMainOverview } from "../../../data";
+import { customerMainOverview } from "../../../data";
 import Card from "../../../components/card/_component";
 import "react-data-grid/lib/styles.css";
 import Button from "../../../components/button/_component";
@@ -85,13 +85,13 @@ function Main() {
 
         <h3 className="text-[16px] font-semibold mt-7">Portfolio overview</h3>
         <div className="flex gap-4">
-          {portfolioMainOverview.map((item: any) => (
+          {/* {portfolioMainOverview.map((item: any) => (
             <Card
               title={item.name}
               value={item.fig}
               valueClassName="text-black"
             />
-          ))}
+          ))} */}
         </div>
 
         <h3 className="text-[16px] font-semibold mt-6">Customer overview</h3>

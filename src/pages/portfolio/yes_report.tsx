@@ -26,35 +26,32 @@ function YesReport() {
     setDownloadingId(null);
   };
 
-  const downloadDocument = (rid: any) => {
-    if (rid) {
-      setDownloadingId(rid);
-      DownloadReportHistory(Number(id), rid)
-        .then((res) => {
-          const downloadUrl = res?.data?.download_url;
+  const downloadDocument = (rid: string) => {
+    setDownloadingId(rid);
 
-          if (downloadUrl) {
-            const newTab = window.open(downloadUrl, "_blank");
-            if (newTab) newTab.focus();
-
-            const link = document.createElement("a");
-            link.href = downloadUrl;
-            link.download = `report_${rid}.xlsx`;
-            link.target = "_blank";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          } else {
-            showToast("No download URL found", false);
-          }
-
-          setDownloadingId(null);
-        })
-        .catch((err) => {
-          setDownloadingId(null);
-          showToast(err?.response?.data?.detail ?? "Download failed", false);
+    DownloadReportHistory(Number(id), rid)
+      .then((res) => {
+        const blob = new Blob([res.data], {
+          type: res.headers["content-type"],
         });
-    }
+
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `report_${rid}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+
+        link.remove();
+        window.URL.revokeObjectURL(url);
+
+        setDownloadingId(null);
+      })
+      .catch((err) => {
+        setDownloadingId(null);
+        showToast(err?.response?.data?.detail ?? "Download failed", false);
+      });
   };
 
   const handleDelete = () => {
