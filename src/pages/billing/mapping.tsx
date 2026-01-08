@@ -17,12 +17,23 @@ import { useNavigate } from "react-router-dom";
 import { CreatePortfolioIngestion } from "../../core/services/portfolio.service";
 import { showToast } from "../../core/hooks/alert";
 import { clearIngestionData } from "../../core/stores/slices/ingestion_slice";
-import { inferType } from "../../data";
+import {
+  buildFileMappings,
+  inferType,
+  validateRequiredMappingsFromPayload,
+} from "../../data";
+import { Slot } from "../../core/interfaces";
 
 type Col = { id: string; label: string; mappedTo?: string | null };
-type Slot = { id: string; label: string; mapped?: string | null };
 
 const slotIdFromModel = (model: string) => `slot_${model}`;
+
+const toFieldKey = (value: string) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "");
 
 const FileTabs = ({
   files,
@@ -150,7 +161,7 @@ const SlotRow = ({
 const ColumnMappingPage: React.FC = () => {
   const [activeFileId, setActiveFileId] = useState<string | null>(null);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
-
+  const [confirmMapping, setConfirmMapping] = useState(false);
   const ingestion = useSelector((state: RootState) => state.ingestion);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -165,6 +176,8 @@ const ColumnMappingPage: React.FC = () => {
 
   useEffect(() => {
     const uploaded = ingestion?.files ?? {};
+
+    console.log("uploaded files", uploaded);
     const keys = Object.keys(uploaded);
     if (keys.length === 0) return;
 
@@ -184,6 +197,7 @@ const ColumnMappingPage: React.FC = () => {
             slots: (file.model_columns || []).map((modelCol: string) => ({
               id: slotIdFromModel(modelCol),
               label: modelCol,
+              fieldKey: toFieldKey(modelCol),
               mapped: null,
             })),
           };
@@ -359,38 +373,40 @@ const ColumnMappingPage: React.FC = () => {
       });
   }, [ingestion]);
 
+  Object.entries(perFileState).forEach(([fileKey, state]) => {
+    console.log(
+      "SUBMIT STATE →",
+      fileKey,
+      state.slots.map((s) => ({
+        label: s.label,
+        mapped: s.mapped,
+      }))
+    );
+  });
+
   const handleFinalSubmit = () => {
+    setConfirmMapping(true);
     if (!ingestion.portfolioId) return;
 
-    const fileEntries = Object.entries(perFileState)
-      .map(([fileKey, state]) => {
-        const fileMeta = (ingestion.files as any)[fileKey];
-        if (!fileMeta) return null;
+    const fileEntries = buildFileMappings(perFileState, ingestion.files);
 
-        const mapping: Record<string, string> = {};
-        state.slots.forEach((slot) => {
-          if (slot.mapped) {
-            mapping[slot.mapped] = slot.label;
-          }
-        });
+    const validationErrors = validateRequiredMappingsFromPayload(fileEntries);
 
-        return {
-          type: fileKey,
-          object_name: fileMeta.object_name,
-          mapping,
-        };
-      })
-      .filter(Boolean);
+    if (validationErrors.length > 0) {
+      setConfirmMapping(false);
+      showToast(validationErrors.join(" | "), false);
+      return;
+    }
 
-    const payload = { files: fileEntries };
-
-    CreatePortfolioIngestion(ingestion.portfolioId, payload)
+    CreatePortfolioIngestion(ingestion.portfolioId, { files: fileEntries })
       .then(() => {
+        setConfirmMapping(false);
         dispatch(clearIngestionData());
         navigate(`/dashboard/portfolio-details/${ingestion.portfolioId}`);
         showToast("Ingestion started successfully", true);
       })
       .catch((err) => {
+        setConfirmMapping(false);
         showToast(err?.response?.data?.detail || "Ingestion failed", false);
       });
   };
@@ -489,6 +505,7 @@ const ColumnMappingPage: React.FC = () => {
               text="Confirm mapping"
               className="bg-[#166E94] w-2/12 text-white"
               onClick={handleFinalSubmit}
+              isLoading={confirmMapping}
             />
           </div>
         </div>

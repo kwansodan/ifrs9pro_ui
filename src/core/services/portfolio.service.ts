@@ -51,7 +51,11 @@ export const GetReportHistory = async (id: number | string) =>
 export const DownloadReportHistory = async (
   id: number | string,
   report_id: number | string
-) => await getAxios().get(`/reports/${id}/report/${report_id}/download`);
+) => {
+  return getAxios().get(`/reports/${id}/report/${report_id}/download`, {
+    responseType: "blob",
+  });
+};
 
 export const DeleteReport = async (
   id: number | string,

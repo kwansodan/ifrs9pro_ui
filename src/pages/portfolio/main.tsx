@@ -19,6 +19,7 @@ function PortfolioMain() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [openCreatePortfolioModal, setOpenCreatePortfolioModal] =
     useState<boolean>(false);
+  const [portfolioModalKey, setPortfolioModalKey] = useState(0);
   const [query, setQuery] = useState("");
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<number>(0);
@@ -143,6 +144,10 @@ function PortfolioMain() {
     });
     setShowFilter(false);
   };
+  const openModal = () => {
+    setPortfolioModalKey((k) => k + 1);
+    setOpenCreatePortfolioModal(true);
+  };
   return (
     <>
       <Modal
@@ -150,7 +155,10 @@ function PortfolioMain() {
         open={openCreatePortfolioModal}
         modalHeader="Create New Portfolio"
       >
-        <CreatePorfolio cancel={() => setOpenCreatePortfolioModal(false)} />
+        <CreatePorfolio
+          key={portfolioModalKey}
+          cancel={() => setOpenCreatePortfolioModal(false)}
+        />
       </Modal>
       <Modal
         close={() => setConfirmDelete(false)}
@@ -246,7 +254,7 @@ function PortfolioMain() {
             <>
               <Button
                 text="New portfolio"
-                onClick={() => setOpenCreatePortfolioModal(true)}
+                onClick={openModal}
                 className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[144px] min-h-[35px]"
               />
             </>

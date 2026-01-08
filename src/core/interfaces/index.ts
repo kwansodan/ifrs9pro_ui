@@ -186,3 +186,16 @@ export interface HistoryRow {
   date: string;
   status: "Current" | "Expired";
 }
+
+export type Slot = {
+  id: string;
+  label: string;
+  fieldKey: string;
+  mapped: string | null;
+};
+
+export type FileMappingEntry = {
+  type: string;
+  object_name: string;
+  mapping: Record<string, string>;
+};
