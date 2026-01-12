@@ -232,7 +232,7 @@ function Users() {
         </div>
       )}
       <div className="flex items-center justify-between bg-[#f8f9fa] rounded-t-lg py-[10px] px-[12px] mt-6 max-w-[1160px]">
-        <h1 className="text-[16px] font-semibold">Users</h1>
+        <h1 className="text-[14px] font-semibold">Teams members</h1>
 
         <div className="flex items-center gap-4">
           <div className="relative">
@@ -258,7 +258,7 @@ function Users() {
           <Button
             text="New team member"
             onClick={() => setOpenNewUserModal(true)}
-            className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[100px]"
+            className="bg-[#166E94] text-white px-7 py-2 rounded-lg min-w-[100px]"
           />
         </div>
 

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Login page", () => {
   test("login page loads", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/login");
 
     await expect(
       page.getByRole("heading", { name: /ifrs9pro/i })
@@ -13,7 +13,7 @@ test.describe("Login page", () => {
   });
 
   test("login button enables when form is valid", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/login");
 
     const button = page.getByRole("button", { name: /login/i });
     await expect(button).toBeDisabled();

@@ -1,7 +1,7 @@
 import { Page, expect } from "@playwright/test";
 
 export async function login(page: Page) {
-  await page.goto("/");
+  await page.goto("/login");
 
   await page.locator('input[name="email"]').fill(process.env.STAGING_EMAIL!);
   await page

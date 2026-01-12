@@ -1,3 +1,5 @@
+import { UserRole } from "../enums";
+
 export interface ButtonProps {
   text: string | React.ReactNode;
   onClick?: () => void;
@@ -198,4 +200,10 @@ export type FileMappingEntry = {
   type: string;
   object_name: string;
   mapping: Record<string, string>;
+};
+
+export type DashboardNavItem = {
+  name: string;
+  href: string;
+  allowedRoles?: UserRole[];
 };

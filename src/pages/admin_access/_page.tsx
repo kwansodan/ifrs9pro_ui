@@ -11,6 +11,8 @@ import { useAdminRequests } from "../../core/hooks/admin";
 import TableLoader from "../../components/table_loader/component";
 
 import { renderStatusColors } from "../../core/utility";
+import { AxiosError } from "axios";
+import ApiErrorPage from "../errors/api";
 
 function AdminAccess() {
   const menuRef = useRef<HTMLDivElement>(null);
@@ -26,6 +28,7 @@ function AdminAccess() {
   const [showActionsMenu, setShowActionsMenu] = useState<boolean>(false);
 
   const { adminRequestsQuery } = useAdminRequests();
+
   const adminData =
     adminRequestsQuery &&
     adminRequestsQuery.data &&
@@ -96,6 +99,25 @@ function AdminAccess() {
       width: "100px",
     },
   ];
+
+  const handleRetry = () => {
+    adminRequestsQuery.refetch();
+  };
+
+  if (adminRequestsQuery.isError) {
+    const error = adminRequestsQuery.error;
+
+    let errorMessage = "Unable to fetch data from server.";
+
+    if (error instanceof AxiosError) {
+      errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        error.message;
+    }
+
+    return <ApiErrorPage message={errorMessage} onRetry={handleRetry} />;
+  }
   return (
     <>
       <Modal

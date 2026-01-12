@@ -2,6 +2,8 @@ import { useState, useMemo } from "react";
 import { DataGrid } from "react-data-grid";
 import "react-data-grid/lib/styles.css";
 import { useBillingSubscription } from "../../core/hooks/dashboard";
+import { AxiosError } from "axios";
+import ApiErrorPage from "../errors/api";
 
 interface InvoiceRow {
   id: string;
@@ -20,7 +22,7 @@ const Invoices = () => {
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showBillingDropdown, setShowBillingDropdown] = useState(false);
 
-  const { data, isLoading, isError } = useBillingSubscription();
+  const { data, isLoading, isError, error, refetch } = useBillingSubscription();
 
   const invoices: InvoiceRow[] = useMemo(() => {
     const apiInvoices = data?.data?.data?.invoices ?? [];
@@ -47,6 +49,10 @@ const Invoices = () => {
       };
     });
   }, [data]);
+
+  const handleRetry = () => {
+    refetch();
+  };
 
   const filteredData = useMemo(
     () =>
@@ -95,9 +101,16 @@ const Invoices = () => {
   }
 
   if (isError) {
-    return (
-      <div className="p-6 text-sm text-red-500">Failed to load invoices</div>
-    );
+    let errorMessage = "Unable to fetch data from server.";
+
+    if (error instanceof AxiosError) {
+      errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        error.message;
+    }
+
+    return <ApiErrorPage message={errorMessage} onRetry={handleRetry} />;
   }
 
   return (

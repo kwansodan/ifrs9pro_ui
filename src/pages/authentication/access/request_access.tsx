@@ -81,7 +81,7 @@ function RequestAccess() {
             Have access already?
             <span
               className="ml-2 text-blue-500 underline cursor-pointer"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/login")}
             >
               Login
             </span>

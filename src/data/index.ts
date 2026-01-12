@@ -1,12 +1,30 @@
 import { ApexOptions } from "apexcharts";
-import { FileMappingEntry, Option, Slot } from "../core/interfaces";
+import {
+  DashboardNavItem,
+  FileMappingEntry,
+  Option,
+  Slot,
+} from "../core/interfaces";
+import { UserRole } from "../core/enums";
 
-export const dashboardNavItems = [
-  { name: "Dashboard", href: "/dashboard", active: true },
+export const dashboardNavItems: DashboardNavItem[] = [
+  { name: "Dashboard", href: "/dashboard" },
   { name: "Portfolio", href: "/dashboard/portfolio" },
-  { name: "Users", href: "/dashboard/users" },
+
+  {
+    name: "Teams",
+    href: "/dashboard/teams",
+    allowedRoles: [UserRole.ADMIN],
+  },
+
   { name: "Feedback", href: "/dashboard/feedback" },
-  { name: "Access requests", href: "/dashboard/admin-access" },
+
+  {
+    name: "Access requests",
+    href: "/dashboard/admin-access",
+    allowedRoles: [UserRole.ADMIN],
+  },
+
   { name: "Billing", href: "/dashboard/billing" },
 ];
 

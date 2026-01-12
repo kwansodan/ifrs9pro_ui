@@ -7,6 +7,8 @@ import {
 } from "../../core/hooks/dashboard";
 import { showToast } from "../../core/hooks/alert";
 import { useState } from "react";
+import { AxiosError } from "axios";
+import ApiErrorPage from "../errors/api";
 
 interface BillingPlan {
   name: string;
@@ -36,7 +38,7 @@ const Pricing = () => {
     null
   );
 
-  const { data, isLoading, isError } = useBillingPricing();
+  const { data, isLoading, isError, error, refetch } = useBillingPricing();
   const { mutateAsync } = useInitializeTransaction();
 
   if (isLoading) {
@@ -45,12 +47,21 @@ const Pricing = () => {
     );
   }
 
+  const handleRetry = () => {
+    refetch();
+  };
+
   if (isError) {
-    return (
-      <div className="p-6 text-sm text-red-500">
-        Failed to load pricing plans
-      </div>
-    );
+    let errorMessage = "Unable to fetch data from server.";
+
+    if (error instanceof AxiosError) {
+      errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        error.message;
+    }
+
+    return <ApiErrorPage message={errorMessage} onRetry={handleRetry} />;
   }
 
   const plans: BillingPlan[] = data?.data.plans ?? [];

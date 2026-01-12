@@ -21,7 +21,7 @@ const Navbar = () => {
         <div className="flex items-center">
           <Button
             text="Login"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/login")}
             className="!border-[1px] !border-[#166E94] !text-[#166E94] text-xs !w-full h-[30px] !rounded-[100px] bg-white mx-3"
           />
           <Button

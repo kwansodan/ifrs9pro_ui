@@ -57,8 +57,8 @@ function App() {
         <Routes>
           {!userSession ? (
             <>
-              <Route path="/home" element={<Homepage />} />
-              <Route path="/" element={<Login />} />
+              <Route path="/" element={<Homepage />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/request-access" element={<RequestAccess />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
@@ -128,7 +128,7 @@ function App() {
               />
               <Route path="after-upload" element={<Test />} />
               <Route path="feedback" element={<NoFeedback />} />
-              <Route path="users" element={<Users />} />
+              <Route path="teams" element={<Users />} />
               <Route path="admin-access" element={<AdminAccess />} />
               <Route path="password-change" element={<PasswordChange />} />
               <Route path="billing" element={<Billing />} />
