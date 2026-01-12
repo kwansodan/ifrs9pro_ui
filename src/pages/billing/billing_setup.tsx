@@ -52,6 +52,8 @@ function BillingSetup() {
       const authorizationUrl =
         res?.data?.data?.authorization_url || res?.data?.authorization_url;
 
+      console.log("Authorization URL:", authorizationUrl);
+
       if (!authorizationUrl) {
         throw new Error("Payment authorization URL not returned");
       }

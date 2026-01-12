@@ -5,7 +5,6 @@ import Login from "./pages/authentication/login/_page";
 import Verification from "./pages/authentication/verification/_page";
 import Home from "./pages/dashboard/home/_page";
 import DashboardLayout from "./pages/layout/_dashboard_layout";
-import Main from "./pages/dashboard/main/_page";
 import NotFound from "./components/404/_component";
 import Porfolio from "./pages/portfolio/_page";
 import Test from "./pages/portfolio/test";
@@ -58,8 +57,8 @@ function App() {
         <Routes>
           {!userSession ? (
             <>
-              <Route path="/" element={<Homepage />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/home" element={<Homepage />} />
+              <Route path="/" element={<Login />} />
               <Route path="/request-access" element={<RequestAccess />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />

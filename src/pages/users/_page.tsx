@@ -103,6 +103,8 @@ function Users() {
   };
 
   const renderUpdatedAt = (data: any) => {
+    if (data.row.updated_at === null) return "N/A";
+
     return moment(data.row.updated_at).format("lll");
   };
 
@@ -164,7 +166,7 @@ function Users() {
   return (
     <>
       <Modal
-        modalHeader="Add new user"
+        modalHeader="Add team member"
         open={openNewUserModal}
         close={() => setOpenNewUserModal(false)}
       >
@@ -254,7 +256,7 @@ function Users() {
             className="bg-[white] text-[#6F6F6F] border-[#6F6F6F] border-[1px] rounded-lg min-w-[100px]"
           />
           <Button
-            text="New user"
+            text="New team member"
             onClick={() => setOpenNewUserModal(true)}
             className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[100px]"
           />

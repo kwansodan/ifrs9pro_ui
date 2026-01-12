@@ -44,25 +44,21 @@ function NewUser({ close }: UploadDataProps) {
     const role = selectedRole as string;
     const portfolio_id = selectedPortfolio as string;
 
-    const payload = {
+    const payload: any = {
       first_name,
       last_name,
       email,
       is_active,
       recovery_email,
       role,
-      portfolio_id,
     };
 
-    if (
-      !first_name ||
-      !last_name ||
-      !email ||
-      !recovery_email ||
-      !role ||
-      !portfolio_id
-    ) {
-      showToast("Please fill in all fields.", false);
+    if (portfolio_id) {
+      payload.portfolio_id = portfolio_id;
+    }
+
+    if (!first_name || !last_name || !email || !recovery_email || !role) {
+      showToast("Please fill in all required fields.", false);
       setIsSubmitting(false);
       return;
     }

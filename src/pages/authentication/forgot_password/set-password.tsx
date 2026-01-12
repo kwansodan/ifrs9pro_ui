@@ -44,7 +44,7 @@ function ResetPassword() {
       showToast(res.data.message || "Password reset successful", true);
 
       setTimeout(() => {
-        navigate("/login");
+        navigate("/");
       }, 1500);
     } catch (err: any) {
       showToast(err?.response?.data?.detail || "Password reset failed", false);
