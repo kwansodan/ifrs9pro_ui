@@ -401,7 +401,7 @@ export function buildFileMappings(
 
       state.slots.forEach((slot) => {
         if (slot.mapped) {
-          mapping[slot.label] = slot.mapped;
+          mapping[slot.fieldKey] = slot.mapped;
         }
       });
 

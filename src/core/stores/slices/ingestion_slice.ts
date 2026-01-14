@@ -29,7 +29,7 @@ export const ingestionSlice = createSlice({
             type: key,
             object_name: file.object_name,
             excel_columns: file.excel_columns,
-            model_columns: file.model_columns,
+            model_columns: file.expected_columns,
           };
         }
       );

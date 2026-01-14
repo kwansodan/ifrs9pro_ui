@@ -176,8 +176,6 @@ const ColumnMappingPage: React.FC = () => {
 
   useEffect(() => {
     const uploaded = ingestion?.files ?? {};
-
-    console.log("uploaded files", uploaded);
     const keys = Object.keys(uploaded);
     if (keys.length === 0) return;
 
@@ -237,6 +235,7 @@ const ColumnMappingPage: React.FC = () => {
     : undefined;
   const left = currentFileState?.left ?? [];
   const slots = currentFileState?.slots ?? [];
+  console.log("testing ex cols:", currentFileState);
 
   const mappedCount = useMemo(
     () => slots.filter((s) => !!s.mapped).length,
