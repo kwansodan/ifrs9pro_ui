@@ -10,6 +10,7 @@ import PageLoader from "../../components/page_loader/_component";
 import { useDispatch } from "react-redux";
 import { setIngestionData } from "../../core/stores/slices/ingestion_slice";
 import { useNavigate } from "react-router-dom";
+import { getExcelRowCount } from "../../core/utility";
 
 function UploadData({ close }: UploadDataProps) {
   const { id } = useParams();
@@ -21,18 +22,45 @@ function UploadData({ close }: UploadDataProps) {
   const [customer_details, setCustomerDetails] = useState<File | null>(null);
   const [loan_details, setLoanDetails] = useState<File | null>(null);
   const [loan_guarantee_data, setLoanGuarantee] = useState<File | null>(null);
+  const [loanRowCount, setLoanRowCount] = useState<number | null>(null);
+
   const [loan_collateral_data, setLoanCollateral] = useState<File | null>(null);
 
-  const getCustomerDataFile = (file: File) => setCustomerDetails(file);
-  const getLoanDetailsFile = (file: File) => setLoanDetails(file);
+  const getCustomerDataFile = async (file: File) => {
+    setCustomerDetails(file);
+
+    const rows = await getExcelRowCount(file);
+    console.log("Customer data rows:", rows);
+  };
+
+  const getLoanDetailsFile = async (file: File) => {
+    setLoanDetails(file);
+    setLoanRowCount(null);
+
+    try {
+      const rows = await getExcelRowCount(file);
+      console.log("Loan details rows:", rows);
+
+      setLoanRowCount(rows);
+    } catch (error) {
+      console.error("Failed to compute loan row count", error);
+      showToast("Failed to read loan file rows", false);
+    }
+  };
+
   const getLoanGuaranteeFile = (file: File) => setLoanGuarantee(file);
   const getLoanCollateralFile = (file: File) => setLoanCollateral(file);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsDone(true);
 
     if (!loan_details || !customer_details) {
       showToast("Please upload loan details and customer data.", false);
+      setIsDone(false);
+      return;
+    }
+    if (loanRowCount === null) {
+      showToast("Loan file is still being processed. Please wait.", false);
       setIsDone(false);
       return;
     }
@@ -50,29 +78,30 @@ function UploadData({ close }: UploadDataProps) {
       formData.append("loan_collateral_data", loan_collateral_data);
     }
 
+    formData.append("loan_row_count", String(loanRowCount));
+
     formData.append("portfolio_id", String(id));
-    if (id) {
-      CreatePortfolioIngestionSave(id, formData)
-        .then((res) => {
-          setIsDone(false);
 
-          dispatch(
-            setIngestionData({
-              portfolioId: Number(id),
-              uploaded_files: res.data.uploaded_files,
-            })
-          );
+    try {
+      const res = await CreatePortfolioIngestionSave(id!, formData);
 
-          navigate(`/dashboard/portfolio/${id}/mapping`);
+      dispatch(
+        setIngestionData({
+          portfolioId: Number(id),
+          uploaded_files: res.data.uploaded_files,
         })
-        .catch((err) => {
-          setIsDone(false);
-          showToast(
-            err?.response?.data?.detail ??
-              "Server error occurred, please try again",
-            false
-          );
-        });
+      );
+
+      navigate(`/dashboard/portfolio/${id}/mapping`);
+    } catch (err: any) {
+      console.error(err);
+      showToast(
+        err?.response?.data?.detail ??
+          "Server error occurred, please try again",
+        false
+      );
+    } finally {
+      setIsDone(false);
     }
   };
 

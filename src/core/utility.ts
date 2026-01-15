@@ -2,6 +2,7 @@ import moment from "moment";
 import { IConfig } from "./interfaces";
 import axios from "axios";
 import { showToast } from "./hooks/alert";
+import * as XLSX from "xlsx";
 
 let options: IConfig = {} as IConfig;
 export const setBaseApi = (v: any) => (options = { apiBaseUrl: v });
@@ -221,4 +222,19 @@ export const isEmptyRate = (value: any): boolean => {
 };
 export const isEmptyRange = (value: any): boolean => {
   return value === null || value === undefined || value === "";
+};
+
+export const getExcelRowCount = async (file: File): Promise<number> => {
+  const buffer = await file.arrayBuffer();
+  const workbook = XLSX.read(buffer, { type: "array" });
+
+  const firstSheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[firstSheetName];
+
+  const rows = XLSX.utils.sheet_to_json(worksheet, {
+    defval: null,
+    blankrows: false,
+  });
+
+  return rows.length;
 };
