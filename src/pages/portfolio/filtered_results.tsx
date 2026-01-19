@@ -39,7 +39,7 @@ function FilteredResults() {
     if (dataSummary && dataSummary?.has_ingested_data) {
       if (
         window.confirm(
-          "Ingestion already done. This ingestion will overwrite the previous one. Do you want to continue?"
+          "Ingestion already done. This ingestion will overwrite the previous one. Do you want to continue?",
         )
       ) {
         setOpenUploadModal(true);
@@ -54,7 +54,7 @@ function FilteredResults() {
     if (dataSummary && dataSummary?.has_calculated_ecl) {
       if (
         window.confirm(
-          "ECL calculation already done. This calculation will overwrite the previous one. Do you want to continue?"
+          "ECL calculation already done. This calculation will overwrite the previous one. Do you want to continue?",
         )
       ) {
         setOpenEclModal(true);
@@ -69,7 +69,7 @@ function FilteredResults() {
     if (dataSummary && dataSummary?.has_calculated_local_impairment) {
       if (
         window.confirm(
-          "BoG impairment calculation already done. This calculation will overwrite the previous one. Do you want to continue?"
+          "BoG impairment calculation already done. This calculation will overwrite the previous one. Do you want to continue?",
         )
       ) {
         setOpenLocalImpairmentModal(true);

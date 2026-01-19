@@ -15,6 +15,7 @@ import { getExcelRowCount } from "../../core/utility";
 function UploadData({ close }: UploadDataProps) {
   const { id } = useParams();
   const [isDone, setIsDone] = useState<boolean>(false);
+  const [isCountingLoanRows, setIsCountingLoanRows] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,23 +29,21 @@ function UploadData({ close }: UploadDataProps) {
 
   const getCustomerDataFile = async (file: File) => {
     setCustomerDetails(file);
-
-    const rows = await getExcelRowCount(file);
-    console.log("Customer data rows:", rows);
   };
 
   const getLoanDetailsFile = async (file: File) => {
     setLoanDetails(file);
     setLoanRowCount(null);
+    setIsCountingLoanRows(true);
 
     try {
       const rows = await getExcelRowCount(file);
-      console.log("Loan details rows:", rows);
-
       setLoanRowCount(rows);
     } catch (error) {
       console.error("Failed to compute loan row count", error);
       showToast("Failed to read loan file rows", false);
+    } finally {
+      setIsCountingLoanRows(false);
     }
   };
 
@@ -89,7 +88,7 @@ function UploadData({ close }: UploadDataProps) {
         setIngestionData({
           portfolioId: Number(id),
           uploaded_files: res.data.uploaded_files,
-        })
+        }),
       );
 
       navigate(`/dashboard/portfolio/${id}/mapping`);
@@ -98,12 +97,19 @@ function UploadData({ close }: UploadDataProps) {
       showToast(
         err?.response?.data?.detail ??
           "Server error occurred, please try again",
-        false
+        false,
       );
     } finally {
       setIsDone(false);
     }
   };
+
+  const isSubmitDisabled =
+    isDone ||
+    isCountingLoanRows ||
+    !customer_details ||
+    !loan_details ||
+    loanRowCount === null;
 
   return (
     <>
@@ -118,27 +124,43 @@ function UploadData({ close }: UploadDataProps) {
         </div>
       </Modal>
 
-      <div className="flex flex-col w-full">
-        <Upload
-          templateLink={"/Customer_data.xlsx"}
-          setFile={getCustomerDataFile}
-          UploadTitle="Import customer data"
-        />
-        <Upload
-          templateLink={"/Loan_master.xlsx"}
-          setFile={getLoanDetailsFile}
-          UploadTitle="Import loan details"
-        />
-        <Upload
-          templateLink={"/Loan_guarantee.xlsx"}
-          setFile={getLoanGuaranteeFile}
-          UploadTitle="Import loan guarantee data"
-        />
-        <Upload
-          templateLink={"/Collateral_Data.xlsx"}
-          setFile={getLoanCollateralFile}
-          UploadTitle="Import loan collateral data"
-        />
+      <div className="relative flex flex-col w-full">
+        {isCountingLoanRows && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/40 backdrop-blur-md backdrop-saturate-150">
+            <PageLoader />
+            <small className="text-[#F7941E] mt-2">
+              Counting loan rows. Please wait…
+            </small>
+          </div>
+        )}
+
+        <div
+          className={isCountingLoanRows ? "opacity-0 pointer-events-none" : ""}
+        >
+          <Upload
+            templateLink={"/Customer_data.xlsx"}
+            setFile={getCustomerDataFile}
+            UploadTitle="Import customer data"
+          />
+
+          <Upload
+            templateLink={"/Loan_master.xlsx"}
+            setFile={getLoanDetailsFile}
+            UploadTitle="Import loan details"
+          />
+
+          <Upload
+            templateLink={"/Loan_guarantee.xlsx"}
+            setFile={getLoanGuaranteeFile}
+            UploadTitle="Import loan guarantee data"
+          />
+
+          <Upload
+            templateLink={"/Collateral_Data.xlsx"}
+            setFile={getLoanCollateralFile}
+            UploadTitle="Import loan collateral data"
+          />
+        </div>
       </div>
 
       <div className="flex justify-end mt-2">
@@ -149,9 +171,10 @@ function UploadData({ close }: UploadDataProps) {
         />
         <Button
           text="Done"
+          disabled={isSubmitDisabled}
           isLoading={isDone}
           onClick={handleSubmit}
-          className="bg-[#166E94] font-normal text-white text-[12px] !rounded-[10px] !w-[90px] "
+          className="bg-[#166E94] font-normal text-white text-[12px] !rounded-[10px] !w-[90px]"
         />
       </div>
     </>
