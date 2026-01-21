@@ -163,7 +163,6 @@ const SlotRow = ({
 const ColumnMappingPage: React.FC = () => {
   const [activeFileId, setActiveFileId] = useState<string | null>(null);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
-  const [confirmMapping, setConfirmMapping] = useState(false);
   const ingestion = useSelector((state: RootState) => state.ingestion);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -281,6 +280,23 @@ const ColumnMappingPage: React.FC = () => {
       };
     });
   }
+
+  useEffect(() => {
+    const hasUnsavedChanges = slots.length > 0 && slots.some((s) => !s.mapped);
+
+    if (!hasUnsavedChanges) return;
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [slots]);
 
   function onDragEnd(event: any) {
     if (!activeFileId) {

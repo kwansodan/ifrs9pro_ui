@@ -289,6 +289,7 @@ function FilteredResults() {
               )}
             </div>
           </div>
+
           {portfolioQuery?.isLoading ? (
             <>
               <PageLoader />
