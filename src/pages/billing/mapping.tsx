@@ -284,7 +284,9 @@ const ColumnMappingPage: React.FC = () => {
   useEffect(() => {
     const hasUnsavedChanges = slots.length > 0 && slots.some((s) => !s.mapped);
 
-    if (!hasUnsavedChanges) return;
+    const shouldBlockUnload = hasUnsavedChanges || isSubmitting;
+
+    if (!shouldBlockUnload) return;
 
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
@@ -296,7 +298,7 @@ const ColumnMappingPage: React.FC = () => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [slots]);
+  }, [slots, isSubmitting]);
 
   function onDragEnd(event: any) {
     if (!activeFileId) {
@@ -392,17 +394,6 @@ const ColumnMappingPage: React.FC = () => {
       });
   }, [ingestion]);
 
-  Object.entries(perFileState).forEach(([fileKey, state]) => {
-    console.log(
-      "SUBMIT STATE →",
-      fileKey,
-      state.slots.map((s) => ({
-        label: s.label,
-        mapped: s.mapped,
-      })),
-    );
-  });
-
   const handleFinalSubmit = () => {
     if (!ingestion.portfolioId) return;
 
@@ -434,11 +425,7 @@ const ColumnMappingPage: React.FC = () => {
     setActiveFileId(key);
   };
 
-  const isConfirmDisabled =
-    isSubmitting ||
-    !activeFileId ||
-    slots.length === 0 ||
-    slots.some((s) => !s.mapped);
+  const isConfirmDisabled = isSubmitting || !activeFileId;
 
   return (
     <>

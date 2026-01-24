@@ -104,7 +104,7 @@ function CalculateEcl({ close }: UploadDataProps) {
   const handleSubmit = () => {
     setCalculating(true);
     const reportingDateElement = document.getElementById(
-      "ecl_reporting_date"
+      "ecl_reporting_date",
     ) as HTMLInputElement | null;
     const reporting_date = reportingDateElement?.value ?? "";
 
@@ -122,6 +122,7 @@ function CalculateEcl({ close }: UploadDataProps) {
           setTimeout(() => window.location.reload(), 1800);
         })
         .catch((err) => {
+          console.log("ECL calculation error:", err);
           setCalculating(false);
           showToast(err?.response?.data.detail ?? "Submission failed", false);
         });
