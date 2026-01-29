@@ -411,7 +411,10 @@ const ColumnMappingPage: React.FC = () => {
       .then(() => {
         dispatch(clearIngestionData());
         navigate(`/dashboard/portfolio-details/${ingestion.portfolioId}`);
-        showToast("Ingestion started successfully", true);
+        showToast(
+          "Ingestion started successfully. You will receive an email notification when it is complete.",
+          true,
+        );
       })
       .catch((err) => {
         showToast(err?.response?.data?.detail || "Ingestion failed", false);
