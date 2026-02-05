@@ -23,8 +23,8 @@ export const clearUserSession = () => {
 
 export const getAxios = () => {
   const instance = axios.create({
-    //baseURL: "https://do-site-staging.service4gh.com",
-    baseURL: "https://do-site.service4gh.com",
+    baseURL: "https://do-site-staging.service4gh.com",
+    //baseURL: "https://do-site.service4gh.com",
   });
 
   const token = localStorage.getItem("u_token");
@@ -60,7 +60,7 @@ export const getAxios = () => {
       //   return Promise.resolve(error);
       // }
       return Promise.reject(error);
-    }
+    },
   );
   return instance;
 };
@@ -106,8 +106,8 @@ export const renderStatusColors = (status: string) => {
   return status.toLocaleLowerCase() === "pending"
     ? "text-yellow-500"
     : status.toLocaleLowerCase() === "approved"
-    ? "text-green-500"
-    : "text-red-500";
+      ? "text-green-500"
+      : "text-red-500";
 };
 
 export const renderReportLabel = (value: string) => {
@@ -160,7 +160,7 @@ export const currencyFormatterWithoutCediSign = (amount: number): string => {
 };
 
 export const validateSequentialRanges = (
-  payload: Record<string, { days_range: string; rate: string }>
+  payload: Record<string, { days_range: string; rate: string }>,
 ): boolean => {
   const categoriesOrder = [
     "current",
@@ -183,7 +183,7 @@ export const validateSequentialRanges = (
     if (rate.includes("%") || isNaN(Number(rate))) {
       showToast(
         `Invalid rate format in "${category}": "${rate}". Use decimal or whole numbers only.`,
-        false
+        false,
       );
       return false;
     }
@@ -206,7 +206,7 @@ export const validateSequentialRanges = (
     if (start !== expectedStart) {
       showToast(
         `Invalid range in "${category}". Expected start: ${expectedStart}, but got: ${start}`,
-        false
+        false,
       );
       return false;
     }

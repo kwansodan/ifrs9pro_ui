@@ -414,6 +414,8 @@ const ColumnMappingPage: React.FC = () => {
         showToast(
           "Ingestion started successfully. You will receive an email notification when it is complete.",
           true,
+          false,
+          20000,
         );
       })
       .catch((err) => {
