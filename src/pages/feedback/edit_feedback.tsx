@@ -52,7 +52,7 @@ function EditFeedback({ close, rowId }: UploadDataProps) {
   console.log("state: ", state);
   return (
     <>
-      <div className="p-8 bg-white">
+      <div className="p-8 bg-white rounded-[10px]">
         <form action={formAction}>
           <div className="p-8 ">
             {/* {aFeedBackQuery?.isFetching ? (

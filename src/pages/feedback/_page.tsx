@@ -141,17 +141,22 @@ function Feedback() {
         open={openCreateFeedbackModal}
         modalHeader="Share feedback"
       >
-        <ShareFeedback cancel={() => setOpenCreateFeedbackModal(false)} />
+        <div className="rounded-[20px]">
+          {" "}
+          <ShareFeedback cancel={() => setOpenCreateFeedbackModal(false)} />
+        </div>
       </Modal>
       <Modal
         close={() => setOpenEditModal(false)}
         open={openEditModal}
         modalHeader="Edit feedback"
       >
-        <EditFeedback
-          close={() => setOpenEditModal(false)}
-          rowId={feedBackId}
-        />
+        <div>
+          <EditFeedback
+            close={() => setOpenEditModal(false)}
+            rowId={feedBackId}
+          />
+        </div>
       </Modal>
       <Modal
         close={() => setOpenDeleteModal(false)}

@@ -31,7 +31,7 @@ function ShareFeedback({ cancel }: any) {
           showToast(
             err?.response?.data.detail[0].msg ??
               "An error occurred. Please try again.",
-            false
+            false,
           );
         });
     } catch {
@@ -44,7 +44,7 @@ function ShareFeedback({ cancel }: any) {
   console.log("state: ", state);
   return (
     <>
-      <div className="bg-white min-w-[500px] rounded-[20px]">
+      <div className="bg-white min-w-[500px] rounded-[10px]">
         <form action={formAction}>
           <div className="p-8 ">
             <div className="mt-3">
