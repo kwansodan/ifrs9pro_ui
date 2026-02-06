@@ -1,8 +1,9 @@
-import Button from "../../components/button/_component";
+import { AxiosError } from "axios";
 import { useBillingOverview } from "../../core/hooks/dashboard";
+import ApiErrorPage from "../errors/api";
 
 const Overview = () => {
-  const { data, isLoading, isError } = useBillingOverview();
+  const { data, isLoading, isError, error, refetch } = useBillingOverview();
 
   if (isLoading) {
     return (
@@ -10,12 +11,27 @@ const Overview = () => {
     );
   }
 
-  if (isError) {
+  if (isLoading) {
     return (
-      <div className="text-sm text-red-500">
-        Failed to load billing overview
-      </div>
+      <div className="p-6 text-sm text-gray-500">Loading pricing plans…</div>
     );
+  }
+
+  const handleRetry = () => {
+    refetch();
+  };
+
+  if (isError) {
+    let errorMessage = "Unable to fetch data from server.";
+
+    if (error instanceof AxiosError) {
+      errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        error.message;
+    }
+
+    return <ApiErrorPage message={errorMessage} onRetry={handleRetry} />;
   }
 
   const overview = data?.data?.data;

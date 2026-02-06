@@ -25,7 +25,7 @@ test.describe("Login page", () => {
   });
 
   test("request access link navigates", async ({ page }) => {
-    await page.goto("/login");
+    await page.goto("/");
 
     await page.getByText(/request access/i).click();
     await expect(page).toHaveURL(/request-access/);

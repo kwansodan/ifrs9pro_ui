@@ -6,7 +6,7 @@ import { InitializeTransactionPayload } from "../interfaces";
 const STAGING_API_BASE_URL = "https://do-site-staging.service4gh.com";
 const PRODUCTION_API_BASE_URL = "https://do-site.service4gh.com";
 
-const URL = STAGING_API_BASE_URL;
+const URL = PRODUCTION_API_BASE_URL;
 
 export const UserLogin = async (email: string, password: string) =>
   await getAxios().post("/login", { email, password });
@@ -16,8 +16,8 @@ export const UserRequestAccess = async (email: string) =>
 
 export const UserSendRequestToAdmin = async (
   email: string,
-  admin_email: string
-) => await getAxios().post("/submit-admin-request/", { email, admin_email });
+  admin_email: string,
+) => await getAxios().post("/submit-admin-request", { email, admin_email });
 
 //using api directly for some reasons
 export const VerifyUserEmail = async (token: string) =>
@@ -26,7 +26,7 @@ export const VerifyUserEmail = async (token: string) =>
 export const VerifyAdminApproval = async (
   token: string,
   password: string,
-  confirm_password: string
+  confirm_password: string,
 ) =>
   await getAxios().post(`/set-password/${token}`, {
     password,
@@ -42,7 +42,7 @@ export const ForgotPasswordRequest = async (email: string) => {
 export const ResetPasswordRequest = async (
   token: string,
   password: string,
-  confirm_password: string
+  confirm_password: string,
 ) => {
   return getAxios().post("/reset-password", {
     token,
@@ -72,7 +72,7 @@ export const CreateBillingCustomer = async (billingToken: string) => {
       headers: {
         Authorization: `Bearer ${billingToken}`,
       },
-    }
+    },
   );
 };
 
@@ -94,7 +94,7 @@ export const GetBillingPlans = async (page = 1, perPage = 50) => {
 };
 
 export const InitializeBillingTransaction = async (
-  payload: InitializeTransactionPayload
+  payload: InitializeTransactionPayload,
 ) => {
   const billingToken = getBillingToken();
 

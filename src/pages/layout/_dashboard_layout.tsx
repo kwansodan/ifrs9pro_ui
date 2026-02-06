@@ -9,8 +9,10 @@ import { Modal } from "../../components/modal/_component";
 import { SendHelp } from "../../core/services/feedback.service";
 import { showToast } from "../../core/hooks/alert";
 import { useGetNotifications } from "../../core/hooks/feedback";
+import { useDashboardNav } from "../../core/hooks/dashboardNav";
 
 const DashboardLayout = () => {
+  const navItems = useDashboardNav();
   const { notificationsQuery } = useGetNotifications();
   const [openHelpModal, setOpenHelpModal] = useState<boolean>(false);
   initTWE({ Dropdown, Ripple });
@@ -115,7 +117,7 @@ const DashboardLayout = () => {
           />
 
           <div className="flex space-x-6">
-            {dashboardNavItems.map((item) => (
+            {navItems.map((item) => (
               <NavLink
                 key={item.name}
                 to={item.href}

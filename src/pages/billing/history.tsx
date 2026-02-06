@@ -3,9 +3,11 @@ import { DataGrid } from "react-data-grid";
 import { useMemo } from "react";
 import { useBillingSubscription } from "../../core/hooks/dashboard";
 import { HistoryRow } from "../../core/interfaces";
+import { AxiosError } from "axios";
+import ApiErrorPage from "../errors/api";
 
 const History = () => {
-  const { data, isLoading, isError } = useBillingSubscription();
+  const { data, isLoading, isError, error, refetch } = useBillingSubscription();
 
   const rows: HistoryRow[] = useMemo(() => {
     const history = data?.data?.data?.invoices_history ?? [];
@@ -55,13 +57,21 @@ const History = () => {
       <div className="p-6 text-sm text-gray-500">Loading billing history…</div>
     );
   }
+  const handleRetry = () => {
+    refetch();
+  };
 
   if (isError) {
-    return (
-      <div className="p-6 text-sm text-red-500">
-        Failed to load billing history
-      </div>
-    );
+    let errorMessage = "Unable to fetch data from server.";
+
+    if (error instanceof AxiosError) {
+      errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        error.message;
+    }
+
+    return <ApiErrorPage message={errorMessage} onRetry={handleRetry} />;
   }
 
   return (

@@ -23,7 +23,7 @@ function DeleteFeedback({ close, rowId }: UploadDataProps) {
   };
   return (
     <>
-      <div className="p-8 bg-white">
+      <div className="p-8 bg-white rounded-[10px]">
         <p className="text-[#1E1E1E] text-[14px] my-8">
           Are you sure you want to delete this? This action cannot be undone
         </p>

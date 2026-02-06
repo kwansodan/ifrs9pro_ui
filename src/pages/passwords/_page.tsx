@@ -31,11 +31,11 @@ function PasswordChange() {
     );
   }, [passwordValue, newPasswordValue]);
 
-  useEffect(() => {
-    if (verifyDone) {
-      showToast(message, true);
-    }
-  }, [verifyDone]);
+  // useEffect(() => {
+  //   if (verifyDone) {
+  //     showToast(message, true);
+  //   }
+  // }, [verifyDone]);
 
   const handlePasswordChange = async (prevState: any, formData: FormData) => {
     setButtonLoading(true);
@@ -109,7 +109,7 @@ function PasswordChange() {
               <div className="relative mt-4">
                 <input
                   type={newPassword ? "text" : "password"}
-                  placeholder="Cofirm password"
+                  placeholder="Confirm password"
                   name="confirm_password"
                   className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                   onChange={(e) => setNewPasswordValue(e.target.value)}

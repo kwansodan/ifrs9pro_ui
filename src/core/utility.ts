@@ -2,6 +2,7 @@ import moment from "moment";
 import { IConfig } from "./interfaces";
 import axios from "axios";
 import { showToast } from "./hooks/alert";
+import * as XLSX from "xlsx";
 
 let options: IConfig = {} as IConfig;
 export const setBaseApi = (v: any) => (options = { apiBaseUrl: v });
@@ -22,8 +23,8 @@ export const clearUserSession = () => {
 
 export const getAxios = () => {
   const instance = axios.create({
-    baseURL: "https://do-site-staging.service4gh.com",
-    ///baseURL: "https://do-site.service4gh.com",
+    //baseURL: "https://do-site-staging.service4gh.com",
+    baseURL: "https://do-site.service4gh.com",
   });
 
   const token = localStorage.getItem("u_token");
@@ -59,7 +60,7 @@ export const getAxios = () => {
       //   return Promise.resolve(error);
       // }
       return Promise.reject(error);
-    }
+    },
   );
   return instance;
 };
@@ -105,8 +106,8 @@ export const renderStatusColors = (status: string) => {
   return status.toLocaleLowerCase() === "pending"
     ? "text-yellow-500"
     : status.toLocaleLowerCase() === "approved"
-    ? "text-green-500"
-    : "text-red-500";
+      ? "text-green-500"
+      : "text-red-500";
 };
 
 export const renderReportLabel = (value: string) => {
@@ -159,7 +160,7 @@ export const currencyFormatterWithoutCediSign = (amount: number): string => {
 };
 
 export const validateSequentialRanges = (
-  payload: Record<string, { days_range: string; rate: string }>
+  payload: Record<string, { days_range: string; rate: string }>,
 ): boolean => {
   const categoriesOrder = [
     "current",
@@ -182,7 +183,7 @@ export const validateSequentialRanges = (
     if (rate.includes("%") || isNaN(Number(rate))) {
       showToast(
         `Invalid rate format in "${category}": "${rate}". Use decimal or whole numbers only.`,
-        false
+        false,
       );
       return false;
     }
@@ -205,7 +206,7 @@ export const validateSequentialRanges = (
     if (start !== expectedStart) {
       showToast(
         `Invalid range in "${category}". Expected start: ${expectedStart}, but got: ${start}`,
-        false
+        false,
       );
       return false;
     }
@@ -221,4 +222,19 @@ export const isEmptyRate = (value: any): boolean => {
 };
 export const isEmptyRange = (value: any): boolean => {
   return value === null || value === undefined || value === "";
+};
+
+export const getExcelRowCount = async (file: File): Promise<number> => {
+  const buffer = await file.arrayBuffer();
+  const workbook = XLSX.read(buffer, { type: "array" });
+
+  const firstSheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[firstSheetName];
+
+  const rows = XLSX.utils.sheet_to_json(worksheet, {
+    defval: null,
+    blankrows: false,
+  });
+
+  return rows.length;
 };

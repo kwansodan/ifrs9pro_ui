@@ -23,6 +23,8 @@ import {
   validateRequiredMappingsFromPayload,
 } from "../../data";
 import { Slot } from "../../core/interfaces";
+import PageLoader from "../../components/page_loader/_component";
+import { Modal } from "../../components/modal/_component";
 
 type Col = { id: string; label: string; mappedTo?: string | null };
 
@@ -67,8 +69,8 @@ const FileTabs = ({
             />
             <div className="text-[11px] text-gray-400 mt-1">
               {active
-                ? `${mappedCount}/${f ? f?.name?.length ?? 0 : 0} mapped`
-                : `0/${f ? f?.name?.length ?? 0 : 0} mapped`}
+                ? `${mappedCount}/${f ? (f?.name?.length ?? 0) : 0} mapped`
+                : `0/${f ? (f?.name?.length ?? 0) : 0} mapped`}
             </div>
           </div>
         );
@@ -161,8 +163,9 @@ const SlotRow = ({
 const ColumnMappingPage: React.FC = () => {
   const [activeFileId, setActiveFileId] = useState<string | null>(null);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
-  const [confirmMapping, setConfirmMapping] = useState(false);
   const ingestion = useSelector((state: RootState) => state.ingestion);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -171,13 +174,11 @@ const ColumnMappingPage: React.FC = () => {
   >({});
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 4 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
   );
 
   useEffect(() => {
     const uploaded = ingestion?.files ?? {};
-
-    console.log("uploaded files", uploaded);
     const keys = Object.keys(uploaded);
     if (keys.length === 0) return;
 
@@ -237,10 +238,11 @@ const ColumnMappingPage: React.FC = () => {
     : undefined;
   const left = currentFileState?.left ?? [];
   const slots = currentFileState?.slots ?? [];
+  console.log("testing ex cols:", currentFileState);
 
   const mappedCount = useMemo(
     () => slots.filter((s) => !!s.mapped).length,
-    [slots]
+    [slots],
   );
 
   function onDragStart(e: any) {
@@ -260,7 +262,7 @@ const ColumnMappingPage: React.FC = () => {
       const mappedLabel = slot.mapped;
 
       const newSlots = fileState.slots.map((s) =>
-        s.id === slotId ? { ...s, mapped: null } : s
+        s.id === slotId ? { ...s, mapped: null } : s,
       );
 
       const newLeft = [
@@ -278,6 +280,25 @@ const ColumnMappingPage: React.FC = () => {
       };
     });
   }
+
+  useEffect(() => {
+    const hasUnsavedChanges = slots.length > 0 && slots.some((s) => !s.mapped);
+
+    const shouldBlockUnload = hasUnsavedChanges || isSubmitting;
+
+    if (!shouldBlockUnload) return;
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [slots, isSubmitting]);
 
   function onDragEnd(event: any) {
     if (!activeFileId) {
@@ -312,7 +333,7 @@ const ColumnMappingPage: React.FC = () => {
     if (draggedType !== expectedType) {
       showToast(
         `Invalid mapping: "${draggedLabel}" (type ${draggedType}) cannot map to "${expectedLabel}" (type ${expectedType})`,
-        false
+        false,
       );
       return;
     }
@@ -356,7 +377,7 @@ const ColumnMappingPage: React.FC = () => {
         const obj = (uploaded as any)[key];
         const objectName: string = obj?.object_name ?? "";
 
-        let fileName = objectName ? objectName.split("/").pop() ?? "" : key;
+        let fileName = objectName ? (objectName.split("/").pop() ?? "") : key;
 
         if (fileName.includes("_")) {
           const parts = fileName.split("_");
@@ -373,41 +394,35 @@ const ColumnMappingPage: React.FC = () => {
       });
   }, [ingestion]);
 
-  Object.entries(perFileState).forEach(([fileKey, state]) => {
-    console.log(
-      "SUBMIT STATE →",
-      fileKey,
-      state.slots.map((s) => ({
-        label: s.label,
-        mapped: s.mapped,
-      }))
-    );
-  });
-
   const handleFinalSubmit = () => {
-    setConfirmMapping(true);
     if (!ingestion.portfolioId) return;
 
     const fileEntries = buildFileMappings(perFileState, ingestion.files);
-
     const validationErrors = validateRequiredMappingsFromPayload(fileEntries);
 
     if (validationErrors.length > 0) {
-      setConfirmMapping(false);
       showToast(validationErrors.join(" | "), false);
       return;
     }
 
+    setIsSubmitting(true);
+
     CreatePortfolioIngestion(ingestion.portfolioId, { files: fileEntries })
       .then(() => {
-        setConfirmMapping(false);
         dispatch(clearIngestionData());
         navigate(`/dashboard/portfolio-details/${ingestion.portfolioId}`);
-        showToast("Ingestion started successfully", true);
+        showToast(
+          "Ingestion started successfully. You will receive an email notification when it is complete.",
+          true,
+          false,
+          20000,
+        );
       })
       .catch((err) => {
-        setConfirmMapping(false);
         showToast(err?.response?.data?.detail || "Ingestion failed", false);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -415,102 +430,122 @@ const ColumnMappingPage: React.FC = () => {
     setActiveFileId(key);
   };
 
+  const isConfirmDisabled = isSubmitting || !activeFileId;
+
   return (
-    <div className="min-h-screen px-4 py-8 bg-white sm:px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="overflow-hidden border shadow-sm rounded-2xl">
-          <div className="px-6 pt-5 pb-4 border-b bg-gray-50">
-            <div className="text-[15px] font-medium text-gray-800">
-              Map columns
-            </div>
-            <div className="mt-1 text-sm text-gray-500">
-              Drag columns from the left to match them with the right fields.
-            </div>
-          </div>
+    <>
+      <Modal
+        showClose={true}
+        open={isSubmitting}
+        modalHeader="Operation ongoing"
+      >
+        <div className="flex flex-col items-center justify-center p-8 bg-white">
+          <PageLoader />
+          <small className="mt-2 text-[#F7941E]">This may take a while.</small>
+          <small className="text-center text-[#F7941E]">
+            Ingestion is being initialized. Please do not close, refresh, or
+            navigate away from this page.
+          </small>
+        </div>
+      </Modal>
 
-          <div className="px-6 mt-4">
-            <FileTabs
-              files={ingestionFilesList}
-              activeId={activeFileId}
-              mappedCount={mappedCount}
-              onChange={handleTabChange}
-            />
-          </div>
-
-          <DndContext
-            sensors={sensors}
-            onDragStart={onDragStart}
-            onDragOver={() => {}}
-            onDragEnd={onDragEnd}
-            collisionDetection={rectIntersection}
-          >
-            <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
-              <div className="p-4 border-[2px] border-[#AFAFAF] rounded-xl h-[520px] overflow-y-auto">
-                <div className="mb-3 text-sm font-medium text-gray-700">
-                  Your columns
-                </div>
-                <div className="min-h-[320px]">
-                  {left.map((c) => (
-                    <LeftItem
-                      key={c.id}
-                      id={c.id}
-                      label={c.label}
-                      disabled={!!c.mappedTo}
-                    />
-                  ))}
-                </div>
+      <div className="min-h-screen px-4 py-8 bg-white sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="overflow-hidden border shadow-sm rounded-2xl">
+            <div className="px-6 pt-5 pb-4 border-b bg-gray-50">
+              <div className="text-[15px] font-medium text-gray-800">
+                Map columns
               </div>
-
-              <div className="p-4 border-[2px] border-[#AFAFAF] rounded-xl h-[520px] overflow-y-auto">
-                <div className="mb-3 text-sm font-medium text-gray-700">
-                  Expected columns
-                </div>
-                <div className="min-h-[320px]">
-                  {slots.map((s) => (
-                    <SlotRow
-                      key={s.id}
-                      id={s.id}
-                      label={s.label}
-                      assigned={s.mapped}
-                      isActive={false}
-                      onClear={() => clearSlot(s.id)}
-                    />
-                  ))}
-                </div>
+              <div className="mt-1 text-sm text-gray-500">
+                Drag columns from the left to match them with the right fields.
               </div>
             </div>
 
-            {createPortal(
-              <DragOverlay>
-                {activeDragId ? (
-                  <div className="px-3 py-2 text-sm bg-white border rounded-md shadow-lg">
-                    {left.find((c) => c.id === activeDragId)?.label}
+            <div className="px-6 mt-4">
+              <FileTabs
+                files={ingestionFilesList}
+                activeId={activeFileId}
+                mappedCount={mappedCount}
+                onChange={handleTabChange}
+              />
+            </div>
+
+            <DndContext
+              sensors={sensors}
+              onDragStart={onDragStart}
+              onDragOver={() => {}}
+              onDragEnd={onDragEnd}
+              collisionDetection={rectIntersection}
+            >
+              <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
+                <div className="p-4 border-[2px] border-[#AFAFAF] rounded-xl h-[520px] overflow-y-auto">
+                  <div className="mb-3 text-sm font-medium text-gray-700">
+                    Your columns
                   </div>
-                ) : null}
-              </DragOverlay>,
-              document.body
-            )}
-          </DndContext>
+                  <div className="min-h-[320px]">
+                    {left.map((c) => (
+                      <LeftItem
+                        key={c.id}
+                        id={c.id}
+                        label={c.label}
+                        disabled={!!c.mappedTo}
+                      />
+                    ))}
+                  </div>
+                </div>
 
-          <div className="flex items-center justify-end gap-2 px-6 py-4 border-t">
-            <Button
-              text="Cancel"
-              className="w-1/12 text-gray-700 bg-white border border-gray-300"
-              onClick={() => {
-                dispatch(clearIngestionData());
-                navigate(-1);
-              }}
-            />
-            <Button
-              text="Confirm mapping"
-              className="bg-[#166E94] w-2/12 text-white"
-              onClick={handleFinalSubmit}
-              isLoading={confirmMapping}
-            />
+                <div className="p-4 border-[2px] border-[#AFAFAF] rounded-xl h-[520px] overflow-y-auto">
+                  <div className="mb-3 text-sm font-medium text-gray-700">
+                    Expected columns
+                  </div>
+                  <div className="min-h-[320px]">
+                    {slots.map((s) => (
+                      <SlotRow
+                        key={s.id}
+                        id={s.id}
+                        label={s.label}
+                        assigned={s.mapped}
+                        isActive={false}
+                        onClear={() => clearSlot(s.id)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {createPortal(
+                <DragOverlay>
+                  {activeDragId ? (
+                    <div className="px-3 py-2 text-sm bg-white border rounded-md shadow-lg">
+                      {left.find((c) => c.id === activeDragId)?.label}
+                    </div>
+                  ) : null}
+                </DragOverlay>,
+                document.body,
+              )}
+            </DndContext>
+
+            <div className="flex items-center justify-end gap-2 px-6 py-4 border-t">
+              <Button
+                text="Cancel"
+                className="w-1/12 text-gray-700 bg-white border border-gray-300"
+                onClick={() => {
+                  dispatch(clearIngestionData());
+                  navigate(-1);
+                }}
+              />
+              <Button
+                text="Confirm mapping"
+                className="bg-[#166E94] w-2/12 text-white"
+                onClick={handleFinalSubmit}
+                isLoading={isSubmitting}
+                disabled={isConfirmDisabled}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
