@@ -128,7 +128,7 @@ function YesReport() {
                         alt=""
                       />
                       {downloadingId === report.id ? (
-                        <span className="animate-bounce">Downloading</span>
+                        <span className="animate-bounce">Downloading...</span>
                       ) : (
                         "Download report"
                       )}
