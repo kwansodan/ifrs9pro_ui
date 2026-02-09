@@ -45,12 +45,12 @@ function YesReport() {
 
         link.remove();
         window.URL.revokeObjectURL(url);
-
-        setDownloadingId(null);
       })
       .catch((err) => {
-        setDownloadingId(null);
         showToast(err?.response?.data?.detail ?? "Download failed", false);
+      })
+      .finally(() => {
+        setDownloadingId(null);
       });
   };
 
@@ -118,10 +118,7 @@ function YesReport() {
                   </span>
                   <div key={report.id}>
                     <div
-                      onClick={() => {
-                        setDownloadingId(report.id);
-                        handleDownload(report.id);
-                      }}
+                      onClick={() => downloadDocument(report.id)}
                       className="flex items-center cursor-pointer text-[#166E94] hover:underline"
                     >
                       <img
@@ -152,7 +149,7 @@ function YesReport() {
                     />
                   </div>
                 </div>
-              )
+              ),
             )}
         </div>
       </div>
