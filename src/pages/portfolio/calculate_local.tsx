@@ -102,7 +102,7 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
 
   const handleSubmit = () => {
     const reportingDateElement = document.getElementById(
-      "local-impairment"
+      "local-impairment",
     ) as HTMLInputElement | null;
     const reporting_date = reportingDateElement?.value ?? "";
 
@@ -117,8 +117,11 @@ function CalculateLocalImpairment({ close }: UploadDataProps) {
       CreatePortfolioLocalImpairmentCalculation(id, reporting_date)
         .then(() => {
           setCalculating(false);
-          showToast("BOG Impairment Calculation Done", true);
-          setTimeout(() => window.location.reload(), 1800);
+          showToast(
+            "BOG Impairment Calculation started successfully. You will receive an email notification when it is complete.",
+            true,
+          );
+          setTimeout(() => window.location.reload(), 5800);
           // const { websocket_url, message } = res.data;
           // console.log("websocket_url: ", websocket_url);
           // if (websocket_url) {

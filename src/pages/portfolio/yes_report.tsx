@@ -19,39 +19,73 @@ function YesReport() {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const { portfoliosReportsQuery } = usePorfolioReports(Number(id));
+  const downloadDocument = async (rid: string) => {
+    try {
+      setDownloadingId(rid);
 
-  const handleDownload = (id: string) => {
-    setDownloadingId(id);
-    downloadDocument(id);
-    setDownloadingId(null);
-  };
+      const res = await DownloadReportHistory(Number(id), rid);
 
-  const downloadDocument = (rid: string) => {
-    setDownloadingId(rid);
-
-    DownloadReportHistory(Number(id), rid)
-      .then((res) => {
-        const blob = new Blob([res.data], {
-          type: res.headers["content-type"],
-        });
-
-        const url = window.URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `report_${rid}.xlsx`;
-        document.body.appendChild(link);
-        link.click();
-
-        link.remove();
-        window.URL.revokeObjectURL(url);
-      })
-      .catch((err) => {
-        showToast(err?.response?.data?.detail ?? "Download failed", false);
-      })
-      .finally(() => {
-        setDownloadingId(null);
+      const blob = new Blob([res.data], {
+        type: res.headers["content-type"],
       });
+
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `report_${rid}.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
+      console.log("FULL ERROR OBJECT:", error);
+
+      // Case 1: Server responded with error (most common)
+      if (error?.response) {
+        const contentType = error.response.headers?.["content-type"];
+
+        // If backend sent JSON but axios treated as blob
+        if (
+          contentType &&
+          contentType.includes("application/json") &&
+          error.response.data
+        ) {
+          try {
+            const text = await error.response.data.text();
+            const json = JSON.parse(text);
+
+            showToast(
+              json?.detail ||
+                "Report not yet available. Please try again later.",
+              false,
+            );
+            return;
+          } catch {
+            showToast("Download failed. Please try again later.", false);
+            return;
+          }
+        }
+
+        showToast("Report not yet available. Please try again later.", false);
+        return;
+      }
+
+      // Case 2: Network error / no response
+      if (error?.request) {
+        showToast(
+          "Unable to reach server. Please check your connection.",
+          false,
+        );
+        return;
+      }
+
+      // Fallback
+      showToast("Download failed. Please try again later.", false);
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   const handleDelete = () => {

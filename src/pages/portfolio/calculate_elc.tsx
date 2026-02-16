@@ -118,11 +118,13 @@ function CalculateEcl({ close }: UploadDataProps) {
       CreatePortfolioECLCalculation(id, reporting_date)
         .then(() => {
           setCalculating(false);
-          showToast("ECL calculation done", true);
-          setTimeout(() => window.location.reload(), 1800);
+          showToast(
+            "ECL calculation started successfully. You will receive an email notification when it is complete. ",
+            true,
+          );
+          setTimeout(() => window.location.reload(), 5800);
         })
         .catch((err) => {
-          console.log("ECL calculation error:", err);
           setCalculating(false);
           showToast(err?.response?.data.detail ?? "Submission failed", false);
         });
