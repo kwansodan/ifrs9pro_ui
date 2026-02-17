@@ -426,7 +426,7 @@ any) {
                       <>
                         <Button
                           text={"Approved"}
-                          className="!text-center !cursor-default gap-2 py-2 font-normal !text-[14px] text-white !w-[120px] bg-[#34C7592E]"
+                          className="!text-center !cursor-default gap-2 py-2 font-normal !text-[14px] text-white !w-[120px] bg-green-500"
                         />
                       </>
                     ) : (
