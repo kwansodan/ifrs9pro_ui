@@ -69,13 +69,13 @@ any) {
 
   const numLoansData = ecl_summary_data
     ? categories.map(
-        (stage) => ecl_summary_data?.[stage]?.total_loan_value ?? 0
+        (stage) => ecl_summary_data?.[stage]?.total_loan_value ?? 0,
       )
     : [];
 
   const bog_numLoansData = bog_summary_data
     ? bog_categories.map(
-        (stage) => bog_summary_data?.[stage]?.total_loan_value ?? 0
+        (stage) => bog_summary_data?.[stage]?.total_loan_value ?? 0,
       )
     : [];
 
@@ -177,14 +177,15 @@ any) {
         showToast(
           err?.response?.data.detail[0].msg ??
             "An error occurred, please try again",
-          false
+          false,
         );
       });
   };
   const selectedIssue = Array.isArray(actualIssues)
-    ? actualIssues.find((issue: any) => issue.id === Number(details_issue_id))
+    ? actualIssues.find(
+        (issue: any) => issue.issue_id === Number(details_issue_id),
+      )
     : null;
-
   return (
     <>
       <Modal
@@ -387,15 +388,15 @@ any) {
                           </span>
                           <div className="flex items-center space-x-4">
                             <span
-                              title="Number of affected records"
-                              className={`cursor-default  font-semibold text-[#F7941E]`}
+                              title={`This issue has occurred ${issue?.occurrence_count} times. Severity level: ${issue?.severity}`}
+                              className={`${issue?.severity === "high" ? "text-red-500" : issue?.severity === "medium" ? "text-yellow-500" : "text-green-500"} cursor-default  font-semibold text-[#F7941E]`}
                             >
-                              {issue?.affected_records.length}
+                              {issue?.occurrence_count}
                             </span>
                             <img
                               onClick={() => {
                                 setOpenEditModal(true);
-                                setDetailsId(issue && issue.id);
+                                setDetailsId(issue && issue.issue_id);
                               }}
                               title="view details"
                               src={Images.see}
@@ -405,7 +406,7 @@ any) {
                             <img
                               onClick={() => {
                                 setOpenCommentModal(true);
-                                setSelectedIssueId(issue && issue.id);
+                                setSelectedIssueId(issue && issue.issue_id);
                               }}
                               title="add comment"
                               src={Images.add_comment}
