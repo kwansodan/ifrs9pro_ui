@@ -30,7 +30,7 @@ function ViewDuplicate({ selectedIssueId, affected_records }: any) {
           setIsDownloading(false);
           showToast(
             err?.response?.data.detail ?? "Download failed, please try again.",
-            false
+            false,
           );
         });
     } else {
@@ -40,25 +40,26 @@ function ViewDuplicate({ selectedIssueId, affected_records }: any) {
   };
   return (
     <>
-      <div className="mt-8 bg-white w-[32rem] border rounded-lg text-[14px] shadow-sm">
-        {affected_records &&
-          affected_records?.map((issue: any, index: number) => (
-            <div
-              key={index}
-              className="flex items-center justify-between p-4 border-b last:border-0"
-            >
-              <span className={`text-gray-700 font-semibold`}>
-                {issue?.name ?? "Not found"}
-              </span>
-              <div className="flex items-center space-x-4">
-                <span className="font-semibold">
-                  {affected_records && affected_records?.length}
+      <div className="overflow-y-scroll h-72">
+        <div className="mt-8 bg-white w-[32rem] border rounded-lg text-[14px] shadow-sm">
+          {affected_records &&
+            affected_records?.map((issue: any, index: number) => (
+              <div
+                key={index}
+                className="flex items-center justify-between p-4 border-b last:border-0"
+              >
+                <span className={`text-gray-700 font-semibold`}>
+                  {issue?.name ?? "Not found"}
                 </span>
+                <div className="flex items-center space-x-4">
+                  <span className="font-semibold">
+                    {affected_records && affected_records?.length}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </div>
       </div>
-
       <div className="flex justify-end mt-3">
         <Button
           text={"Download report"}
