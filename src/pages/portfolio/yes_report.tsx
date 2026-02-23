@@ -19,69 +19,28 @@ function YesReport() {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const { portfoliosReportsQuery } = usePorfolioReports(Number(id));
+
   const downloadDocument = async (rid: string) => {
     try {
       setDownloadingId(rid);
 
       const res = await DownloadReportHistory(Number(id), rid);
-
-      const blob = new Blob([res.data], {
-        type: res.headers["content-type"],
-      });
+      console.log("Download response:", res);
+      const blob = res.data;
 
       const url = window.URL.createObjectURL(blob);
 
       const link = document.createElement("a");
       link.href = url;
       link.download = `report_${rid}.xlsx`;
+
       document.body.appendChild(link);
       link.click();
 
-      link.remove();
+      document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-    } catch (error: any) {
-      console.log("FULL ERROR OBJECT:", error);
-
-      // Case 1: Server responded with error (most common)
-      if (error?.response) {
-        const contentType = error.response.headers?.["content-type"];
-
-        // If backend sent JSON but axios treated as blob
-        if (
-          contentType &&
-          contentType.includes("application/json") &&
-          error.response.data
-        ) {
-          try {
-            const text = await error.response.data.text();
-            const json = JSON.parse(text);
-
-            showToast(
-              json?.detail ||
-                "Report not yet available. Please try again later.",
-              false,
-            );
-            return;
-          } catch {
-            showToast("Download failed. Please try again later.", false);
-            return;
-          }
-        }
-
-        showToast("Report not yet available. Please try again later.", false);
-        return;
-      }
-
-      // Case 2: Network error / no response
-      if (error?.request) {
-        showToast(
-          "Unable to reach server. Please check your connection.",
-          false,
-        );
-        return;
-      }
-
-      // Fallback
+    } catch (error) {
+      console.error("Download error:", error);
       showToast("Download failed. Please try again later.", false);
     } finally {
       setDownloadingId(null);

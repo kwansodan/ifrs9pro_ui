@@ -14,12 +14,14 @@ function ViewDuplicate({ selectedIssueId, affected_records }: any) {
       DownloadQualityIssuesReport(Number(id), selectedIssueId)
         .then((res) => {
           setIsDownloading(false);
-          const blob = new Blob([res.data]);
 
+          const blob = res.data;
           const url = window.URL.createObjectURL(blob);
+
           const link = document.createElement("a");
           link.href = url;
           link.download = `report_${selectedIssueId}.xlsx`;
+
           document.body.appendChild(link);
           link.click();
 
