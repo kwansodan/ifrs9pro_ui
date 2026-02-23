@@ -42,7 +42,7 @@ function CreatePorfolio({ cancel }: any) {
   };
 
   const handleRepaymentToggle = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRepaymentValue(event.target.checked);
   };
@@ -90,7 +90,6 @@ function CreatePorfolio({ cancel }: any) {
 
             setStep(2);
           } else {
-            console.log(res);
             setIsSubmittingFirstStep(false);
             showToast("An error occurred. Please try again.", false);
           }
@@ -100,7 +99,7 @@ function CreatePorfolio({ cancel }: any) {
           showToast(
             err?.response?.data.detail ??
               "An error occurred. Please try again.",
-            false
+            false,
           );
         });
     } catch (err) {

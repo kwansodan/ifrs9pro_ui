@@ -160,7 +160,6 @@ function AdminAccess() {
                 const text =
                   event.currentTarget.querySelector("span")?.innerText || "";
                 setActionToBeTaken(text);
-                console.log(text);
                 setOpenEditUserModal(true);
               }}
               className="flex items-center cursor-pointer"

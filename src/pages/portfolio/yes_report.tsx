@@ -25,7 +25,6 @@ function YesReport() {
       setDownloadingId(rid);
 
       const res = await DownloadReportHistory(Number(id), rid);
-      console.log("Download response:", res);
       const blob = res.data;
 
       const url = window.URL.createObjectURL(blob);
