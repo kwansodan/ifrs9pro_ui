@@ -17,7 +17,7 @@ export const DeleteAPortfolio = async (id: number) =>
 
 export const CreatePortfolioIngestion = async (
   id: number | string,
-  payload: any
+  payload: any,
 ) =>
   await getAxios().post(`/portfolios/${id}/ingest`, payload, {
     headers: { "Content-Type": "application/json" },
@@ -25,18 +25,18 @@ export const CreatePortfolioIngestion = async (
 
 export const CreatePortfolioECLCalculation = async (
   id: number | string,
-  reporting_date: string | HTMLInputElement
+  reporting_date: string | HTMLInputElement,
 ) =>
   await getAxios().get(
-    `/portfolios/${id}/calculate-ecl?reporting_date=${reporting_date}`
+    `/portfolios/${id}/calculate-ecl?reporting_date=${reporting_date}`,
   );
 
 export const CreatePortfolioLocalImpairmentCalculation = async (
   id: number | string,
-  reporting_date: string | HTMLInputElement
+  reporting_date: string | HTMLInputElement,
 ) =>
   await getAxios().get(
-    `/portfolios/${id}/calculate-local-impairment?reporting_date=${reporting_date}`
+    `/portfolios/${id}/calculate-local-impairment?reporting_date=${reporting_date}`,
   );
 
 export const GenerateReports = async (id: number | string, payload: any) =>
@@ -50,7 +50,7 @@ export const GetReportHistory = async (id: number | string) =>
 
 export const DownloadReportHistory = async (
   id: number | string,
-  report_id: number | string
+  report_id: number | string,
 ) => {
   return getAxios().get(`/reports/${id}/report/${report_id}/download`, {
     responseType: "blob",
@@ -59,7 +59,7 @@ export const DownloadReportHistory = async (
 
 export const DeleteReport = async (
   id: number | string,
-  report_id: number | string
+  report_id: number | string,
 ) => await getAxios().delete(`/reports/${id}/report/${report_id}`);
 
 export const GetQualityIssues = async (portfolio_id: number | string) =>
@@ -68,25 +68,30 @@ export const GetQualityIssues = async (portfolio_id: number | string) =>
 export const AddCommentToQualityIssue = async (
   portfolio_id: number | string,
   issue_id: number | string,
-  payload: any
+  payload: any,
 ) =>
   await getAxios().post(
     `/portfolios/${portfolio_id}/quality-issues/${issue_id}/comments`,
-    payload
+    payload,
   );
 
 export const ApproveQualityIssue = async (portfolio_id: number | string) =>
   await getAxios().post(
-    `/portfolios/${portfolio_id}/approve-all-quality-issues`
+    `/portfolios/${portfolio_id}/approve-all-quality-issues`,
   );
 
 export const DownloadQualityIssuesReport = async (
   id: number | string,
-  issue_id: number | string
+  issue_id: number | string,
 ) =>
-  await getAxios().get(`/portfolios/${id}/quality-issues/${issue_id}/download`);
+  await getAxios().get(
+    `/portfolios/${id}/quality-issues/${issue_id}/download`,
+    {
+      responseType: "blob",
+    },
+  );
 
 export const CreatePortfolioIngestionSave = async (
   id: number | string,
-  payload: FormData
+  payload: FormData,
 ) => await getAxios().post(`/portfolios/${id}/ingest/save`, payload);

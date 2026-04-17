@@ -20,38 +20,30 @@ function YesReport() {
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const { portfoliosReportsQuery } = usePorfolioReports(Number(id));
 
-  const handleDownload = (id: string) => {
-    setDownloadingId(id);
-    downloadDocument(id);
-    setDownloadingId(null);
-  };
+  const downloadDocument = async (rid: string) => {
+    try {
+      setDownloadingId(rid);
 
-  const downloadDocument = (rid: string) => {
-    setDownloadingId(rid);
+      const res = await DownloadReportHistory(Number(id), rid);
+      const blob = res.data;
 
-    DownloadReportHistory(Number(id), rid)
-      .then((res) => {
-        const blob = new Blob([res.data], {
-          type: res.headers["content-type"],
-        });
+      const url = window.URL.createObjectURL(blob);
 
-        const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `report_${rid}.xlsx`;
 
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `report_${rid}.xlsx`;
-        document.body.appendChild(link);
-        link.click();
+      document.body.appendChild(link);
+      link.click();
 
-        link.remove();
-        window.URL.revokeObjectURL(url);
-
-        setDownloadingId(null);
-      })
-      .catch((err) => {
-        setDownloadingId(null);
-        showToast(err?.response?.data?.detail ?? "Download failed", false);
-      });
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download error:", error);
+      showToast("Download failed. Please try again later.", false);
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   const handleDelete = () => {
@@ -118,10 +110,7 @@ function YesReport() {
                   </span>
                   <div key={report.id}>
                     <div
-                      onClick={() => {
-                        setDownloadingId(report.id);
-                        handleDownload(report.id);
-                      }}
+                      onClick={() => downloadDocument(report.id)}
                       className="flex items-center cursor-pointer text-[#166E94] hover:underline"
                     >
                       <img
@@ -131,7 +120,7 @@ function YesReport() {
                         alt=""
                       />
                       {downloadingId === report.id ? (
-                        <span className="animate-bounce">Downloading</span>
+                        <span className="animate-bounce">Downloading...</span>
                       ) : (
                         "Download report"
                       )}
@@ -152,7 +141,7 @@ function YesReport() {
                     />
                   </div>
                 </div>
-              )
+              ),
             )}
         </div>
       </div>

@@ -15,7 +15,10 @@ function BillingCallback() {
       return;
     }
 
-    showToast("Payment successful", true);
+    showToast(
+      "Payment successful. Please proceed to login if you haven't",
+      true,
+    );
 
     setTimeout(() => {
       navigate("/dashboard", { replace: true });
