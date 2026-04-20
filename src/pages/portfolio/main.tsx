@@ -72,10 +72,11 @@ function PortfolioMain() {
   const renderActionsRow = (data: any) => {
     const { id, name } = data.row;
     return (
-      <div className="flex cursor-pointer">
+      <div className="flex cursor-pointer" onClick={(e) => e.stopPropagation()}>
         <>
           <img
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setRequestId(id);
               setPortfolioName(name);
               setShowActionsMenu((prev) => !prev);
@@ -97,13 +98,13 @@ function PortfolioMain() {
       const matchesAssetType =
         filters.asset_type.length === 0 ||
         filters.asset_type.some(
-          (type: string) => type.toLowerCase() === e.asset_type.toLowerCase()
+          (type: string) => type.toLowerCase() === e.asset_type.toLowerCase(),
         );
       const matchesFundingSource =
         filters.funding_source.length === 0 ||
         filters.funding_source.some(
           (source: string) =>
-            source.toLowerCase() === e.funding_source.toLowerCase()
+            source.toLowerCase() === e.funding_source.toLowerCase(),
         );
 
       return matchesSearch && matchesAssetType && matchesFundingSource;
@@ -147,6 +148,10 @@ function PortfolioMain() {
   const openModal = () => {
     setPortfolioModalKey((k) => k + 1);
     setOpenCreatePortfolioModal(true);
+  };
+
+  const handleRowClick = (row: any) => {
+    window.location.href = "/dashboard/portfolio-details/" + row.id;
   };
   return (
     <>
@@ -288,6 +293,11 @@ function PortfolioMain() {
               columns={filteredColumns}
               rows={filteredData || []}
               className="rdg-light custom-grid"
+              onCellClick={({ row, column }) => {
+                if (column.key === "update") return;
+                handleRowClick(row);
+              }}
+              rowClass={() => "cursor-pointer hover:bg-gray-50"}
             />
           </motion.div>
         )}
