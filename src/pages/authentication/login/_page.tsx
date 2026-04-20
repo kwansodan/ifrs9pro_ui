@@ -51,7 +51,7 @@ function Login() {
             showToast(
               err?.response?.data?.detail ??
                 "Server error: Please try again later.",
-              false
+              false,
             );
           }
         });

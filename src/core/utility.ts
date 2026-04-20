@@ -21,10 +21,10 @@ export const clearUserSession = () => {
   window.location.reload();
 };
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const getAxios = () => {
   const instance = axios.create({
-    //baseURL: "https://do-site-staging.service4gh.com",
-    baseURL: "https://do-site.service4gh.com",
+    baseURL: API_BASE_URL,
   });
 
   const token = localStorage.getItem("u_token");

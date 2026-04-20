@@ -3,10 +3,7 @@ import { getAxios } from "../utility";
 import { getBillingToken } from "../storage/billing";
 import { InitializeTransactionPayload } from "../interfaces";
 
-const STAGING_API_BASE_URL = "https://do-site-staging.service4gh.com";
-const PRODUCTION_API_BASE_URL = "https://do-site.service4gh.com";
-
-const URL = PRODUCTION_API_BASE_URL;
+const URL = import.meta.env.VITE_API_BASE_URL;
 
 export const UserLogin = async (email: string, password: string) =>
   await getAxios().post("/login", { email, password });
