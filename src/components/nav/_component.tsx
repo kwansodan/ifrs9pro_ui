@@ -5,18 +5,27 @@ import Button from "../button/_component";
 const Navbar = () => {
   const navigate = useNavigate();
   const gotoHome = () => {
-    navigate("/dashboard");
+    navigate("/");
   };
 
   return (
     <>
-      <nav className="md:px-12 flex items-center justify-between mx-auto max-w-[1189px] w-full px-6 py-4">
-        <img
+      <nav
+        aria-label="Primary navigation"
+        className="md:px-12 flex items-center justify-between mx-auto max-w-[1189px] w-full px-6 py-4"
+      >
+        <button
+          type="button"
           onClick={gotoHome}
-          src={Images.logo}
-          alt="Logo"
-          className="h-[24px] cursor-pointer w-[85px]"
-        />
+          className="flex items-center"
+          aria-label="Go to IFRS9Pro home"
+        >
+          <img
+            src={Images.logo}
+            alt="IFRS9Pro logo"
+            className="h-[24px] cursor-pointer w-[85px]"
+          />
+        </button>
 
         <div className="flex items-center">
           <Button
