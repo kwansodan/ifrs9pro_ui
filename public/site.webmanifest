@@ -1,0 +1,16 @@
+{
+  "name": "IFRS9Pro",
+  "short_name": "IFRS9Pro",
+  "description": "IFRS 9 ECL and impairment automation software for lending institutions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#166E94",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "85x16",
+      "type": "image/svg+xml"
+    }
+  ]
+}

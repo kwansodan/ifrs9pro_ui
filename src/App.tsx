@@ -1,4 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import { useEffect, useState, Suspense, lazy } from "react";
 import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
@@ -60,6 +66,87 @@ const SubscriptionPayment = lazy(
   () => import("./pages/billing/subscription_billing"),
 );
 
+const PUBLIC_SITE_URL = "https://ifrs9pro.service4gh.com";
+
+const routeSeo: Record<
+  string,
+  { title: string; description: string; robots?: string }
+> = {
+  "/": {
+    title: "IFRS9Pro | IFRS 9 ECL and Impairment Automation",
+    description:
+      "IFRS9Pro is IFRS 9 impairment software for banks, microfinance institutions, SACCOs, and credit unions. Automate ECL, PD, LGD, EAD, BoG impairment calculations, portfolio analysis, data quality checks, and audit-ready reports.",
+    robots: "index, follow",
+  },
+  "/create-company-account": {
+    title: "Create an IFRS9Pro Account | IFRS 9 Impairment Software",
+    description:
+      "Create an IFRS9Pro company account to start automating IFRS 9 expected credit loss, BoG impairment, portfolio data quality checks, and reports.",
+    robots: "index, follow",
+  },
+  "/request-access": {
+    title: "Request IFRS9Pro Access | IFRS 9 ECL Platform",
+    description:
+      "Request access to IFRS9Pro for IFRS 9 expected credit loss automation, loan portfolio analysis, and impairment reporting.",
+    robots: "index, follow",
+  },
+  "/login": {
+    title: "Login | IFRS9Pro",
+    description: "Log in to IFRS9Pro.",
+    robots: "noindex, follow",
+  },
+};
+
+const upsertMeta = (name: string, content: string) => {
+  let meta = document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);
+
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.setAttribute("name", name);
+    document.head.appendChild(meta);
+  }
+
+  meta.setAttribute("content", content);
+};
+
+const RouteMetadata = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const fallback =
+      pathname.startsWith("/dashboard") ||
+      pathname.includes("password") ||
+      pathname.includes("verification") ||
+      pathname.includes("billing")
+        ? {
+            title: "IFRS9Pro",
+            description: "IFRS9Pro application page.",
+            robots: "noindex, nofollow",
+          }
+        : routeSeo["/"];
+
+    const seo = routeSeo[pathname] ?? fallback;
+    const canonicalPath = routeSeo[pathname] ? pathname : "/";
+    const canonicalHref = `${PUBLIC_SITE_URL}${canonicalPath === "/" ? "/" : canonicalPath}`;
+    let canonical = document.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]',
+    );
+
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+
+    document.title = seo.title;
+    canonical.setAttribute("href", canonicalHref);
+    upsertMeta("description", seo.description);
+    upsertMeta("robots", seo.robots ?? "index, follow");
+  }, [pathname]);
+
+  return null;
+};
+
 function App() {
   const [userSession] = useState(getUserSession());
   const [configLoaded] = useState<boolean>(false);
@@ -79,6 +166,7 @@ function App() {
       )}
 
       <BrowserRouter>
+        <RouteMetadata />
         <Suspense
           fallback={
             <div className="fixed inset-0 flex items-center justify-center bg-white">

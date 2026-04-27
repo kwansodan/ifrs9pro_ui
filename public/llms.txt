@@ -1,0 +1,31 @@
+# IFRS9Pro
+
+IFRS9Pro is a web-based IFRS 9 impairment automation platform for banks, microfinance institutions, SACCOs, credit unions, and lending teams.
+
+## Product Summary
+
+IFRS9Pro helps finance and credit risk teams automate expected credit loss workflows, loan portfolio analysis, data quality review, BoG impairment calculations, and audit-ready reporting.
+
+## Key Capabilities
+
+- IFRS 9 expected credit loss calculation support
+- PD, LGD, EAD, and ECL workflow support
+- BoG/local impairment calculation support
+- Loan portfolio creation and management
+- Excel-based loan, customer, collateral, and guarantee data import
+- Column mapping from uploaded files to expected model fields
+- Data quality issue review, comments, and approvals
+- Audit-ready report generation and report downloads
+- Admin access request, team, billing, and subscription management
+
+## Audience
+
+IFRS9Pro is designed for banks, microfinance institutions, SACCOs, credit unions, finance teams, risk teams, auditors, and compliance teams that need repeatable IFRS 9 impairment calculations and reports.
+
+## Important URLs
+
+- Landing page: https://ifrs9pro.service4gh.com/
+- Account creation: https://ifrs9pro.service4gh.com/create-company-account
+- Request access: https://ifrs9pro.service4gh.com/request-access
+- Sitemap: https://ifrs9pro.service4gh.com/sitemap.xml
+- Robots: https://ifrs9pro.service4gh.com/robots.txt

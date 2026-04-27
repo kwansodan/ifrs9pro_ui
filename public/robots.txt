@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /dashboard/*
+Disallow: /login
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /password-reset
+Disallow: /password-reset/*
+Disallow: /verification
+Disallow: /admin-verification
+Disallow: /admin-request
+Disallow: /expired-link
+Disallow: /billing-setup
+Disallow: /billing/callback
+
+Sitemap: https://ifrs9pro.service4gh.com/sitemap.xml
