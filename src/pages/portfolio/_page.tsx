@@ -4,8 +4,10 @@ import TableLoader from "../../components/table_loader/component";
 import { usePortfolios } from "../../core/hooks/portfolio";
 import PortfolioMain from "./main";
 import { ApiErrorPage } from "../errors/api";
+import { useTranslation } from "react-i18next";
 
 function Porfolio() {
+  const { t } = useTranslation();
   const { portfoliosQuery } = usePortfolios();
 
   const handleRetry = () => {
@@ -15,7 +17,7 @@ function Porfolio() {
   if (portfoliosQuery.isError) {
     const error = portfoliosQuery.error;
 
-    let errorMessage = "Unable to fetch data from server.";
+    let errorMessage = t("errors.networkErrorMessage");
 
     if (error instanceof AxiosError) {
       errorMessage =

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import FeatureSection from "../../components/feature_section/_component";
 import FooterSection from "../../components/footer/_component";
 import Navbar from "../../components/nav/_component";
@@ -40,6 +41,8 @@ const faqs = [
 ];
 
 const Homepage = () => {
+  const { t } = useTranslation();
+
   return (
     <>
       <div className="bg-gradient-to-b from-[#F7FCFF] to-[#fff]">
@@ -49,21 +52,17 @@ const Homepage = () => {
           <section aria-labelledby="landing-heading" className="text-left">
             <div className="max-w-3xl mx-auto mt-6 text-lg">
               <p className="mb-3 text-sm font-semibold tracking-wide text-[#166E94] uppercase">
-                IFRS 9 impairment automation software
+                {t("homepage.tagline")}
               </p>
               <h1
                 id="landing-heading"
                 className="text-4xl font-bold text-gray-900 md:text-5xl"
               >
-                IFRS9Pro automates ECL and impairment reporting for lending
-                institutions
+                {t("homepage.title")}
               </h1>
 
               <p className="max-w-3xl mt-6 text-[15px] leading-7 text-[#4B5563]">
-                IFRS9Pro helps banks, microfinance institutions, SACCOs, and
-                credit unions calculate IFRS 9 expected credit loss, manage loan
-                portfolios, review data quality issues, and generate audit-ready
-                impairment reports without spreadsheet-heavy manual work.
+                {t("homepage.subtitle")}
               </p>
 
               <div className="flex flex-wrap gap-3 mt-6">
@@ -71,13 +70,13 @@ const Homepage = () => {
                   href="/create-company-account"
                   className="bg-[#166E94] text-white px-5 py-3 rounded-lg text-sm font-medium"
                 >
-                  Create company account
+                  {t("homepage.createAccount")}
                 </a>
                 <a
                   href="/request-access"
                   className="border border-[#166E94] text-[#166E94] px-5 py-3 rounded-lg text-sm font-medium"
                 >
-                  Request access
+                  {t("homepage.requestAccess")}
                 </a>
               </div>
             </div>
@@ -99,12 +98,10 @@ const Homepage = () => {
               id="audience-heading"
               className="text-2xl font-bold text-[#1E1E1E]"
             >
-              Built for regulated credit and finance teams
+              {t("homepage.audienceTitle")}
             </h2>
             <p className="max-w-3xl mt-3 text-[14px] leading-7 text-[#6F6F6F]">
-              IFRS9Pro gives institutions a single workflow for portfolio
-              setup, loan data ingestion, impairment calculations, quality issue
-              resolution, and report generation.
+              {t("homepage.audienceSubtitle")}
             </p>
             <div className="grid grid-cols-2 gap-3 mt-6 md:grid-cols-3">
               {audience.map((item) => (
@@ -156,7 +153,7 @@ const Homepage = () => {
               id="outcomes-heading"
               className="text-2xl font-bold text-[#1E1E1E]"
             >
-              What IFRS9Pro helps teams produce
+              {t("homepage.outcomesTitle")}
             </h2>
             <div className="grid gap-4 mt-6 md:grid-cols-2">
               {outcomes.map((outcome) => (
@@ -172,16 +169,19 @@ const Homepage = () => {
 
           <section
             aria-labelledby="faq-heading"
-            className="max-w-4xl mx-auto my-20"
+            className="max-w-6xl mx-auto my-20"
           >
-            <h2 id="faq-heading" className="text-2xl font-bold text-[#1E1E1E]">
-              IFRS9Pro FAQs
+            <h2
+              id="faq-heading"
+              className="text-2xl font-bold text-[#1E1E1E] mb-6"
+            >
+              {t("homepage.faqTitle")}
             </h2>
-            <div className="mt-6 space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
               {faqs.map((faq) => (
                 <div
                   key={faq.question}
-                  className="border border-[#E5E7EB] rounded-lg p-5 bg-white"
+                  className="border border-[#E5E7EB] rounded-lg p-5 bg-white shadow-sm hover:shadow-md transition-shadow"
                 >
                   <h3 className="text-base font-semibold text-[#1E1E1E]">
                     {faq.question}

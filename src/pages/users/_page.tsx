@@ -15,8 +15,10 @@ import { showToast } from "../../core/hooks/alert";
 import { ExportUsers } from "../../core/services/users.service";
 import { AxiosError } from "axios";
 import ApiErrorPage from "../errors/api";
+import { useTranslation } from "react-i18next";
 
 function Users() {
+  const { t } = useTranslation();
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const [openNewUserModal, setOpenNewUserModal] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
@@ -62,7 +64,7 @@ function Users() {
   if (adminUsersQuery.isError) {
     const error = adminUsersQuery.error;
 
-    let errorMessage = "Unable to fetch data from server.";
+    let errorMessage = t("errors.networkErrorMessage");
 
     if (error instanceof AxiosError) {
       errorMessage =
@@ -109,24 +111,29 @@ function Users() {
   };
 
   const columns = [
-    { key: "name", name: "Name", width: 180, renderCell: renderFullName },
-    { key: "email", name: "Email", width: 180 },
-    { key: "role", name: "Role", resizable: true },
+    {
+      key: "name",
+      name: t("users.fullName"),
+      width: 180,
+      renderCell: renderFullName,
+    },
+    { key: "email", name: t("users.email"), width: 180 },
+    { key: "role", name: t("users.role"), resizable: true },
     {
       key: "created_at",
-      name: "Created At",
+      name: t("users.createdAt"),
       resizable: true,
       renderCell: renderDate,
     },
     {
       key: "updated_at",
-      name: "Updated At",
+      name: t("users.updatedAt"),
       resizable: true,
       renderCell: renderUpdatedAt,
     },
     {
       key: "update",
-      name: "Actions",
+      name: t("common.actions"),
       renderCell: renderActionsRow,
       width: "100px",
     },
@@ -158,7 +165,7 @@ function Users() {
         setIsExporting(false);
         showToast(
           err?.response?.data?.detail || "Export failed. Please try again",
-          false
+          false,
         );
       });
   };
