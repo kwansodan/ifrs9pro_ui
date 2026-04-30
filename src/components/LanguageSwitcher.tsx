@@ -22,7 +22,7 @@ const LanguageSwitcher = () => {
         <span
           className={`px-2 py-1 text-sm rounded ${
             isActive("en")
-              ? "bg-[#166E94] text-white"
+              ? "bg-[#b5cdd9] text-white"
               : "text-[#166E94] hover:bg-gray-100"
           }`}
         >
@@ -34,12 +34,12 @@ const LanguageSwitcher = () => {
         onClick={() => changeLanguage("fr")}
         className="flex items-center gap-1"
       >
-        <img src={fr} alt="French" className="w-4 h-4" />
+        <img src={fr} alt="French" className="w-4 h-4 ml-4" />
 
         <span
           className={`px-2 py-1 text-sm rounded ${
             isActive("fr")
-              ? "bg-[#166E94] text-white"
+              ? "bg-[#daeaf2] text-white"
               : "text-[#166E94] hover:bg-gray-100"
           }`}
         >

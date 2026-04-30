@@ -460,5 +460,74 @@
     "logoutFailed": "Échec de la déconnexion",
     "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
     "unauthorizedAccess": "Vous n'êtes pas autorisé à effectuer cette action"
+  },
+  "footer": {
+    "startAutomating": "Commencez à automatiser la dépréciation IFRS 9 à partir de 2 000 $",
+    "subtitle": "Remplacez le travail fastidieux de dépréciation sur tableur par des flux de travail répétitifs pour l'ECL, la dépréciation BoG, la qualité des données et le reporting.",
+    "createAccount": "Créer un compte",
+    "requestAccess": "Demander l'accès",
+    "copyright": "© 2026 IFRS9Pro. Tous droits réservés."
+  },
+  "404": {
+    "title": "404",
+    "message": "Oups! Page introuvable.",
+    "goBack": "Retour à l'accueil"
+  },
+  "createPortfolio": {
+    "portfolioName": "Nom du portefeuille",
+    "portfolioNamePlaceholder": "Entrez le nom du portefeuille",
+    "description": "Description",
+    "descriptionPlaceholder": "Entrez la description du portefeuille",
+    "assetType": "Type d'actif",
+    "selectAssetType": "Sélectionner le type d'actif",
+    "customerType": "Type de client",
+    "selectCustomerType": "Sélectionner le type de client",
+    "fundingSource": "Source de financement",
+    "selectFundingSource": "Sélectionner la source de financement",
+    "dataSource": "Source de données",
+    "selectDataSource": "Sélectionner la source de données",
+    "repaymentSource": "Source de remboursement",
+    "repaymentSourceHint": "Choisir entre un transfert manuel ou à la source",
+    "cancel": "Annuler",
+    "next": "Suivant",
+    "fillAllFields": "Veuillez remplir tous les champs.",
+    "firstStepSuccess": "Première étape du portefeuille créée avec succès.",
+    "errorOccurred": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "secondStep": {
+    "creditRiskReserve": "Réserve de risque de crédit",
+    "creditRiskReservePlaceholder": "B5938492",
+    "loanAssets": "Prêts et actifs",
+    "loanAssetsPlaceholder": "A000567",
+    "eclImpairmentAccount": "Compte de dépréciation ECL",
+    "eclImpairmentAccountPlaceholder": "C98342432",
+    "cancel": "Annuler",
+    "next": "Suivant",
+    "fillAllFields": "Veuillez remplir tous les champs.",
+    "createFirstStep": "Veuillez créer la première étape du portefeuille.",
+    "success": "Deuxième étape du portefeuille créée avec succès.",
+    "serverError": "Erreur serveur. Veuillez réessayer"
+  },
+  "thirdStep": {
+    "bogStaging": "Classification BOG",
+    "category": "Catégorie",
+    "daysRange": "Plage de jours",
+    "rate": "Taux(%)",
+    "cancel": "Annuler",
+    "next": "Suivant",
+    "fillAllFields": "Veuillez vous assurer que tous les champs sont remplis. Valeurs manquantes dans \"{{category}}\"",
+    "createSecondStep": "Veuillez créer la deuxième étape du portefeuille.",
+    "success": "Troisième étape du portefeuille créée avec succès.",
+    "errorOccurred": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "fourthStep": {
+    "eclStaging": "Classification ECL",
+    "category": "Catégorie",
+    "daysRange": "Plage de jours",
+    "cancel": "Annuler",
+    "completePortfolioCreation": "Terminer la création du portefeuille",
+    "createThirdStep": "Veuillez créer la troisième étape du portefeuille.",
+    "fillAllFields": "Veuillez vous assurer que tous les champs sont remplis. Valeurs manquantes dans \"{{category}}\"",
+    "success": "Création du portefeuille réussie"
   }
 }

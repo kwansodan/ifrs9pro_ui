@@ -3,12 +3,13 @@ import { Images } from "../../data/Assets";
 import Button from "../../components/button/_component";
 import { useState } from "react";
 import { CreateSecondStepPortfolioApi } from "../../core/services/portfolio.service";
-
+import { useTranslation } from "react-i18next";
 import { showToast } from "../../core/hooks/alert";
 import { validateSequentialRanges } from "../../core/utility";
 
 function ThirdStep({ close, id, setStep }: any) {
   // const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [categories, setCategories] = useState<CategoryProps[]>([
     { category: "Current", range: "0-30", rate: "0.1" },
@@ -31,7 +32,7 @@ function ThirdStep({ close, id, setStep }: any) {
   const handleInputChange = (
     index: number,
     field: keyof CategoryProps,
-    value: string
+    value: string,
   ) => {
     const updatedCategories = [...categories];
     updatedCategories[index][field] = value;
@@ -44,31 +45,31 @@ function ThirdStep({ close, id, setStep }: any) {
       const { category, range } = item;
 
       if (!range?.trim()) {
-        showToast(
-          `Please ensure all fields are filled. Missing values in "${category}"`,
-          false
-        );
+        showToast(t("thirdStep.fillAllFields", { category }), false);
         setIsCreating(false);
         return;
       }
     }
 
     if (!id) {
-      showToast("Please create second step of portfolio.", false);
+      showToast(t("thirdStep.createSecondStep"), false);
       setIsCreating(false);
       return;
     }
 
-    const payload = categories.reduce((acc, item) => {
-      const key = item.category.toLowerCase();
+    const payload = categories.reduce(
+      (acc, item) => {
+        const key = item.category.toLowerCase();
 
-      acc[key] = {
-        days_range: item.range ?? "",
-        rate: item.rate ?? "",
-      };
+        acc[key] = {
+          days_range: item.range ?? "",
+          rate: item.rate ?? "",
+        };
 
-      return acc;
-    }, {} as Record<string, { days_range: string; rate: string }>);
+        return acc;
+      },
+      {} as Record<string, { days_range: string; rate: string }>,
+    );
 
     const isValidPayload = validateSequentialRanges(payload);
     if (!isValidPayload) {
@@ -83,39 +84,40 @@ function ThirdStep({ close, id, setStep }: any) {
         .then((res) => {
           setIsCreating(false);
           if (res.status === 200 || res.status === 201) {
-            showToast("Third step of portfolio created successfully.", true);
+            showToast(t("thirdStep.success"), true);
 
             setStep(4);
           } else {
             setIsCreating(false);
-            showToast("An error occurred. Please try again.", false);
+            showToast(t("thirdStep.errorOccurred"), false);
           }
         })
         .catch((err) => {
           setIsCreating(false);
           showToast(
-            err?.response?.data.detail ??
-              "An error occurred. Please try again.",
-            false
+            err?.response?.data.detail ?? t("thirdStep.errorOccurred"),
+            false,
           );
         });
     } catch (err) {
-      showToast("An error occurred. Please try again.", false);
-      return { success: false, error: "An error occurred. Please try again." };
+      showToast(t("thirdStep.errorOccurred"), false);
+      return { success: false, error: t("thirdStep.errorOccurred") };
     }
   };
 
   return (
     <>
       <div className="px-8 py-6 mt-1 bg-white rounded-lg">
-        <h3 className="text-[14px] text-center font-bol mt-2">BOG staging</h3>
+        <h3 className="text-[14px] text-center font-bol mt-2">
+          {t("thirdStep.bogStaging")}
+        </h3>
         <div className="mt-4 overflow-x-auto">
           <table className="w-full border rounded-lg">
             <thead>
               <tr className="text-left text-gray-700 bg-gray-100">
-                <th className="p-3">Category</th>
-                <th className="p-3">Days range</th>
-                <th className="p-3">Rate(%)</th>
+                <th className="p-3">{t("thirdStep.category")}</th>
+                <th className="p-3">{t("thirdStep.daysRange")}</th>
+                <th className="p-3">{t("thirdStep.rate")}</th>
               </tr>
             </thead>
             <tbody>
@@ -178,14 +180,14 @@ function ThirdStep({ close, id, setStep }: any) {
         </div> */}
         <div className="flex justify-end mt-3">
           <Button
-            text="Cancel"
+            text={t("thirdStep.cancel")}
             onClick={close}
             className="px-4 !w-[90px] !text-[14px] bg-white border border-gray-400 rounded-[10px] mr-2"
           />
           <Button
             onClick={handleSubmit}
             isLoading={isCreating}
-            text="Next"
+            text={t("thirdStep.next")}
             className="bg-[#166E94] !text-[14px] !w-[120px] text-white px-4 py-2 rounded-[10px]"
           />
         </div>

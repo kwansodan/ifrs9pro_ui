@@ -5,8 +5,10 @@ import { useState } from "react";
 import { CreateSecondStepPortfolioApi } from "../../core/services/portfolio.service";
 import { showToast } from "../../core/hooks/alert";
 import { usePortfolios } from "../../core/hooks/portfolio";
+import { useTranslation } from "react-i18next";
 
 function FourthStep({ close, id }: any) {
+  const { t } = useTranslation();
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const { portfoliosQuery } = usePortfolios();
   const [categories, setCategories] = useState<CategoryProps[]>([
@@ -28,7 +30,7 @@ function FourthStep({ close, id }: any) {
   const handleInputChange = (
     index: number,
     field: keyof CategoryProps,
-    value: string
+    value: string,
   ) => {
     const updatedCategories = [...categories];
     updatedCategories[index][field] = value;
@@ -39,7 +41,7 @@ function FourthStep({ close, id }: any) {
     setIsCreating(true);
 
     if (!id) {
-      showToast("Please create third step of portfolio.", false);
+      showToast(t("fourthStep.createThirdStep"), false);
       setIsCreating(false);
       return;
     }
@@ -48,24 +50,24 @@ function FourthStep({ close, id }: any) {
       const { category, range } = item;
 
       if (!range?.trim()) {
-        showToast(
-          `Please ensure all fields are filled. Missing values in "${category}"`,
-          false
-        );
+        showToast(t("fourthStep.fillAllFields", { category }), false);
         setIsCreating(false);
         return;
       }
     }
 
-    const payload = categories.reduce((acc, item) => {
-      const key = item.category.toLowerCase();
+    const payload = categories.reduce(
+      (acc, item) => {
+        const key = item.category.toLowerCase();
 
-      acc[key] = {
-        days_range: item.range ?? "",
-      };
+        acc[key] = {
+          days_range: item.range ?? "",
+        };
 
-      return acc;
-    }, {} as Record<string, { days_range: string }>);
+        return acc;
+      },
+      {} as Record<string, { days_range: string }>,
+    );
     const finalPayload = {
       ecl_staging_config: payload,
     };
@@ -73,16 +75,15 @@ function FourthStep({ close, id }: any) {
       CreateSecondStepPortfolioApi(id, finalPayload)
         .then(() => {
           setIsCreating(false);
-          showToast("Portfolio creation done successfully", true);
+          showToast(t("fourthStep.success"), true);
           close?.();
           portfoliosQuery.refetch();
         })
         .catch((err) => {
           setIsCreating(false);
           showToast(
-            err?.response?.data?.detail ??
-              "An error occurred. Please try again.",
-            false
+            err?.response?.data?.detail ?? t("fourthStep.errorOccurred"),
+            false,
           );
         });
     }

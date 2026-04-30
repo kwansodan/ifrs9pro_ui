@@ -10,10 +10,12 @@ import { useActionState, useState } from "react";
 import SecondStep from "./second_step";
 import { CreatePortfolioApi } from "../../core/services/portfolio.service";
 import { showToast } from "../../core/hooks/alert";
+import { useTranslation } from "react-i18next";
 import ThirdStep from "./third_step";
 import FourthStep from "./fourth_step";
 
 function CreatePorfolio({ cancel }: any) {
+  const { t } = useTranslation();
   const [step, setStep] = useState<number>(1);
   const [portfolioId, setPortfolioId] = useState<string>("");
   const [selectedAsset, setSelectedAsset] = useState<string>("");
@@ -76,7 +78,7 @@ function CreatePorfolio({ cancel }: any) {
       !dataSource
     ) {
       setIsSubmittingFirstStep(false);
-      showToast("Please fill in all fields.", false);
+      showToast(t("createPortfolio.fillAllFields"), false);
       return;
     }
 
@@ -85,26 +87,25 @@ function CreatePorfolio({ cancel }: any) {
         .then((res) => {
           setIsSubmittingFirstStep(false);
           if (res.status === 200 || res.status === 201) {
-            showToast("First step of portfolio created successfully.", true);
+            showToast(t("createPortfolio.firstStepSuccess"), true);
             setPortfolioId(res?.data?.id);
 
             setStep(2);
           } else {
             setIsSubmittingFirstStep(false);
-            showToast("An error occurred. Please try again.", false);
+            showToast(t("createPortfolio.errorOccurred"), false);
           }
         })
         .catch((err) => {
           setIsSubmittingFirstStep(false);
           showToast(
-            err?.response?.data.detail ??
-              "An error occurred. Please try again.",
+            err?.response?.data.detail ?? t("createPortfolio.errorOccurred"),
             false,
           );
         });
     } catch (err) {
       setIsSubmittingFirstStep(false);
-      showToast("An error occurred. Please try again.", false);
+      showToast(t("createPortfolio.errorOccurred"), false);
       return;
     }
   };
@@ -128,77 +129,77 @@ function CreatePorfolio({ cancel }: any) {
           <form action={formAction}>
             <div className="p-8">
               <div className="mt-3">
-                <label>Portfolio name</label>
+                <label>{t("createPortfolio.portfolioName")}</label>
                 <input
                   type="name"
                   name="name"
-                  placeholder="Enter portfolio name"
+                  placeholder={t("createPortfolio.portfolioNamePlaceholder")}
                   className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 />
               </div>
               <div className="mt-3">
-                <label>Description</label>
+                <label>{t("createPortfolio.description")}</label>
                 <textarea
                   name="description"
-                  placeholder="Enter portfolio description"
+                  placeholder={t("createPortfolio.descriptionPlaceholder")}
                   className="w-full h-[100px] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 />
               </div>
               <div className="flex items-center justify-between">
                 <div className="mt-3">
-                  <label>Asset type</label>
+                  <label>{t("createPortfolio.assetType")}</label>
                   <Select
                     inputId="asset-type"
                     aria-labelledby="asset-type-label"
                     className="min-w-[280px] mr-2"
                     onChange={handleAssetChange}
                     options={assetsOptions}
-                    placeholder="Select asset type"
+                    placeholder={t("createPortfolio.selectAssetType")}
                   />
                 </div>
                 <div className="mt-3">
-                  <label>Customer type</label>
+                  <label>{t("createPortfolio.customerType")}</label>
                   <Select
                     inputId="customer-type"
                     aria-labelledby="customer-type-label"
                     className="min-w-[280px] mr-2"
                     onChange={handleCustomerTypeChange}
                     options={customerTypeOptions}
-                    placeholder="Select customer type"
+                    placeholder={t("createPortfolio.selectCustomerType")}
                   />
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="mt-3">
-                  <label>Funding source</label>
+                  <label>{t("createPortfolio.fundingSource")}</label>
                   <Select
                     inputId="funding-source"
                     aria-labelledby="funding-source-label"
                     className="min-w-[280px] mr-2"
                     onChange={handleFundingSourceChange}
                     options={fundingSourceOptions}
-                    placeholder="Select funding source"
+                    placeholder={t("createPortfolio.selectFundingSource")}
                   />
                 </div>
                 <div className="mt-3">
-                  <label>Data source</label>
+                  <label>{t("createPortfolio.dataSource")}</label>
                   <Select
                     inputId="data-source"
                     aria-labelledby="data-source-label"
                     className="min-w-[280px] mr-2"
                     onChange={handleDataSourceChange}
                     options={dataSourceOptions}
-                    placeholder="Select data source"
+                    placeholder={t("createPortfolio.selectDataSource")}
                   />
                 </div>
               </div>
 
               <div className="flex items-center justify-between mt-3">
                 <div className="flex flex-col">
-                  <label>Repayment source</label>
+                  <label>{t("createPortfolio.repaymentSource")}</label>
                   <span className="text-[#AFAFAF] text-[14px]">
-                    Choose between manual transfer or at source
+                    {t("createPortfolio.repaymentSourceHint")}
                   </span>
                 </div>
 
@@ -219,12 +220,12 @@ function CreatePorfolio({ cancel }: any) {
                 onClick={() => cancel()}
                 className="bg-white cursor-pointer flex justify-center items-center !py-0 mr-3 border-[1px] border-[#6F6F6F] font-normal mt-3 text-[#6F6F6F] text-[12px] !rounded-[10px] !w-[90px]"
               >
-                Cancel
+                {t("createPortfolio.cancel")}
               </div>
 
               <Button
                 isLoading={isSubmittingFirstStep}
-                text="Next"
+                text={t("createPortfolio.next")}
                 type="submit"
                 className="bg-[#166E94] font-normal mt-3 text-white text-[12px] !rounded-[10px] !w-[90px] "
               />

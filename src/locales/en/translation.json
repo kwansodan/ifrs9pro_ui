@@ -460,5 +460,75 @@
     "logoutFailed": "Logout failed",
     "sessionExpired": "Your session has expired. Please log in again.",
     "unauthorizedAccess": "You are not authorized to perform this action"
+  },
+  "footer": {
+    "startAutomating": "Start automating IFRS 9 impairment from $2,000",
+    "subtitle": "Replace spreadsheet-heavy impairment work with repeatable ECL, BoG impairment, data quality, and reporting workflows.",
+    "createAccount": "Create account",
+    "requestAccess": "Request access",
+    "copyright": "© 2026 IFRS9Pro. All rights reserved."
+  },
+  "404": {
+    "title": "404",
+    "message": "Oops! Page not found.",
+    "goBack": "Go back to Home"
+  },
+  "createPortfolio": {
+    "portfolioName": "Portfolio name",
+    "portfolioNamePlaceholder": "Enter portfolio name",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter portfolio description",
+    "assetType": "Asset type",
+    "selectAssetType": "Select asset type",
+    "customerType": "Customer type",
+    "selectCustomerType": "Select customer type",
+    "fundingSource": "Funding source",
+    "selectFundingSource": "Select funding source",
+    "dataSource": "Data source",
+    "selectDataSource": "Select data source",
+    "repaymentSource": "Repayment source",
+    "repaymentSourceHint": "Choose between manual transfer or at source",
+    "cancel": "Cancel",
+    "next": "Next",
+    "fillAllFields": "Please fill in all fields.",
+    "firstStepSuccess": "First step of portfolio created successfully.",
+    "errorOccurred": "An error occurred. Please try again."
+  },
+  "secondStep": {
+    "creditRiskReserve": "Credit risk reserve",
+    "creditRiskReservePlaceholder": "B5938492",
+    "loanAssets": "Loan assets",
+    "loanAssetsPlaceholder": "A000567",
+    "eclImpairmentAccount": "ECL impairment account",
+    "eclImpairmentAccountPlaceholder": "C98342432",
+    "cancel": "Cancel",
+    "next": "Next",
+    "fillAllFields": "Please fill in all fields.",
+    "createFirstStep": "Please create first step of portfolio.",
+    "success": "Second step of portfolio created successfully.",
+    "serverError": "Server error occured. Please try again"
+  },
+  "thirdStep": {
+    "bogStaging": "BOG staging",
+    "category": "Category",
+    "daysRange": "Days range",
+    "rate": "Rate(%)",
+    "cancel": "Cancel",
+    "next": "Next",
+    "fillAllFields": "Please ensure all fields are filled. Missing values in \"{{category}}\"",
+    "createSecondStep": "Please create second step of portfolio.",
+    "success": "Third step of portfolio created successfully.",
+    "errorOccurred": "An error occurred. Please try again."
+  },
+  "fourthStep": {
+    "eclStaging": "ECL staging",
+    "category": "Category",
+    "daysRange": "Days range",
+    "cancel": "Cancel",
+    "completePortfolioCreation": "Complete portfolio creation",
+    "createThirdStep": "Please create third step of portfolio.",
+    "fillAllFields": "Please ensure all fields are filled. Missing values in \"{{category}}\"",
+    "success": "Portfolio creation done successfully",
+    "errorOccurred": "An error occurred. Please try again."
   }
 }
