@@ -148,7 +148,45 @@
     "audienceTitle": "Conçu pour les équipes de crédit et de finance réglementées",
     "audienceSubtitle": "IFRS9Pro offre aux institutions un flux de travail unique pour la configuration du portefeuille, l'ingestion des données de prêts, les calculs d'impairment, la résolution des problèmes de qualité et la génération de rapports.",
     "outcomesTitle": "Ce que IFRS9Pro aide les équipes à produire",
-    "faqTitle": "FAQ IFRS9Pro"
+    "faqTitle": "FAQ IFRS9Pro",
+    "audience": {
+      "banks": "Banques",
+      "microfinance": "Institutions de microfinance",
+      "saccos": "SACCOs",
+      "creditUnions": "Coopératives de crédit",
+      "financeTeams": "Équipes finance",
+      "riskAuditTeams": "Équipes risque et audit"
+    },
+    "features": {
+      "portfolioHeading": "Gestion de portefeuille\nsimple et efficace",
+      "portfolioDescription": "Créez et gérez plusieurs portefeuilles de prêts. Définissez les types d'actifs, les segments clients, les sources de financement, les modes de remboursement, les comptes de dépréciation et les règles de staging dans un seul flux de travail.",
+      "dataImportHeading": "Importation propre des données\npour les modèles IFRS 9",
+      "dataImportDescription": "Téléversez les données clients, prêts, garanties et cautions avec des modèles Excel standardisés. Mappez les colonnes importées aux champs attendus du modèle avant le début des calculs.",
+      "calculationHeading": "Calculs automatisés ECL et dépréciation BoG",
+      "calculationDescription": "Exécutez les calculs de perte de crédit attendue et de dépréciation locale, examinez les résumés de staging, résolvez les problèmes de qualité et produisez des rapports prêts pour l'audit."
+    },
+    "outcomes": {
+      "ecl": "Calculs de perte de crédit attendue pour le reporting IFRS 9",
+      "bog": "Calculs de dépréciation BoG et configuration du staging",
+      "workflow": "Prise en charge des flux de travail PD, LGD, EAD et ECL",
+      "import": "Importation Excel, validation des données et mapping des colonnes",
+      "quality": "Résumés de portefeuilles de prêts, revue des problèmes de qualité et approbations",
+      "reports": "Rapports de dépréciation prêts pour l'audit pour les équipes finance et conformité"
+    },
+    "faqs": {
+      "whatIs": {
+        "question": "Qu'est-ce qu'IFRS9Pro ?",
+        "answer": "IFRS9Pro est un logiciel d'automatisation de la dépréciation IFRS 9 destiné aux institutions de prêt qui ont besoin de flux de travail répétables pour l'ECL, la dépréciation BoG, l'analyse de portefeuille et le reporting."
+      },
+      "whoFor": {
+        "question": "À qui s'adresse IFRS9Pro ?",
+        "answer": "Il est conçu pour les banques, les institutions de microfinance, les SACCOs, les coopératives de crédit, les équipes finance, les équipes de risque crédit, les auditeurs et les équipes conformité."
+      },
+      "calculations": {
+        "question": "Quels calculs IFRS9Pro prend-il en charge ?",
+        "answer": "La plateforme prend en charge les flux de travail de perte de crédit attendue IFRS 9, PD, LGD, EAD, le reporting ECL et les calculs locaux de dépréciation BoG."
+      }
+    }
   },
   "auth": {
     "login": "Connexion",
@@ -233,7 +271,16 @@
     "lastUpdated": "Dernière mise à jour",
     "refreshData": "Actualiser les données",
     "exportData": "Exporter les données",
-    "importData": "Importer les données"
+    "importData": "Importer les données",
+    "portfolioOverview": "Aperçu du portefeuille",
+    "portfolioCount": "Nombre de portefeuilles",
+    "totalBogImpairment": "Dépréciation BOG totale",
+    "totalEcl": "ECL total",
+    "riskReserve": "Réserve de risque",
+    "customerOverview": "Aperçu des clients",
+    "numberOfCustomers": "Nombre de clients",
+    "institutionalLoans": "Prêts institutionnels",
+    "consumerLoans": "Prêts aux particuliers"
   },
   "portfolio": {
     "title": "Portefeuille",
@@ -271,7 +318,15 @@
     "previousStep": "Étape précédente",
     "submit": "Soumettre",
     "saveDraft": "Enregistrer le brouillon",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "searchByPortfolioName": "Rechercher par nom de portefeuille...",
+    "newPortfolio": "Nouveau portefeuille",
+    "createNewPortfolio": "Créer un nouveau portefeuille",
+    "deletePortfolioModal": "Supprimer le portefeuille",
+    "editConfiguration": "Modifier la configuration du portefeuille",
+    "viewPortfolio": "Voir le portefeuille",
+    "updatedAt": "Mis à jour le",
+    "actions": "Actions"
   },
   "billing": {
     "title": "Facturation",
@@ -352,7 +407,29 @@
     "unsuspend": "Réactiver",
     "inviteUser": "Inviter un utilisateur",
     "resendInvite": "Renvoyer l'invitation",
-    "revokeInvite": "Révoquer l'invitation"
+    "revokeInvite": "Révoquer l'invitation",
+    "teamMembers": "Membres de l'équipe",
+    "addTeamMember": "Ajouter un membre de l'équipe",
+    "newTeamMember": "Nouveau membre",
+    "editUserModal": "Modifier l'utilisateur",
+    "deleteUserModal": "Supprimer l'utilisateur",
+    "searchByRole": "Rechercher par rôle...",
+    "export": "Exporter",
+    "exportSuccessful": "Exportation réussie !",
+    "exportFailed": "Échec de l'exportation. Veuillez réessayer",
+    "deleteUserConfirmation": "Êtes-vous sûr de vouloir supprimer {{name}} ? Cette action est irréversible",
+    "operationSuccessful": "Opération réussie",
+    "fillAllFields": "Veuillez remplir tous les champs.",
+    "fillRequiredFields": "Veuillez remplir tous les champs obligatoires.",
+    "editSuccessful": "Modification réussie",
+    "editFailed": "Échec de la modification de l'utilisateur. Veuillez réessayer",
+    "creationFailed": "Échec de la création de l'utilisateur. Veuillez réessayer",
+    "recoveryEmail": "E-mail de récupération",
+    "recoveryEmailPlaceholder": "Entrez l'adresse e-mail de récupération",
+    "emailPlaceholder": "Entrez l'adresse e-mail",
+    "selectRole": "Sélectionner un rôle",
+    "assignPortfolio": "Attribuer un portefeuille",
+    "selectPortfolio": "Sélectionner un portefeuille"
   },
   "admin": {
     "title": "Admin",

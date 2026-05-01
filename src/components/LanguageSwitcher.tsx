@@ -5,11 +5,11 @@ import fr from "../assets/images/fr.jpg";
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
 
-  const changeLanguage = (lang: string) => {
-    i18n.changeLanguage(lang);
+  const changeLanguage = async (lang: "en" | "fr") => {
+    await i18n.changeLanguage(lang);
   };
 
-  const isActive = (lang: string) => i18n.language.startsWith(lang);
+  const isActive = (lang: "en" | "fr") => i18n.language.startsWith(lang);
 
   return (
     <div className="flex items-center gap-2">

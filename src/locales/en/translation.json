@@ -148,7 +148,45 @@
     "audienceTitle": "Built for regulated credit and finance teams",
     "audienceSubtitle": "IFRS9Pro gives institutions a single workflow for portfolio setup, loan data ingestion, impairment calculations, quality issue resolution, and report generation.",
     "outcomesTitle": "What IFRS9Pro helps teams produce",
-    "faqTitle": "IFRS9Pro FAQs"
+    "faqTitle": "IFRS9Pro FAQs",
+    "audience": {
+      "banks": "Banks",
+      "microfinance": "Microfinance institutions",
+      "saccos": "SACCOs",
+      "creditUnions": "Credit unions",
+      "financeTeams": "Finance teams",
+      "riskAuditTeams": "Risk and audit teams"
+    },
+    "features": {
+      "portfolioHeading": "Portfolio\nmanagement\nmade simple",
+      "portfolioDescription": "Create and manage multiple loan portfolios. Define asset types, customer segments, funding sources, repayment methods, impairment accounts, and staging rules in one workflow.",
+      "dataImportHeading": "Clean data import\nfor IFRS 9 models",
+      "dataImportDescription": "Upload customer, loan, collateral, and guarantee data with standardized Excel templates. Map uploaded columns to expected model fields before calculations begin.",
+      "calculationHeading": "Automated ECL and BoG impairment calculations",
+      "calculationDescription": "Run expected credit loss and local impairment calculations, review staging summaries, resolve quality issues, and produce audit-ready reports for internal and external reporting."
+    },
+    "outcomes": {
+      "ecl": "Expected credit loss calculations for IFRS 9 reporting",
+      "bog": "BoG impairment calculations and staging configuration",
+      "workflow": "PD, LGD, EAD, and ECL workflow support",
+      "import": "Excel data import, validation, and column mapping",
+      "quality": "Loan portfolio summaries, quality issue review, and approvals",
+      "reports": "Audit-ready impairment reports for finance and compliance teams"
+    },
+    "faqs": {
+      "whatIs": {
+        "question": "What is IFRS9Pro?",
+        "answer": "IFRS9Pro is IFRS 9 impairment automation software for lending institutions that need repeatable ECL, BoG impairment, portfolio analysis, and reporting workflows."
+      },
+      "whoFor": {
+        "question": "Who is IFRS9Pro built for?",
+        "answer": "It is built for banks, microfinance institutions, SACCOs, credit unions, finance teams, credit risk teams, auditors, and compliance teams."
+      },
+      "calculations": {
+        "question": "What calculations does IFRS9Pro support?",
+        "answer": "The platform supports IFRS 9 expected credit loss workflows, PD, LGD, EAD, ECL reporting, and local BoG impairment calculations."
+      }
+    }
   },
   "auth": {
     "login": "Login",
@@ -233,7 +271,16 @@
     "lastUpdated": "Last updated",
     "refreshData": "Refresh data",
     "exportData": "Export data",
-    "importData": "Import data"
+    "importData": "Import data",
+    "portfolioOverview": "Portfolio overview",
+    "portfolioCount": "Portfolio count",
+    "totalBogImpairment": "Total BOG impairment",
+    "totalEcl": "Total ECL",
+    "riskReserve": "Risk reserve",
+    "customerOverview": "Customer overview",
+    "numberOfCustomers": "Number of customers",
+    "institutionalLoans": "Institutional loans",
+    "consumerLoans": "Consumer loans"
   },
   "portfolio": {
     "title": "Portfolio",
@@ -271,7 +318,15 @@
     "previousStep": "Previous step",
     "submit": "Submit",
     "saveDraft": "Save draft",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "searchByPortfolioName": "Search by portfolio name...",
+    "newPortfolio": "New portfolio",
+    "createNewPortfolio": "Create New Portfolio",
+    "deletePortfolioModal": "Delete Portfolio",
+    "editConfiguration": "Edit portfolio configuration",
+    "viewPortfolio": "View portfolio",
+    "updatedAt": "Updated at",
+    "actions": "Actions"
   },
   "billing": {
     "title": "Billing",
@@ -352,7 +407,29 @@
     "unsuspend": "Unsuspend",
     "inviteUser": "Invite user",
     "resendInvite": "Resend invite",
-    "revokeInvite": "Revoke invite"
+    "revokeInvite": "Revoke invite",
+    "teamMembers": "Team members",
+    "addTeamMember": "Add team member",
+    "newTeamMember": "New team member",
+    "editUserModal": "Edit user",
+    "deleteUserModal": "Delete user",
+    "searchByRole": "Search by role...",
+    "export": "Export",
+    "exportSuccessful": "Export successful!",
+    "exportFailed": "Export failed. Please try again",
+    "deleteUserConfirmation": "Are you sure you want to delete {{name}}? This action cannot be undone",
+    "operationSuccessful": "Operation successful",
+    "fillAllFields": "Please fill in all fields.",
+    "fillRequiredFields": "Please fill in all required fields.",
+    "editSuccessful": "Edit successful",
+    "editFailed": "Editing user failed. Please try again",
+    "creationFailed": "User creation failed. Please try again",
+    "recoveryEmail": "Recovery email",
+    "recoveryEmailPlaceholder": "Enter recovery email address",
+    "emailPlaceholder": "Enter email address",
+    "selectRole": "Select role",
+    "assignPortfolio": "Assign portfolio",
+    "selectPortfolio": "Select portfolio"
   },
   "admin": {
     "title": "Admin",

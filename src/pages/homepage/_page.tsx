@@ -4,44 +4,41 @@ import FooterSection from "../../components/footer/_component";
 import Navbar from "../../components/nav/_component";
 import { Images } from "../../data/Assets";
 
-const audience = [
-  "Banks",
-  "Microfinance institutions",
-  "SACCOs",
-  "Credit unions",
-  "Finance teams",
-  "Risk and audit teams",
-];
-
-const outcomes = [
-  "Expected credit loss calculations for IFRS 9 reporting",
-  "BoG impairment calculations and staging configuration",
-  "PD, LGD, EAD, and ECL workflow support",
-  "Excel data import, validation, and column mapping",
-  "Loan portfolio summaries, quality issue review, and approvals",
-  "Audit-ready impairment reports for finance and compliance teams",
-];
-
-const faqs = [
-  {
-    question: "What is IFRS9Pro?",
-    answer:
-      "IFRS9Pro is IFRS 9 impairment automation software for lending institutions that need repeatable ECL, BoG impairment, portfolio analysis, and reporting workflows.",
-  },
-  {
-    question: "Who is IFRS9Pro built for?",
-    answer:
-      "It is built for banks, microfinance institutions, SACCOs, credit unions, finance teams, credit risk teams, auditors, and compliance teams.",
-  },
-  {
-    question: "What calculations does IFRS9Pro support?",
-    answer:
-      "The platform supports IFRS 9 expected credit loss workflows, PD, LGD, EAD, ECL reporting, and local BoG impairment calculations.",
-  },
-];
-
 const Homepage = () => {
   const { t } = useTranslation();
+
+  const audience = [
+    t("homepage.audience.banks"),
+    t("homepage.audience.microfinance"),
+    t("homepage.audience.saccos"),
+    t("homepage.audience.creditUnions"),
+    t("homepage.audience.financeTeams"),
+    t("homepage.audience.riskAuditTeams"),
+  ];
+
+  const outcomes = [
+    t("homepage.outcomes.ecl"),
+    t("homepage.outcomes.bog"),
+    t("homepage.outcomes.workflow"),
+    t("homepage.outcomes.import"),
+    t("homepage.outcomes.quality"),
+    t("homepage.outcomes.reports"),
+  ];
+
+  const faqs = [
+    {
+      question: t("homepage.faqs.whatIs.question"),
+      answer: t("homepage.faqs.whatIs.answer"),
+    },
+    {
+      question: t("homepage.faqs.whoFor.question"),
+      answer: t("homepage.faqs.whoFor.answer"),
+    },
+    {
+      question: t("homepage.faqs.calculations.question"),
+      answer: t("homepage.faqs.calculations.answer"),
+    },
+  ];
 
   return (
     <>
@@ -121,10 +118,20 @@ const Homepage = () => {
               imageAlt="IFRS9Pro loan portfolio management screen"
               heading={
                 <>
-                  Portfolio <br /> management <br /> made simple
+                  {t("homepage.features.portfolioHeading")
+                    .split("\n")
+                    .map((line, index) => (
+                      <span key={line}>
+                        {line}
+                        {index <
+                          t("homepage.features.portfolioHeading").split("\n")
+                            .length -
+                            1 && <br />}
+                      </span>
+                    ))}
                 </>
               }
-              description="Create and manage multiple loan portfolios. Define asset types, customer segments, funding sources, repayment methods, impairment accounts, and staging rules in one workflow."
+              description={t("homepage.features.portfolioDescription")}
             />
             <FeatureSection
               image={Images.seamless}
@@ -132,16 +139,26 @@ const Homepage = () => {
               reverse={true}
               heading={
                 <>
-                  Clean data import <br /> for IFRS 9 models
+                  {t("homepage.features.dataImportHeading")
+                    .split("\n")
+                    .map((line, index) => (
+                      <span key={line}>
+                        {line}
+                        {index <
+                          t("homepage.features.dataImportHeading").split("\n")
+                            .length -
+                            1 && <br />}
+                      </span>
+                    ))}
                 </>
               }
-              description="Upload customer, loan, collateral, and guarantee data with standardized Excel templates. Map uploaded columns to expected model fields before calculations begin."
+              description={t("homepage.features.dataImportDescription")}
             />
             <FeatureSection
               image={Images.automated}
               imageAlt="IFRS9Pro expected credit loss and impairment calculation summary"
-              heading={<>Automated ECL and BoG impairment calculations</>}
-              description="Run expected credit loss and local impairment calculations, review staging summaries, resolve quality issues, and produce audit-ready reports for internal and external reporting."
+              heading={<>{t("homepage.features.calculationHeading")}</>}
+              description={t("homepage.features.calculationDescription")}
             />
           </div>
 

@@ -13,8 +13,10 @@ import { motion } from "framer-motion";
 import { FilterValues } from "../../core/interfaces";
 import { AxiosError } from "axios";
 import ApiErrorPage from "../errors/api";
+import { useTranslation } from "react-i18next";
 
 function PortfolioMain() {
+  const { t } = useTranslation();
   const { portfoliosQuery } = usePortfolios();
   const menuRef = useRef<HTMLDivElement>(null);
   const [openCreatePortfolioModal, setOpenCreatePortfolioModal] =
@@ -115,24 +117,33 @@ function PortfolioMain() {
   };
 
   const columns = [
-    { key: "name", name: "Name", width: 180 },
-    { key: "description", name: "Description", width: 180 },
-    { key: "asset_type", name: "Asset type", resizable: true },
-    { key: "customer_type", name: "Customer type", resizable: true },
-    { key: "funding_source", name: "Funding source", resizable: true },
+    { key: "name", name: t("common.name"), width: 180 },
+    { key: "description", name: t("common.description"), width: 180 },
+    { key: "asset_type", name: t("portfolio.assetType"), resizable: true },
+    {
+      key: "customer_type",
+      name: t("createPortfolio.customerType"),
+      resizable: true,
+    },
+    {
+      key: "funding_source",
+      name: t("portfolio.fundingSource"),
+      resizable: true,
+    },
     {
       key: "updated_at",
-      name: "Updated at",
+      name: t("portfolio.updatedAt"),
       resizable: true,
       renderCell: renderUpdatedAtDate,
     },
     {
       key: "update",
-      name: "Actions",
+      name: t("portfolio.actions"),
       renderCell: renderActionsRow,
       width: "100px",
     },
   ];
+
   const filteredColumns =
     location.pathname === "/dashboard"
       ? columns.filter((col) => col.key !== "update")
@@ -158,7 +169,7 @@ function PortfolioMain() {
       <Modal
         close={() => setOpenCreatePortfolioModal(false)}
         open={openCreatePortfolioModal}
-        modalHeader="Create New Portfolio"
+        modalHeader={t("portfolio.createNewPortfolio")}
       >
         <CreatePorfolio
           key={portfolioModalKey}
@@ -168,7 +179,7 @@ function PortfolioMain() {
       <Modal
         close={() => setConfirmDelete(false)}
         open={confirmDelete}
-        modalHeader="Delete Portfolio"
+        modalHeader={t("portfolio.deletePortfolioModal")}
       >
         <DeletePortfolio
           name={portfolioName}
@@ -191,7 +202,7 @@ function PortfolioMain() {
             >
               <img className="w-[14px] mr-1" src={Images.edit} alt="" />
               <span className="text-[#1E1E1E] text-[14px] font-normal">
-                Edit portfolio configuration
+                {t("portfolio.editConfiguration")}
               </span>
             </div>
 
@@ -204,7 +215,7 @@ function PortfolioMain() {
             >
               <img className="w-[14px] mr-1" src={Images.openEye} alt="" />
               <span className="text-[#1E1E1E] text-[14px] font-normal">
-                View portfolio
+                {t("portfolio.viewPortfolio")}
               </span>
             </div>
             <div
@@ -213,7 +224,7 @@ function PortfolioMain() {
             >
               <img className="w-[14px] mr-1" src={Images.deleteIcon} alt="" />
               <span className="text-[#1E1E1E] text-[14px] font-normal">
-                Delete
+                {t("common.delete")}
               </span>
             </div>
           </div>
@@ -226,8 +237,9 @@ function PortfolioMain() {
             : "max-w-[1160px]"
         } `}
       >
-        <h1 className="text-[16px] font-semibold">Portfolios</h1>
-
+        <h1 className="text-[16px] font-semibold">
+          {t("portfolio.portfolios")}
+        </h1>
         <div className="flex items-center gap-4">
           {location.pathname === "/dashboard" ? (
             <></>
@@ -235,7 +247,7 @@ function PortfolioMain() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="Search by portfolio name..."
+                placeholder={t("portfolio.searchByPortfolioName")}
                 onChange={(e) => setQuery(e.target.value)}
                 className="pl-10 text-sm h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
               />
@@ -258,7 +270,7 @@ function PortfolioMain() {
           ) : (
             <>
               <Button
-                text="New portfolio"
+                text={t("portfolio.newPortfolio")}
                 onClick={openModal}
                 className="bg-[#166E94] text-white px-4 py-2 rounded-lg min-w-[144px] min-h-[35px]"
               />

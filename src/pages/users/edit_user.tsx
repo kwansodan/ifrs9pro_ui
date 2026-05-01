@@ -7,7 +7,9 @@ import { UpdateAUser } from "../../core/services/users.service";
 import { useAdminUser, useAdminUsers } from "../../core/hooks/users";
 import { showToast } from "../../core/hooks/alert";
 import { roles } from "../../data";
+// import { useTranslation } from "react-i18next";
 function EditUser({ close, rowId }: UploadDataProps) {
+  // const { t } = useTranslation();
   const { adminUsersQuery } = useAdminUsers();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<string>("");
@@ -65,7 +67,7 @@ function EditUser({ close, rowId }: UploadDataProps) {
           showToast(
             err?.response?.data.detail ??
               "Editing user failed. Please try again",
-            false
+            false,
           );
         });
     } catch (err) {

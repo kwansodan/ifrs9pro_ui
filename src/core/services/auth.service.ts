@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAxios } from "../utility";
+import { getAxios, getCurrentLanguage } from "../utility";
 import { getBillingToken } from "../storage/billing";
 import { InitializeTransactionPayload } from "../interfaces";
 
@@ -18,8 +18,11 @@ export const UserSendRequestToAdmin = async (
 
 //using api directly for some reasons
 export const VerifyUserEmail = async (token: string) =>
-  await axios.get(`${URL}/verify-email/${token}`);
-
+  await axios.get(`${URL}/verify-email/${token}`, {
+    headers: {
+      "Accept-Language": getCurrentLanguage(),
+    },
+  });
 export const VerifyAdminApproval = async (
   token: string,
   password: string,
@@ -68,6 +71,7 @@ export const CreateBillingCustomer = async (billingToken: string) => {
     {
       headers: {
         Authorization: `Bearer ${billingToken}`,
+        "Accept-Language": getCurrentLanguage(),
       },
     },
   );
@@ -86,6 +90,7 @@ export const GetBillingPlans = async (page = 1, perPage = 50) => {
     },
     headers: {
       Authorization: `Bearer ${billingToken}`,
+      "Accept-Language": getCurrentLanguage(),
     },
   });
 };
@@ -102,6 +107,7 @@ export const InitializeBillingTransaction = async (
   return axios.post(`${URL}/billing/transactions/initialize`, payload, {
     headers: {
       Authorization: `Bearer ${billingToken}`,
+      "Accept-Language": getCurrentLanguage(),
     },
   });
 };

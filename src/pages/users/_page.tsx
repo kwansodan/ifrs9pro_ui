@@ -158,13 +158,13 @@ function Users() {
         window.URL.revokeObjectURL(url);
 
         setTimeout(() => {
-          showToast("Export successful!", true);
+          showToast(t("users.exportSuccessful"), true);
         }, 2000);
       })
       .catch((err) => {
         setIsExporting(false);
         showToast(
-          err?.response?.data?.detail || "Export failed. Please try again",
+          err?.response?.data?.detail || t("users.exportFailed"),
           false,
         );
       });
@@ -173,7 +173,7 @@ function Users() {
   return (
     <>
       <Modal
-        modalHeader="Add team member"
+        modalHeader={t("users.addTeamMember")}
         open={openNewUserModal}
         close={() => setOpenNewUserModal(false)}
       >
@@ -182,7 +182,7 @@ function Users() {
         </div>
       </Modal>
       <Modal
-        modalHeader="Edit user"
+        modalHeader={t("users.editUserModal")}
         open={openEditUserModal}
         close={() => setOpenEditUserModal(false)}
       >
@@ -193,7 +193,7 @@ function Users() {
         </div>
       </Modal>
       <Modal
-        modalHeader="Delete user"
+        modalHeader={t("users.deleteUser")}
         open={openDeleteUserModal}
         close={() => setOpenDeleteUserModal(false)}
       >
@@ -239,13 +239,13 @@ function Users() {
         </div>
       )}
       <div className="flex items-center justify-between bg-[#f8f9fa] rounded-t-lg py-[10px] px-[12px] mt-6 max-w-[1160px]">
-        <h1 className="text-[14px] font-semibold">Teams members</h1>
+        <h1 className="text-[14px] font-semibold">{t("users.teamMembers")}</h1>
 
         <div className="flex items-center gap-4">
           <div className="relative">
             <input
               type="text"
-              placeholder="Search by role..."
+              placeholder={t("users.searchByRole")}
               onChange={(e) => setQuery(e.target.value)}
               className="pl-10 text-sm h-[35px] min-w-[385px] pr-3 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
@@ -257,13 +257,13 @@ function Users() {
             />
           </div>
           <Button
-            text="Export"
+            text={t("users.export")}
             onClick={() => handleExportUsers()}
             isLoading={isExporting}
             className="bg-[white] text-[#6F6F6F] border-[#6F6F6F] border-[1px] rounded-lg min-w-[100px]"
           />
           <Button
-            text="New team member"
+            text={t("users.newTeamMember")}
             onClick={() => setOpenNewUserModal(true)}
             className="bg-[#166E94] text-white px-7 py-2 rounded-lg min-w-[100px]"
           />

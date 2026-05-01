@@ -3,6 +3,7 @@ import { IConfig } from "./interfaces";
 import axios from "axios";
 import { showToast } from "./hooks/alert";
 import * as XLSX from "xlsx";
+import i18n from "../i18n";
 
 let options: IConfig = {} as IConfig;
 export const setBaseApi = (v: any) => (options = { apiBaseUrl: v });
@@ -26,6 +27,9 @@ export const getAxios = () => {
   console.log("API BASE URL:", API_BASE_URL);
   const instance = axios.create({
     baseURL: API_BASE_URL,
+    headers: {
+      "Accept-Language": getCurrentLanguage(),
+    },
   });
 
   const token = localStorage.getItem("u_token");
@@ -64,6 +68,12 @@ export const getAxios = () => {
     },
   );
   return instance;
+};
+
+export const getCurrentLanguage = () => {
+  const lang = i18n.language || localStorage.getItem("i18nextLng") || "en";
+
+  return lang.startsWith("fr") ? "fr" : "en";
 };
 
 export const cacheUserSession = (token: string, expiry: any) => {
