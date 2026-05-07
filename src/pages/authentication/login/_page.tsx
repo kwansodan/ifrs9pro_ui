@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../../core/stores/slices/user_slice";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Navbar from "../../../components/nav/_component";
 
 function Login() {
   const { t } = useTranslation();
@@ -76,6 +77,7 @@ function Login() {
 
   return (
     <>
+      <Navbar />
       <h2 className=" mt-24 text-center text-[20px] font-extrabold text-[#166E94]">
         IFRS9Pro
       </h2>

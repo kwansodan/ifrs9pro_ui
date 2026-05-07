@@ -3,6 +3,7 @@ import Button from "../../../components/button/_component";
 import { UserRequestAccess } from "../../../core/services/auth.service";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../../../core/hooks/alert";
+import Navbar from "../../../components/nav/_component";
 
 function RequestAccess() {
   const [emailValue, setEmailValue] = useState<string>("");
@@ -30,7 +31,7 @@ function RequestAccess() {
           setButtonLoading(false);
           showToast(
             err?.response?.data.detail ?? "Request access failed",
-            false
+            false,
           );
         });
     } catch (err) {
@@ -45,6 +46,7 @@ function RequestAccess() {
 
   return (
     <>
+      <Navbar />
       <h2 className=" mt-24 text-center text-[20px] font-extrabold text-[#166E94]">
         IFRS9Pro
       </h2>

@@ -15,6 +15,7 @@ import {
   RegisterTenant,
 } from "../../core/services/auth.service";
 import { cacheBillingToken } from "../../core/storage/billing";
+import Navbar from "../../components/nav/_component";
 
 function CreateCompanyAccount() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ function CreateCompanyAccount() {
   const [industry, setIndustry] = useState<Option | null>(null);
   const [countryCurrency, setCountryCurrency] = useState<Option | null>(null);
   const [accountingStandard, setAccountingStandard] = useState<Option | null>(
-    null
+    null,
   );
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [acceptDpa, setAcceptDpa] = useState(false);
@@ -51,7 +52,7 @@ function CreateCompanyAccount() {
         jobRole.trim() !== "" &&
         password.trim() !== "" &&
         acceptTerms &&
-        acceptDpa
+        acceptDpa,
     );
   }, [
     companyName,
@@ -114,7 +115,7 @@ function CreateCompanyAccount() {
         err?.response?.data?.detail?.[0]?.msg ??
           err?.response?.data?.detail ??
           "Failed to create company account. Please try again.",
-        false
+        false,
       );
     } finally {
       setButtonLoading(false);
@@ -123,6 +124,7 @@ function CreateCompanyAccount() {
 
   return (
     <>
+      <Navbar />
       <h2 className="mt-12 text-center text-[20px] font-extrabold text-[#166E94]">
         IFRS9Pro
       </h2>

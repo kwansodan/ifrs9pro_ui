@@ -177,9 +177,7 @@ const DashboardLayout = () => {
               text="Help"
               className="!border-[1px] !border-[#6F6F6F] !w-[64px] h-[30px] !rounded-[100px] bg-white flex items-center mx-3"
             />
-            <div className="mx-3">
-              <LanguageSwitcher />
-            </div>
+            <div className="mx-3">{/* <LanguageSwitcher /> */}</div>
             <div className="relative" data-twe-dropdown-ref>
               <button onClick={triggerLogout} className="flex items-center">
                 <img
