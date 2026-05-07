@@ -36,7 +36,9 @@ const Navbar = () => {
             className="h-[24px] cursor-pointer w-[85px]"
           />
         </button>
-        <div className="mx-3">{/* <LanguageSwitcher /> */}</div>
+        <div className="mx-3">
+          <LanguageSwitcher />
+        </div>
         <div className="flex items-center">
           {!isLoginPage && (
             <Button
