@@ -7,7 +7,9 @@ import { useActionState, useState } from "react";
 import { showToast } from "../../core/hooks/alert";
 import { CreateAdminUser } from "../../core/services/users.service";
 import { useAdminUsers } from "../../core/hooks/users";
+import { useTranslation } from "react-i18next";
 function NewUser({ close }: UploadDataProps) {
+  const { t } = useTranslation();
   const { portfoliosQuery } = usePortfolios();
   const { adminUsersQuery } = useAdminUsers();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -58,7 +60,7 @@ function NewUser({ close }: UploadDataProps) {
     }
 
     if (!first_name || !last_name || !email || !recovery_email || !role) {
-      showToast("Please fill in all required fields.", false);
+      showToast(t("users.fillRequiredFields"), false);
       setIsSubmitting(false);
       return;
     }
@@ -76,14 +78,13 @@ function NewUser({ close }: UploadDataProps) {
         .catch((err) => {
           setIsSubmitting(false);
           showToast(
-            err?.response?.data.detail ??
-              "User creation failed. Please try again",
-            false
+            err?.response?.data.detail ?? t("users.creationFailed"),
+            false,
           );
         });
     } catch (err) {
       setIsSubmitting(false);
-      showToast("User creation failed. Please try again", false);
+      showToast(t("users.creationFailed"), false);
     }
   };
 
@@ -145,17 +146,17 @@ function NewUser({ close }: UploadDataProps) {
               onChange={handleRoleChange}
               options={roles}
               id="asset-type"
-              placeholder="Select role"
+              placeholder={t("users.selectRole")}
             />
 
             <label className="text-[#1E1E1E] text-[14px] font-medium">
-              Assign portfolio
+              {t("users.assignPortfolio")}
             </label>
             <Select
               className="w-full"
               onChange={handlePortofioOptions}
               options={portfolioOptions}
-              placeholder="Select portfolio"
+              placeholder={t("users.selectPortfolio")}
             />
           </div>
 
@@ -164,12 +165,12 @@ function NewUser({ close }: UploadDataProps) {
               className="px-4 !w-[90px] cursor-pointer flex items-center !text-[14px] bg-white border border-gray-400 rounded-[10px] mr-2"
               onClick={close}
             >
-              Cancel
+              {t("common.cancel")}
             </div>
             <Button
               isLoading={isSubmitting}
               type="submit"
-              text="Submit"
+              text={t("common.submit")}
               className="bg-[#166E94] !text-[14px] !w-[90px] text-white px-4 py-2 rounded-[10px]"
             />
           </div>

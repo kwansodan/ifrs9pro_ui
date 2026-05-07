@@ -243,20 +243,108 @@ export function inferType(label: string): "id" | "date" | "number" | "string" {
 }
 
 export const INDUSTRY_OPTIONS: Option[] = [
-  { label: "Bank", value: "BANK" },
-  { label: "Microfinance", value: "MICROFINANCE" },
-  { label: "SACCO", value: "SACCO" },
-  { label: "Credit Union", value: "CREDIT_UNION" },
+  { label: "Banks", value: "BANKS" },
+  { label: "Savings and Loans", value: "SAVINGS_AND_LOANS" },
+  { label: "Finance Houses", value: "FINANCE_HOUSES" },
+  { label: "Leasing Companies", value: "LEASING_COMPANIES" },
+  { label: "Other Banks", value: "OTHER_BANKS" },
+  {
+    label: "Representative Offices in Ghana",
+    value: "REPRESENTATIVE_OFFICES_IN_GHANA",
+  },
+  {
+    label: "Finance and Leasing Companies",
+    value: "FINANCE_AND_LEASING_COMPANIES",
+  },
+  { label: "Mortgage Finance", value: "MORTGAGE_FINANCE" },
+  { label: "Remittance Companies", value: "REMITTANCE_COMPANIES" },
 ];
 
 export const COUNTRY_CURRENCY_OPTIONS: Option[] = [
-  { label: "Ghana / Cedis (GHS)", value: "GH" },
-  { label: "United States / Dollar (USD)", value: "US" },
+  { label: "Algeria / Algerian Dinar (DZD)", value: "DZ" },
+  { label: "Angola / Angolan Kwanza (AOA)", value: "AO" },
+  { label: "Benin / West African CFA Franc (XOF)", value: "BJ" },
+  { label: "Botswana / Botswana Pula (BWP)", value: "BW" },
+  { label: "Burkina Faso / West African CFA Franc (XOF)", value: "BF" },
+  { label: "Burundi / Burundian Franc (BIF)", value: "BI" },
+  { label: "Cabo Verde / Cape Verdean Escudo (CVE)", value: "CV" },
+  { label: "Cameroon / Central African CFA Franc (XAF)", value: "CM" },
+  {
+    label: "Central African Republic / Central African CFA Franc (XAF)",
+    value: "CF",
+  },
+  { label: "Chad / Central African CFA Franc (XAF)", value: "TD" },
+  { label: "Comoros / Comorian Franc (KMF)", value: "KM" },
+  { label: "Congo / Central African CFA Franc (XAF)", value: "CG" },
+  { label: "Côte d'Ivoire / West African CFA Franc (XOF)", value: "CI" },
+  {
+    label: "Democratic Republic of the Congo / Congolese Franc (CDF)",
+    value: "CD",
+  },
+  { label: "Djibouti / Djiboutian Franc (DJF)", value: "DJ" },
+  { label: "Egypt / Egyptian Pound (EGP)", value: "EG" },
+  { label: "Equatorial Guinea / Central African CFA Franc (XAF)", value: "GQ" },
+  { label: "Eritrea / Eritrean Nakfa (ERN)", value: "ER" },
+  { label: "Eswatini / Swazi Lilangeni (SZL)", value: "SZ" },
+  { label: "Ethiopia / Ethiopian Birr (ETB)", value: "ET" },
+  { label: "Gabon / Central African CFA Franc (XAF)", value: "GA" },
+  { label: "Gambia / Gambian Dalasi (GMD)", value: "GM" },
+  { label: "Ghana / Ghanaian Cedi (GHS)", value: "GH" },
+  { label: "Guinea / Guinean Franc (GNF)", value: "GN" },
+  { label: "Guinea-Bissau / West African CFA Franc (XOF)", value: "GW" },
+  { label: "Kenya / Kenyan Shilling (KES)", value: "KE" },
+  { label: "Lesotho / Lesotho Loti (LSL)", value: "LS" },
+  { label: "Liberia / Liberian Dollar (LRD)", value: "LR" },
+  { label: "Libya / Libyan Dinar (LYD)", value: "LY" },
+  { label: "Madagascar / Malagasy Ariary (MGA)", value: "MG" },
+  { label: "Malawi / Malawian Kwacha (MWK)", value: "MW" },
+  { label: "Mali / West African CFA Franc (XOF)", value: "ML" },
+  { label: "Mauritania / Mauritanian Ouguiya (MRU)", value: "MR" },
+  { label: "Mauritius / Mauritian Rupee (MUR)", value: "MU" },
+  { label: "Morocco / Moroccan Dirham (MAD)", value: "MA" },
+  { label: "Mozambique / Mozambican Metical (MZN)", value: "MZ" },
+  { label: "Namibia / Namibian Dollar (NAD)", value: "NA" },
+  { label: "Niger / West African CFA Franc (XOF)", value: "NE" },
+  { label: "Nigeria / Nigerian Naira (NGN)", value: "NG" },
+  { label: "Rwanda / Rwandan Franc (RWF)", value: "RW" },
+  {
+    label: "São Tomé and Príncipe / São Tomé and Príncipe Dobra (STN)",
+    value: "ST",
+  },
+  { label: "Senegal / West African CFA Franc (XOF)", value: "SN" },
+  { label: "Seychelles / Seychellois Rupee (SCR)", value: "SC" },
+  { label: "Sierra Leone / Sierra Leonean Leone (SLE)", value: "SL" },
+  { label: "Somalia / Somali Shilling (SOS)", value: "SO" },
+  { label: "South Africa / South African Rand (ZAR)", value: "ZA" },
+  { label: "South Sudan / South Sudanese Pound (SSP)", value: "SS" },
+  { label: "Sudan / Sudanese Pound (SDG)", value: "SD" },
+  { label: "Tanzania / Tanzanian Shilling (TZS)", value: "TZ" },
+  { label: "Togo / West African CFA Franc (XOF)", value: "TG" },
+  { label: "Tunisia / Tunisian Dinar (TND)", value: "TN" },
+  { label: "Uganda / Ugandan Shilling (UGX)", value: "UG" },
+  { label: "Zambia / Zambian Kwacha (ZMW)", value: "ZM" },
+  { label: "Zimbabwe / Zimbabwe Gold (ZWG)", value: "ZW" },
 ];
 
 export const ACCOUNTING_STANDARD_OPTIONS: Option[] = [
-  { label: "IFRS 9", value: "IFRS9" },
-  { label: "IFRS 9 + BoG Model", value: "IFRS9_BOG" },
+  { label: "IFRS + BOG Guide", value: "IFRS_BOG_GUIDE" },
+  {
+    label: "IFRS + CBN Prudential Guidelines",
+    value: "IFRS_CBN_PRUDENTIAL_GUIDELINES",
+  },
+  { label: "IFRS + SARB (Regulation 24)", value: "IFRS_SARB_REGULATION_24" },
+  {
+    label: "IFRS + CBK Prudential Guidelines",
+    value: "IFRS_CBK_PRUDENTIAL_GUIDELINES",
+  },
+  {
+    label: "EAS (Egyptian Accounting Stds) + CBE Regulations",
+    value: "EAS_CBE_REGULATIONS",
+  },
+  { label: "SYSCOHADA + COBAC / WAMU", value: "SYSCOHADA_COBAC_WAMU" },
+  { label: "IFRS9 Only", value: "IFRS9_ONLY" },
+  { label: "EAS Only", value: "EAS_ONLY" },
+  { label: "SYSCOHADA", value: "SYSCOHADA" },
 ];
 
 export const REQUIRED_MAPPINGS: Record<string, string[]> = {
@@ -361,7 +449,7 @@ export function normalizeExport(value: string) {
 
 export function validateRequiredMappings(
   perFileState: Record<string, { slots: Slot[] }>,
-  ingestionFiles: Record<string, any>
+  ingestionFiles: Record<string, any>,
 ) {
   const errors: string[] = [];
 
@@ -373,14 +461,14 @@ export function validateRequiredMappings(
     if (!fileMeta) return;
 
     const mappedFields = new Set(
-      state.slots.filter((s) => s.mapped).map((s) => s.mapped)
+      state.slots.filter((s) => s.mapped).map((s) => s.mapped),
     );
 
     const missing = rule.required.filter((key) => !mappedFields.has(key));
 
     if (missing.length > 0) {
       errors.push(
-        `${rule.label} file is missing required mappings: ${missing.join(", ")}`
+        `${rule.label} file is missing required mappings: ${missing.join(", ")}`,
       );
     }
   });
@@ -390,7 +478,7 @@ export function validateRequiredMappings(
 
 export function buildFileMappings(
   perFileState: Record<string, { slots: Slot[] }>,
-  ingestionFiles: Record<string, any>
+  ingestionFiles: Record<string, any>,
 ): FileMappingEntry[] {
   return Object.entries(perFileState)
     .map(([fileKey, state]) => {
@@ -418,7 +506,7 @@ export function validateRequiredMappingsFromPayload(
   fileEntries: {
     type: string;
     mapping: Record<string, string>;
-  }[]
+  }[],
 ) {
   const errors: string[] = [];
 
@@ -432,7 +520,7 @@ export function validateRequiredMappingsFromPayload(
 
     if (missing.length > 0) {
       errors.push(
-        `${rule.label} file is missing required mappings: ${missing.join(", ")}`
+        `${rule.label} file is missing required mappings: ${missing.join(", ")}`,
       );
     }
   });
@@ -441,7 +529,7 @@ export function validateRequiredMappingsFromPayload(
 }
 
 export function isFileMappingEntry(
-  entry: FileMappingEntry | null
+  entry: FileMappingEntry | null,
 ): entry is FileMappingEntry {
   return entry !== null;
 }

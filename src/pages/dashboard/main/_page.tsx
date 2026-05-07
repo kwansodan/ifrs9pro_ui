@@ -22,8 +22,8 @@ function Main() {
       hour < 12
         ? "Good morning"
         : hour < 18
-        ? "Good afternoon"
-        : "Good evening";
+          ? "Good afternoon"
+          : "Good evening";
 
     setCurrentDate(formattedDate);
     setGreeting(greetingMessage);

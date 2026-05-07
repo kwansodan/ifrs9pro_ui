@@ -10,6 +10,7 @@ import { SendHelp } from "../../core/services/feedback.service";
 import { showToast } from "../../core/hooks/alert";
 import { useGetNotifications } from "../../core/hooks/feedback";
 import { useDashboardNav } from "../../core/hooks/dashboardNav";
+import LanguageSwitcher from "../../components/LanguageSwitcher";
 
 const DashboardLayout = () => {
   const navItems = useDashboardNav();
@@ -54,7 +55,7 @@ const DashboardLayout = () => {
           showToast(
             err?.response?.data.detail[0].msg ??
               "An error occurred, please try again",
-            false
+            false,
           );
         });
     } catch {
@@ -176,6 +177,7 @@ const DashboardLayout = () => {
               text="Help"
               className="!border-[1px] !border-[#6F6F6F] !w-[64px] h-[30px] !rounded-[100px] bg-white flex items-center mx-3"
             />
+            <div className="mx-3">{/* <LanguageSwitcher /> */}</div>
             <div className="relative" data-twe-dropdown-ref>
               <button onClick={triggerLogout} className="flex items-center">
                 <img

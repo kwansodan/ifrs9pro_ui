@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../../components/button/_component";
 import { showToast } from "../../../core/hooks/alert";
 import { ForgotPasswordRequest } from "../../../core/services/auth.service";
+import Navbar from "../../../components/nav/_component";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -36,10 +37,11 @@ function ForgotPassword() {
 
   return (
     <>
+      <Navbar />
       <h2 className="mt-24 text-center text-[20px] font-extrabold text-[#166E94]">
         IFRS9Pro
       </h2>
-
+      11
       <div className="flex items-center justify-center">
         <div className="px-8 py-12 bg-white border rounded-xl w-96">
           <form onSubmit={handleSubmit}>

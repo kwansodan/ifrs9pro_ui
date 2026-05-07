@@ -7,7 +7,9 @@ import { UpdateAUser } from "../../core/services/users.service";
 import { useAdminUser, useAdminUsers } from "../../core/hooks/users";
 import { showToast } from "../../core/hooks/alert";
 import { roles } from "../../data";
+import { useTranslation } from "react-i18next";
 function EditUser({ close, rowId }: UploadDataProps) {
+  const { t } = useTranslation();
   const { adminUsersQuery } = useAdminUsers();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<string>("");
@@ -24,7 +26,7 @@ function EditUser({ close, rowId }: UploadDataProps) {
   };
 
   const handleSubmit = async (prevState: any, formData: FormData) => {
-    console.log("prev: ", prevState);
+    console.log("form entries:", Object.fromEntries(formData.entries()));
     setIsSubmitting(true);
     const first_name = formData.get("first_name") as string;
     const last_name = formData.get("last_name") as string;
@@ -45,9 +47,9 @@ function EditUser({ close, rowId }: UploadDataProps) {
           adminUserQuery.data &&
           adminUserQuery.data.data.role,
     };
-
+    console.log("payload:", payload);
     if (!first_name || !last_name || !email || !recovery_email) {
-      showToast("Please fill in all fields.", false);
+      showToast(t("users.fillAllFields"), false);
       setIsSubmitting(false);
       return;
     }
@@ -56,21 +58,17 @@ function EditUser({ close, rowId }: UploadDataProps) {
       UpdateAUser(Number(rowId), payload)
         .then(() => {
           setIsSubmitting(false);
-          showToast("Edit successful", true);
+          showToast(t("users.editSuccessful"), true);
           close?.();
           adminUsersQuery.refetch();
         })
         .catch((err) => {
           setIsSubmitting(false);
-          showToast(
-            err?.response?.data.detail ??
-              "Editing user failed. Please try again",
-            false
-          );
+          showToast(err?.response?.data.detail ?? t("users.editFailed"), false);
         });
     } catch (err) {
       setIsSubmitting(false);
-      showToast("Editing user failed. Please try again", false);
+      showToast(t("users.editFailed"), false);
     }
   };
 
@@ -94,7 +92,7 @@ function EditUser({ close, rowId }: UploadDataProps) {
                     adminUserQuery.data &&
                     adminUserQuery.data.data.first_name
                   }
-                  placeholder="Enter first name"
+                  placeholder={t("auth.firstNamePlaceholder")}
                   className="w-full h-[50%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 />
               </div>
@@ -110,14 +108,14 @@ function EditUser({ close, rowId }: UploadDataProps) {
                     adminUserQuery.data &&
                     adminUserQuery.data.data.last_name
                   }
-                  placeholder="Enter last name"
+                  placeholder={t("auth.lastNamePlaceholder")}
                   className="w-full h-[50%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 />
               </div>
             </div>
 
             <label className="text-[#1E1E1E] text-[14px] font-medium">
-              Email
+              {t("users.email")}
             </label>
             <input
               type="email"
@@ -127,11 +125,11 @@ function EditUser({ close, rowId }: UploadDataProps) {
                 adminUserQuery.data &&
                 adminUserQuery.data.data.email
               }
-              placeholder="Enter email address"
+              placeholder={t("users.emailPlaceholder")}
               className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
             <label className="text-[#1E1E1E] text-[14px] font-medium">
-              Recovery email
+              {t("users.recoveryEmail")}
             </label>
             <input
               type="email"
@@ -141,14 +139,14 @@ function EditUser({ close, rowId }: UploadDataProps) {
                 adminUserQuery.data &&
                 adminUserQuery.data.data.recovery_email
               }
-              placeholder="Enter recovery email address"
+              placeholder={t("users.recoveryEmailPlaceholder")}
               className="w-full h-[4%] text-[14px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
             />
             <label className="text-[#1E1E1E] text-[14px] font-medium">
-              Role
+              {t("users.role")}
             </label>
             <Select
-              className="w-full "
+              className="w-full"
               onChange={handleRoleChange}
               options={roles}
               id="asset-type"
@@ -175,12 +173,12 @@ function EditUser({ close, rowId }: UploadDataProps) {
               className="px-4 !w-[90px] cursor-pointer flex items-center !text-[14px] bg-white border border-gray-400 rounded-[10px] mr-2"
               onClick={close}
             >
-              Cancel
+              {t("common.cancel")}
             </div>
             <Button
               isLoading={isSubmitting}
               type="submit"
-              text="Submit"
+              text={t("common.submit")}
               className="bg-[#166E94] !text-[14px] !w-[90px] text-white px-4 py-2 rounded-[10px]"
             />
           </div>

@@ -8,8 +8,11 @@ import { cacheUserRole, cacheUserSession } from "../../../core/utility";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../core/stores/slices/user_slice";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import Navbar from "../../../components/nav/_component";
 
 function Login() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [emailValue, setEmailValue] = useState<string>("");
@@ -24,9 +27,9 @@ function Login() {
     const email = formData.get("email") as string | null;
     const password = formData.get("password") as string | null;
     if (!email || !password) {
-      showToast("Email and password are required.", false);
+      showToast(t("validation.required"), false);
       setButtonLoading(false);
-      return { success: false, error: "Email and password are required." };
+      return { success: false, error: t("validation.required") };
     }
 
     try {
@@ -46,18 +49,17 @@ function Login() {
         .catch((err) => {
           setButtonLoading(false);
           if (err?.response?.status === 500) {
-            showToast("Server error: Please try again later.", false);
+            showToast(t("errors.serverErrorMessage"), false);
           } else {
             showToast(
-              err?.response?.data?.detail ??
-                "Server error: Please try again later.",
+              err?.response?.data?.detail ?? t("errors.serverErrorMessage"),
               false,
             );
           }
         });
     } catch {
       setButtonLoading(false);
-      showToast("Login failed. Please try again.", false);
+      showToast(t("messages.loginFailed"), false);
       return;
     }
   };
@@ -75,6 +77,7 @@ function Login() {
 
   return (
     <>
+      <Navbar />
       <h2 className=" mt-24 text-center text-[20px] font-extrabold text-[#166E94]">
         IFRS9Pro
       </h2>
@@ -84,14 +87,14 @@ function Login() {
             <div className="absolute top-0 left-0 right-0 h-8 bg-gray-100 rounded-t-xl"></div>
 
             <h3 className="text-center text-[14px] font-medium text-gray-800">
-              Log into your account
+              {t("auth.loginTitle")}
             </h3>
             <div className="mt-4">
               <input
                 type="email"
                 name="email"
                 value={emailValue}
-                placeholder="Enter your email address"
+                placeholder={t("auth.emailPlaceholder")}
                 className="w-full h-[4%] text-[12px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 onChange={(e) => setEmailValue(e.target.value)}
               />
@@ -101,7 +104,7 @@ function Login() {
                 type={password ? "text" : "password"}
                 name="password"
                 value={passwordValue}
-                placeholder="Enter your password"
+                placeholder={t("auth.passwordPlaceholder")}
                 className="w-full h-[4%] text-[12px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-[#166E94]"
                 onChange={(e) => setPasswordValue(e.target.value)}
               />
@@ -121,27 +124,27 @@ function Login() {
               className={`mt-8 bg-[#166E94] ${
                 isFormValid ? "bg-[#166E94]" : "bg-[#D9EFF9]"
               }`}
-              text="Login"
+              text={t("auth.login")}
               disabled={!isFormValid}
               isLoading={buttonLoading}
             />
           </form>
           <small className="flex justify-center text-xs text-center">
-            Don't have access?
+            {t("auth.dontHaveAccess")}
             <span
               className="ml-2 text-blue-500 underline cursor-pointer"
               onClick={() => navigate("/request-access")}
             >
-              Request access
+              {t("auth.requestAccessLink")}
             </span>
           </small>
           <small className="flex justify-center mt-4 text-xs text-center">
-            Forgot your password?
+            {t("auth.forgotPasswordLink")}
             <span
               className="ml-2 text-blue-500 underline cursor-pointer"
               onClick={() => navigate("/forgot-password")}
             >
-              Reset
+              {t("auth.resetLink")}
             </span>
           </small>
         </div>

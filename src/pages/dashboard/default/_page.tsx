@@ -11,8 +11,10 @@ import TextLoader from "../../../components/text_loader/component";
 import { currencyFormatter } from "../../../core/utility";
 import ApiErrorPage from "../../errors/api";
 import { AxiosError } from "axios";
+import { useTranslation } from "react-i18next";
 
 function Default() {
+  const { t } = useTranslation();
   const { portfoliosQuery } = usePortfolios();
   const { dashboardStatsQuery } = useDashboardStats();
 
@@ -30,14 +32,14 @@ function Default() {
     const hour = new Date().getHours();
     const greetingMessage =
       hour < 12
-        ? "Good morning"
+        ? t("dashboard.goodMorning")
         : hour < 18
-        ? "Good afternoon"
-        : "Good evening";
+          ? t("dashboard.goodAfternoon")
+          : t("dashboard.goodEvening");
 
     setCurrentDate(formattedDate);
     setGreeting(greetingMessage);
-  }, []);
+  }, [t]);
 
   const dashboardStats = dashboardStatsQuery?.data?.data;
 
@@ -49,7 +51,7 @@ function Default() {
   if (dashboardStatsQuery.isError || portfoliosQuery.isError) {
     const error = dashboardStatsQuery.error || portfoliosQuery.error;
 
-    let errorMessage = "Unable to fetch data from server.";
+    let errorMessage = t("errors.networkErrorMessage");
 
     if (error instanceof AxiosError) {
       errorMessage =
@@ -84,7 +86,8 @@ function Default() {
             <TextLoader />
           ) : (
             <div className="flex items-center">
-              {greeting} {(dashboardStats && dashboardStats?.name) ?? "user"}{" "}
+              {greeting}{" "}
+              {(dashboardStats && dashboardStats?.name) ?? t("dashboard.user")}{" "}
               <img
                 className="w-[20px] h-[20px] ml-2"
                 src={Images.greeting}
@@ -113,51 +116,60 @@ function Default() {
       ) : (
         <>
           {/* ====== Portfolio Overview ====== */}
-          <h3 className="text-[16px] font-semibold mt-7">Portfolio overview</h3>
+          <h3 className="text-[16px] font-semibold mt-7">
+            {t("dashboard.portfolioOverview")}
+          </h3>
           <div className="grid w-full grid-cols-3 gap-4">
             <Card
-              title="Portfolio count"
+              title={t("dashboard.portfolioCount")}
               value={dashboardStats.portfolios.length}
               valueClassName="text-[#AFAFAF] md:!text-[44px]"
             />
+
             <Card
-              title="Total BOG impairment"
+              title={t("dashboard.totalBogImpairment")}
               value={currencyFormatter(
-                dashboardStats?.portfolio_overview?.total_local_impairment
+                dashboardStats?.portfolio_overview?.total_local_impairment,
               )}
               valueClassName="text-[#AFAFAF] md:!text-[44px]"
             />
+
             <Card
-              title="Total ECL"
+              title={t("dashboard.totalEcl")}
               value={currencyFormatter(
-                dashboardStats?.portfolio_overview?.total_ecl_amount
+                dashboardStats?.portfolio_overview?.total_ecl_amount,
               )}
               valueClassName="text-[#AFAFAF] md:!text-[44px]"
             />
+
             <Card
-              title="Risk reserve"
+              title={t("dashboard.riskReserve")}
               value={currencyFormatter(
-                dashboardStats?.portfolio_overview?.total_risk_reserve
+                dashboardStats?.portfolio_overview?.total_risk_reserve,
               )}
               valueClassName="text-[#AFAFAF] md:!text-[44px]"
             />
           </div>
 
           {/* ====== Customer Overview ====== */}
-          <h3 className="text-[16px] font-semibold mt-4">Customer overview</h3>
+          <h3 className="text-[16px] font-semibold mt-4">
+            {t("dashboard.customerOverview")}
+          </h3>
           <div className="flex gap-4">
             <Card
-              title="Number of customers"
+              title={t("dashboard.numberOfCustomers")}
               value={dashboardStats?.customer_overview?.total_customers}
               valueClassName="text-[#AFAFAF] md:!text-[44px]"
             />
+
             <Card
-              title="Institutional loans"
+              title={t("dashboard.institutionalLoans")}
               value={dashboardStats?.customer_overview?.institutional}
               valueClassName="text-[#AFAFAF] md:!text-[44px]"
             />
+
             <Card
-              title="Consumer loans"
+              title={t("dashboard.consumerLoans")}
               value={dashboardStats?.customer_overview?.individual}
               valueClassName="text-[#AFAFAF] md:!text-[44px]"
             />
